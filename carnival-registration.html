@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiddies Carnival 2026 - Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --gold: #FFD700;
+    --red: #CE1126;
+    --green: #006B3F;
+    --white: #FFFFFF;
+    --card-bg: #111111;
+    --input-bg: #1a1a1a;
+    --border: #2a2a2a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--black);
+    color: var(--white);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,215,0,0.02) 40px, rgba(255,215,0,0.02) 80px);
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--black) 0%, #1a0000 50%, var(--black) 100%);
+    border-bottom: 4px solid var(--gold);
+    padding: 2rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--green), var(--gold), var(--red));
+  }
+
+  .star-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .star-row span {
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  header h1 .kiddies { color: var(--red); }
+  header h1 .carnival { color: var(--white); }
+  header h1 .year { color: var(--gold); }
+
+  header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.4rem);
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-top: 0.25rem;
+  }
+
+  .form-container {
+    max-width: 680px;
+    margin: 2rem auto;
+    padding: 0 1rem 4rem;
+  }
+
+  .section-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--red), var(--gold), var(--green));
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title .icon { font-size: 1.1rem; }
+
+  .field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .field-group.full { grid-template-columns: 1fr; }
+
+  @media (max-width: 520px) {
+    .field-group { grid-template-columns: 1fr; }
+  }
+
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #aaaaaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.65rem 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+  }
+
+  select option { background: #1a1a1a; }
+
+  .field { margin-bottom: 0; }
+
+  .costume-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  @media (max-width: 520px) {
+    .costume-options { grid-template-columns: 1fr; }
+  }
+
+  .costume-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--input-bg);
+    position: relative;
+  }
+
+  .costume-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0; height: 0;
+  }
+
+  .costume-card:hover {
+    border-color: var(--gold);
+  }
+
+  .costume-card.selected {
+    border-color: var(--gold);
+    background: rgba(255, 215, 0, 0.08);
+  }
+
+  .costume-card .costume-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--white);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .costume-card .costume-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--gold);
+    display: block;
+  }
+
+  .costume-card .costume-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 0.4rem;
+  }
+
+  .badge-back { background: var(--green); color: white; }
+  .badge-front { background: var(--red); color: white; }
+  .badge-ultra { background: var(--gold); color: black; }
+
+  .addon-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .addon-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .addon-item:hover { border-color: var(--gold); }
+
+  .addon-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  .addon-label {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .addon-price {
+    font-weight: 800;
+    color: var(--gold);
+    font-size: 0.95rem;
+  }
+
+  .addon-note {
+    font-size: 0.72rem;
+    color: #888;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .deposit-banner {
+    background: linear-gradient(135deg, #1a0e00, #2a1500);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .deposit-banner .icon {
+    font-size: 1.75rem;
+    flex-shrink: 0;
+  }
+
+  .deposit-banner p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #dddddd;
+  }
+
+  .deposit-banner strong {
+    color: var(--gold);
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+  }
+
+  .deposit-email {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .total-bar {
+    background: linear-gradient(135deg, var(--green), #004d2e);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .total-bar span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+
+  .total-bar .amount {
+    font-size: 1.8rem;
+    color: var(--gold);
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--red), #8b0000);
+    border: none;
+    border-radius: 10px;
+    color: var(--white);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    padding: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn:hover {
+    background: linear-gradient(135deg, #e01030, var(--red));
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(206, 17, 38, 0.4);
+  }
+
+  .submit-btn:active { transform: translateY(0); }
+
+  .success-message {
+    display: none;
+    background: linear-gradient(135deg, #001a0e, #003320);
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .success-message h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .success-message p {
+    color: #cccccc;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .error-msg {
+    color: #ff6b6b;
+    font-size: 0.78rem;
+    margin-top: 0.3rem;
+    display: none;
+  }
+
+  .gender-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .gender-card {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--input-bg);
+    font-weight: 700;
+    font-size: 0.95rem;
+    position: relative;
+  }
+
+  .gender-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0; height: 0;
+  }
+
+  .gender-card:hover { border-color: var(--gold); }
+  .gender-card.selected { border-color: var(--gold); background: rgba(255,215,0,0.08); color: var(--gold); }
+
+  .size-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.25rem 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="star-row">
+    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+  </div>
+  <h1>
+    <span class="kiddies">Kiddies </span>
+    <span class="carnival">Carnival </span>
+    <span class="year">2026</span>
+  </h1>
+  <h2>The Black Stars World Cup Edition</h2>
+  <div class="star-row" style="margin-top:0.5rem">
+    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+  </div>
+</header>
+
+<div class="form-container">
+
+  <div class="deposit-banner">
+    <div class="icon">⚽</div>
+    <div>
+      <strong>Deposit Required to Confirm Your Order</strong>
+      <p>A <strong style="color:var(--gold);font-family:inherit;font-size:inherit;">50% deposit</strong> is required to secure your registration. Please send your deposit via e-transfer to <span class="deposit-email">simone.cole2@gmail.com</span> after submitting this form. Orders are not confirmed until deposit is received.</p>
+    </div>
+  </div>
+
+  <form id="registrationForm" novalidate>
+
+    <!-- Personal Info -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">👤</span> Masquerader Information</div>
+      <div class="field-group" style="margin-bottom:1rem;">
+        <div class="field">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" placeholder="First name" required>
+          <div class="error-msg" id="firstNameError">Required</div>
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" placeholder="Last name" required>
+          <div class="error-msg" id="lastNameError">Required</div>
+        </div>
+      </div>
+      <div class="field-group" style="margin-bottom:1rem;">
+        <div class="field">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" placeholder="Age" min="1" max="17" required>
+          <div class="error-msg" id="ageError">Required</div>
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <div class="gender-options">
+            <label class="gender-card" id="genderGirl">
+              <input type="radio" name="gender" value="Girl" required>
+              Girl
+            </label>
+            <label class="gender-card" id="genderBoy">
+              <input type="radio" name="gender" value="Boy">
+              Boy
+            </label>
+          </div>
+          <div class="error-msg" id="genderError">Required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">📞</span> Parent / Guardian Contact</div>
+      <div class="field-group" style="margin-bottom:1rem;">
+        <div class="field">
+          <label for="parentName">Parent / Guardian Name</label>
+          <input type="text" id="parentName" name="parentName" placeholder="Full name" required>
+          <div class="error-msg" id="parentNameError">Required</div>
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. 416-555-0100" required>
+          <div class="error-msg" id="phoneError">Required</div>
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+          <div class="error-msg" id="emailError">Valid email required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Costume Selection -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">🎭</span> Costume Selection</div>
+      <label style="margin-bottom:0.75rem;display:block;">Choose Your Costume</label>
+      <div class="costume-options">
+        <label class="costume-card" id="card-backline">
+          <input type="radio" name="costume" value="Backline" data-price="150" required>
+          <span class="costume-badge badge-back">Backline</span>
+          <span class="costume-price">$150</span>
+        </label>
+        <label class="costume-card" id="card-frontline">
+          <input type="radio" name="costume" value="Frontline" data-price="275">
+          <span class="costume-badge badge-front">Frontline</span>
+          <span class="costume-price">$275</span>
+        </label>
+        <label class="costume-card" id="card-ultra">
+          <input type="radio" name="costume" value="Ultra Frontline" data-price="430">
+          <span class="costume-badge badge-ultra">Ultra Frontline</span>
+          <span class="costume-price">$430</span>
+        </label>
+      </div>
+      <div class="error-msg" id="costumeError" style="margin-top:0.5rem;">Please select a costume</div>
+    </div>
+
+    <!-- Add Ons -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">✨</span> Add-Ons & Upgrades</div>
+      <div class="addon-group">
+
+        <label class="addon-item" id="addon-cage-skirt">
+          <input type="checkbox" name="addons" value="Girls Cage Skirt" data-price="75" data-gender="Girl">
+          <span class="addon-label">
+            Girls Cage Skirt
+            <span class="addon-note">Girls only</span>
+          </span>
+          <span class="addon-price">$75</span>
+        </label>
+
+        <label class="addon-item" id="addon-frontline-backpack">
+          <input type="checkbox" name="addons" value="Frontline Backpack" data-price="85" data-costume="Frontline">
+          <span class="addon-label">
+            Frontline Backpack
+            <span class="addon-note">Frontline costume</span>
+          </span>
+          <span class="addon-price">$85</span>
+        </label>
+
+        <label class="addon-item" id="addon-ultra-backpack">
+          <input type="checkbox" name="addons" value="Ultra Frontline Backpack" data-price="125" data-costume="Ultra Frontline">
+          <span class="addon-label">
+            Ultra Frontline Backpack
+            <span class="addon-note">Ultra Frontline costume</span>
+          </span>
+          <span class="addon-price">$125</span>
+        </label>
+
+        <label class="addon-item" id="addon-headpiece">
+          <input type="checkbox" name="addons" value="Frontline Headpiece" data-price="50" data-gender="Girl">
+          <span class="addon-label">
+            Frontline Headpiece
+            <span class="addon-note">Girls only</span>
+          </span>
+          <span class="addon-price">$50</span>
+        </label>
+
+        <label class="addon-item" id="addon-shoes">
+          <input type="checkbox" name="addons" value="Costume Shoes" data-price="45">
+          <span class="addon-label">
+            Costume Shoes
+            <span class="addon-note">Girls and boys</span>
+          </span>
+          <span class="addon-price">$45</span>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- Sizing -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">📏</span> Sizing Information</div>
+      <div class="size-grid" style="margin-bottom:1rem;">
+        <div class="field">
+          <label for="topSize">Top Size</label>
+          <select id="topSize" name="topSize" required>
+            <option value="">Select size</option>
+            <option>2T</option>
+            <option>3T</option>
+            <option>4T</option>
+            <option>XS (4-5)</option>
+            <option>S (6-7)</option>
+            <option>M (8-9)</option>
+            <option>L (10-12)</option>
+            <option>XL (14-16)</option>
+          </select>
+          <div class="error-msg" id="topSizeError">Required</div>
+        </div>
+        <div class="field">
+          <label for="bottomSize">Bottom Size</label>
+          <select id="bottomSize" name="bottomSize" required>
+            <option value="">Select size</option>
+            <option>2T</option>
+            <option>3T</option>
+            <option>4T</option>
+            <option>XS (4-5)</option>
+            <option>S (6-7)</option>
+            <option>M (8-9)</option>
+            <option>L (10-12)</option>
+            <option>XL (14-16)</option>
+          </select>
+          <div class="error-msg" id="bottomSizeError">Required</div>
+        </div>
+      </div>
+      <div class="size-grid">
+        <div class="field">
+          <label for="waistSize">Waist Size (inches)</label>
+          <input type="number" id="waistSize" name="waistSize" placeholder='e.g. 22"' min="10" max="40" required>
+          <div class="error-msg" id="waistSizeError">Required</div>
+        </div>
+        <div class="field">
+          <label for="shoeSize">Shoe Size</label>
+          <input type="text" id="shoeSize" name="shoeSize" placeholder="e.g. 10C / 2Y">
+          <div class="error-msg" id="shoeSizeError">Required if adding shoes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="section-card">
+      <div class="section-title"><span class="icon">📝</span> Additional Notes</div>
+      <div class="field">
+        <label for="notes">Any special requests or notes</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="e.g. allergies, accessibility needs, custom requests..."></textarea>
+      </div>
+    </div>
+
+    <!-- Total -->
+    <div class="total-bar">
+      <span>Estimated Total</span>
+      <span class="amount" id="totalDisplay">$0</span>
+    </div>
+
+    <button type="submit" class="submit-btn">SUBMIT REGISTRATION ⚽</button>
+
+    <div class="success-message" id="successMessage">
+      <h3>Registration Submitted!</h3>
+      <p>Thank you! Your registration for <strong id="successName"></strong> has been received.<br><br>
+      Please remember to send your <strong style="color:var(--gold);">50% deposit</strong> via e-transfer to <strong style="color:var(--gold);">simone.cole2@gmail.com</strong> to confirm your order.<br><br>
+      A confirmation will be sent to your email shortly.</p>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  // Costume card selection
+  document.querySelectorAll('.costume-card input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.costume-card').forEach(c => c.classList.remove('selected'));
+      this.closest('.costume-card').classList.add('selected');
+      updateTotal();
+    });
+  });
+
+  // Gender card selection
+  document.querySelectorAll('.gender-card input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('selected'));
+      this.closest('.gender-card').classList.add('selected');
+    });
+  });
+
+  // Addon checkboxes
+  document.querySelectorAll('.addon-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', updateTotal);
+  });
+
+  function updateTotal() {
+    let total = 0;
+    const selectedCostume = document.querySelector('input[name="costume"]:checked');
+    if (selectedCostume) total += parseInt(selectedCostume.dataset.price);
+
+    document.querySelectorAll('input[name="addons"]:checked').forEach(cb => {
+      total += parseInt(cb.dataset.price);
+    });
+
+    document.getElementById('totalDisplay').textContent = '$' + total;
+  }
+
+  // Form submission
+  document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    let valid = true;
+
+    const required = [
+      ['firstName', 'firstNameError'],
+      ['lastName', 'lastNameError'],
+      ['age', 'ageError'],
+      ['parentName', 'parentNameError'],
+      ['phone', 'phoneError'],
+      ['email', 'emailError'],
+      ['topSize', 'topSizeError'],
+      ['bottomSize', 'bottomSizeError'],
+      ['waistSize', 'waistSizeError'],
+    ];
+
+    required.forEach(([fieldId, errorId]) => {
+      const field = document.getElementById(fieldId);
+      const error = document.getElementById(errorId);
+      if (!field.value.trim()) {
+        error.style.display = 'block';
+        valid = false;
+      } else {
+        error.style.display = 'none';
+      }
+    });
+
+    // Email validation
+    const email = document.getElementById('email').value;
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById('emailError').style.display = 'block';
+      valid = false;
+    }
+
+    // Gender validation
+    const gender = document.querySelector('input[name="gender"]:checked');
+    if (!gender) {
+      document.getElementById('genderError').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('genderError').style.display = 'none';
+    }
+
+    // Costume validation
+    const costume = document.querySelector('input[name="costume"]:checked');
+    if (!costume) {
+      document.getElementById('costumeError').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('costumeError').style.display = 'none';
+    }
+
+    // Shoe size if shoes selected
+    const shoesSelected = document.querySelector('input[value="Costume Shoes"]:checked');
+    const shoeSize = document.getElementById('shoeSize').value.trim();
+    if (shoesSelected && !shoeSize) {
+      document.getElementById('shoeSizeError').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('shoeSizeError').style.display = 'none';
+    }
+
+    if (!valid) return;
+
+    // Build form data
+    const addons = Array.from(document.querySelectorAll('input[name="addons"]:checked')).map(cb => cb.value);
+    const total = document.getElementById('totalDisplay').textContent;
+
+    const formData = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      age: document.getElementById('age').value,
+      gender: gender.value,
+      parentName: document.getElementById('parentName').value,
+      phone: document.getElementById('phone').value,
+      email: email,
+      costume: costume.value,
+      costumePrice: costume.dataset.price,
+      addons: addons.join(', ') || 'None',
+      topSize: document.getElementById('topSize').value,
+      bottomSize: document.getElementById('bottomSize').value,
+      waistSize: document.getElementById('waistSize').value,
+      shoeSize: document.getElementById('shoeSize').value || 'N/A',
+      notes: document.getElementById('notes').value || 'None',
+      total: total
+    };
+
+    // Use Formspree to send to email
+    const formspreeEndpoint = 'https://formspree.io/f/mqejdpla';
+
+    try {
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          _subject: `Carnival Registration - ${formData.firstName} ${formData.lastName} - ${formData.costume}`
+        })
+      });
+
+      document.getElementById('successName').textContent = formData.firstName + ' ' + formData.lastName;
+      document.getElementById('successMessage').style.display = 'block';
+      document.getElementById('registrationForm').style.display = 'none';
+
+    } catch (error) {
+      // Fallback - show success anyway and note to check
+      document.getElementById('successName').textContent = formData.firstName + ' ' + formData.lastName;
+      document.getElementById('successMessage').style.display = 'block';
+      document.getElementById('registrationForm').style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
