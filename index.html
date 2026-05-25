@@ -1354,15 +1354,12 @@
       });
     } catch(err) { console.error('Formspree error:', err); }
 
-    // Send to Google Sheets (no-cors to avoid CORS block)
+    // Send to Google Sheets via GET + URL params (avoids CORS redirect issue)
     if (SHEETS_URL !== 'YOUR_WEB_APP_URL_HERE') {
       try {
-        fetch(SHEETS_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify(formData)
-        });
+        const params = new URLSearchParams();
+        Object.entries(formData).forEach(([k, v]) => params.append(k, v));
+        fetch(SHEETS_URL + '?' + params.toString(), { mode: 'no-cors' });
       } catch(err) { console.error('Sheets error:', err); }
     }
 
