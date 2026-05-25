@@ -1212,15 +1212,32 @@
       estimatedTotal: total
     };
 
+    // ← Paste your Google Apps Script Web App URL below after deployment
+    const SHEETS_URL = 'YOUR_WEB_APP_URL_HERE';
+
     try {
-      await fetch('https://formspree.io/f/mqejdpla', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          _subject: `Carnival Registration - ${formData.firstName} ${formData.lastName} - ${formData.costume}`
+      const requests = [
+        fetch('https://formspree.io/f/mqejdpla', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            _subject: `Carnival Registration - ${formData.firstName} ${formData.lastName} - ${formData.costume}`
+          })
         })
-      });
+      ];
+
+      if (SHEETS_URL !== 'YOUR_WEB_APP_URL_HERE') {
+        requests.push(
+          fetch(SHEETS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(formData)
+          })
+        );
+      }
+
+      await Promise.all(requests);
     } catch(err) { console.error(err); }
 
     document.getElementById('successName').textContent = formData.firstName + ' ' + formData.lastName;
