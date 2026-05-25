@@ -680,6 +680,40 @@
       <div class="error-msg" id="costumeError" style="margin-top:0.5rem;">Please select a costume</div>
     </div>
 
+    <div class="section-card" id="styleOptionsCard" style="display:none;">
+      <div class="section-title">&#128248; Costume Style Option</div>
+
+      <div id="girlsStyleOptions" style="display:none;">
+        <label style="margin-bottom:0.75rem;display:block;">Choose Your Bottom</label>
+        <div class="gender-options">
+          <label class="gender-card" id="optLeggings">
+            <input type="radio" name="styleOption" value="White Leggings">
+            White Leggings
+          </label>
+          <label class="gender-card" id="optShorts">
+            <input type="radio" name="styleOption" value="White Shorts">
+            White Shorts
+          </label>
+        </div>
+      </div>
+
+      <div id="boysStyleOptions" style="display:none;">
+        <label style="margin-bottom:0.75rem;display:block;">Choose Your Top</label>
+        <div class="gender-options">
+          <label class="gender-card" id="optTank">
+            <input type="radio" name="styleOption" value="White Tank">
+            White Tank
+          </label>
+          <label class="gender-card" id="optTshirt">
+            <input type="radio" name="styleOption" value="White T-Shirt">
+            White T-Shirt
+          </label>
+        </div>
+      </div>
+
+      <div class="error-msg" id="styleOptionError" style="margin-top:0.5rem;">Please select an option</div>
+    </div>
+
     <div class="section-card">
       <div class="section-title">&#10024; Add-Ons &amp; Upgrades</div>
       <div class="addon-group">
@@ -842,6 +876,21 @@
     radio.addEventListener('change', function() {
       document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('selected'));
       this.closest('.gender-card').classList.add('selected');
+
+      const isGirl = this.value === 'Girl';
+      document.getElementById('styleOptionsCard').style.display = 'block';
+      document.getElementById('girlsStyleOptions').style.display = isGirl ? 'block' : 'none';
+      document.getElementById('boysStyleOptions').style.display = isGirl ? 'none' : 'block';
+
+      document.querySelectorAll('input[name="styleOption"]').forEach(r => r.checked = false);
+      document.querySelectorAll('#styleOptionsCard .gender-card').forEach(c => c.classList.remove('selected'));
+    });
+  });
+
+  document.querySelectorAll('input[name="styleOption"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('#styleOptionsCard .gender-card').forEach(c => c.classList.remove('selected'));
+      this.closest('.gender-card').classList.add('selected');
     });
   });
 
@@ -887,6 +936,10 @@
     if (!costume) { document.getElementById('costumeError').style.display = 'block'; valid = false; }
     else { document.getElementById('costumeError').style.display = 'none'; }
 
+    const styleOption = document.querySelector('input[name="styleOption"]:checked');
+    if (!styleOption) { document.getElementById('styleOptionError').style.display = 'block'; valid = false; }
+    else { document.getElementById('styleOptionError').style.display = 'none'; }
+
     const shoesSelected = document.querySelector('input[value="Costume Shoes (Kids)"]:checked') || document.querySelector('input[value="Costume Shoes (Adult)"]:checked');
     const shoeSize = document.getElementById('shoeSize').value.trim();
     if (shoesSelected && !shoeSize) { document.getElementById('shoeSizeError').style.display = 'block'; valid = false; }
@@ -913,6 +966,7 @@
       waistSize: document.getElementById('waistSize').value + '"',
       shoeSize: document.getElementById('shoeSize').value || 'N/A',
       notes: document.getElementById('notes').value || 'None',
+      styleOption: document.querySelector('input[name="styleOption"]:checked')?.value || 'N/A',
       instagram: document.getElementById('instagram').value || 'N/A',
       photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
       estimatedTotal: total
