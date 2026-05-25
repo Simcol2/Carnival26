@@ -378,6 +378,17 @@
   }
 
   .addon-item:hover { border-color: var(--gold); background: #fffbf0; }
+
+  .addon-item.addon-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: grayscale(0.4);
+  }
+  .addon-item.addon-disabled input[type="checkbox"] {
+    pointer-events: none;
+  }
+
   .addon-item.addon-selected {
     border-color: #C8971A !important;
     background: #fffbf0 !important;
@@ -905,7 +916,7 @@
       <div class="section-title">&#10024; Add-Ons &amp; Upgrades</div>
       <div class="addon-group">
 
-        <label class="addon-item">
+        <label class="addon-item" data-gender="girl">
           <input type="checkbox" name="addons" value="Girls Cage Skirt" data-price="75">
           <span class="addon-label">Girls Cage Skirt<span class="addon-note">Girls only</span></span>
           <span class="addon-price">$75</span>
@@ -923,7 +934,7 @@
           <span class="addon-price">$125</span>
         </label>
 
-        <label class="addon-item">
+        <label class="addon-item" data-gender="girl">
           <input type="checkbox" name="addons" value="Frontline Headpiece" data-price="50">
           <span class="addon-label">Frontline Headpiece<span class="addon-note">Girls only</span></span>
           <span class="addon-price">$50</span>
@@ -1107,6 +1118,27 @@
     }
   };
 
+  function updateAddonAvailability(gender) {
+    document.querySelectorAll('.addon-item[data-gender]').forEach(item => {
+      const itemGender = item.dataset.gender; // 'girl' or 'boy'
+      const available = itemGender === gender.toLowerCase();
+      const cb = item.querySelector('input[type="checkbox"]');
+      if (!available) {
+        item.classList.add('addon-disabled');
+        cb.disabled = true;
+        // uncheck & deduct from total if it was selected
+        if (cb.checked) {
+          cb.checked = false;
+          item.classList.remove('addon-selected');
+          updateTotal();
+        }
+      } else {
+        item.classList.remove('addon-disabled');
+        cb.disabled = false;
+      }
+    });
+  }
+
   document.querySelectorAll('input[name="gender"]').forEach(radio => {
     radio.addEventListener('change', function() {
       document.querySelectorAll('#genderGirl, #genderBoy').forEach(c => c.classList.remove('selected'));
@@ -1125,6 +1157,8 @@
       ['backline','frontline','ultra'].forEach(tier => {
         document.getElementById('includes-' + tier).textContent = costumeIncludes[gender][tier];
       });
+
+      updateAddonAvailability(gender);
     });
   });
 
