@@ -1106,9 +1106,9 @@
     }
   };
 
-  document.querySelectorAll('.gender-card input[type="radio"]').forEach(radio => {
+  document.querySelectorAll('input[name="gender"]').forEach(radio => {
     radio.addEventListener('change', function() {
-      document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('#genderGirl, #genderBoy').forEach(c => c.classList.remove('selected'));
       this.closest('.gender-card').classList.add('selected');
 
       const isGirl = this.value === 'Girl';
