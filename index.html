@@ -789,6 +789,41 @@
           <div class="error-msg" id="genderError">Required</div>
         </div>
       </div>
+
+      <div id="styleOptionsCard" style="display:none; margin-top:1rem;">
+        <hr style="border:none;border-top:1px solid var(--border);margin-bottom:1rem;">
+
+        <div id="girlsStyleOptions" style="display:none;">
+          <label style="margin-bottom:0.75rem;display:block;">Choose Your Bottom</label>
+          <div class="gender-options">
+            <label class="gender-card" id="optLeggings">
+              <input type="radio" name="styleOption" value="White Leggings">
+              White Leggings
+            </label>
+            <label class="gender-card" id="optShorts">
+              <input type="radio" name="styleOption" value="White Shorts">
+              White Shorts
+            </label>
+          </div>
+        </div>
+
+        <div id="boysStyleOptions" style="display:none;">
+          <label style="margin-bottom:0.75rem;display:block;">Choose Your Top</label>
+          <div class="gender-options">
+            <label class="gender-card" id="optTank">
+              <input type="radio" name="styleOption" value="White Tank">
+              White Tank
+            </label>
+            <label class="gender-card" id="optTshirt">
+              <input type="radio" name="styleOption" value="White T-Shirt">
+              White T-Shirt
+            </label>
+          </div>
+        </div>
+
+        <div class="error-msg" id="styleOptionError" style="margin-top:0.5rem;">Please select an option</div>
+      </div>
+
     </div>
 
     <div class="section-card">
@@ -864,40 +899,6 @@
         </label>
       </div>
       <div class="error-msg" id="costumeError" style="margin-top:0.5rem;">Please select a costume</div>
-    </div>
-
-    <div class="section-card" id="styleOptionsCard" style="display:none;">
-      <div class="section-title">&#128248; Costume Style Option</div>
-
-      <div id="girlsStyleOptions" style="display:none;">
-        <label style="margin-bottom:0.75rem;display:block;">Choose Your Bottom</label>
-        <div class="gender-options">
-          <label class="gender-card" id="optLeggings">
-            <input type="radio" name="styleOption" value="White Leggings">
-            White Leggings
-          </label>
-          <label class="gender-card" id="optShorts">
-            <input type="radio" name="styleOption" value="White Shorts">
-            White Shorts
-          </label>
-        </div>
-      </div>
-
-      <div id="boysStyleOptions" style="display:none;">
-        <label style="margin-bottom:0.75rem;display:block;">Choose Your Top</label>
-        <div class="gender-options">
-          <label class="gender-card" id="optTank">
-            <input type="radio" name="styleOption" value="White Tank">
-            White Tank
-          </label>
-          <label class="gender-card" id="optTshirt">
-            <input type="radio" name="styleOption" value="White T-Shirt">
-            White T-Shirt
-          </label>
-        </div>
-      </div>
-
-      <div class="error-msg" id="styleOptionError" style="margin-top:0.5rem;">Please select an option</div>
     </div>
 
     <div class="section-card">
