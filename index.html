@@ -583,6 +583,43 @@
     font-size: 0.8rem;
   }
 
+  /* Costume includes */
+  .costume-includes {
+    width: 100%;
+    padding: 0.6rem 0.25rem 0.1rem;
+    text-align: left;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+  }
+
+  .includes-label {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-light);
+    margin-bottom: 0.3rem;
+  }
+
+  .includes-text {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.65;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .includes-placeholder {
+    font-size: 0.75rem;
+    color: #bbb;
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
   /* View button for addon photos */
   .view-btn {
     background: transparent;
@@ -795,11 +832,19 @@
           </div>
           <span class="costume-badge badge-back">Backline</span>
           <span class="costume-price">$150</span>
+          <div class="costume-includes">
+            <span class="includes-label">Includes</span>
+            <span class="includes-text" id="includes-backline"><span class="includes-placeholder">Select gender above to see what's included</span></span>
+          </div>
         </label>
         <label class="costume-card" id="card-frontline">
           <input type="radio" name="costume" value="Frontline" data-price="275">
           <span class="costume-badge badge-front">Frontline</span>
           <span class="costume-price">$275</span>
+          <div class="costume-includes">
+            <span class="includes-label">Includes</span>
+            <span class="includes-text" id="includes-frontline"><span class="includes-placeholder">Select gender above to see what's included</span></span>
+          </div>
         </label>
         <label class="costume-card" id="card-ultra">
           <input type="radio" name="costume" value="Ultra Frontline" data-price="430">
@@ -808,6 +853,10 @@
           </div>
           <span class="costume-badge badge-ultra">Ultra Frontline</span>
           <span class="costume-price">$430</span>
+          <div class="costume-includes">
+            <span class="includes-label">Includes</span>
+            <span class="includes-text" id="includes-ultra"><span class="includes-placeholder">Select gender above to see what's included</span></span>
+          </div>
         </label>
       </div>
       <div class="error-msg" id="costumeError" style="margin-top:0.5rem;">Please select a costume</div>
@@ -884,7 +933,7 @@
         <label class="addon-item">
           <input type="checkbox" name="addons" value="Costume Shoes (Kids)" data-price="30">
           <img src="shoes.png" alt="Costume Shoes" class="addon-img">
-          <span class="addon-label">Costume Shoes -- Kids Sizes<span class="addon-note">Girls and boys</span></span>
+          <span class="addon-label">Decorated Shoes -- Kids Sizes<span class="addon-note">Available to all tiers</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('shoes.png')">View</button>
           <span class="addon-price">$30</span>
         </label>
@@ -892,7 +941,7 @@
         <label class="addon-item">
           <input type="checkbox" name="addons" value="Costume Shoes (Adult)" data-price="45">
           <img src="shoes.png" alt="Costume Shoes" class="addon-img">
-          <span class="addon-label">Costume Shoes -- Adult Sizes<span class="addon-note">Girls and boys</span></span>
+          <span class="addon-label">Decorated Shoes -- Adult Sizes<span class="addon-note">Available to all tiers</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('shoes.png')">View</button>
           <span class="addon-price">$45</span>
         </label>
@@ -1040,18 +1089,37 @@
     });
   });
 
+  const costumeIncludes = {
+    Girl: {
+      backline: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Skirt',
+      frontline: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Feather collar, Tiara, Frontline skirt',
+      ultra: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Caged skirt, Large Tiara, Large feather collar'
+    },
+    Boy: {
+      backline: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Chest piece, Belt',
+      frontline: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Feather collar, Belt, Chest piece, Large headpiece',
+      ultra: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Belt, Chest piece, Large headpiece, Large feather backpack with flag'
+    }
+  };
+
   document.querySelectorAll('.gender-card input[type="radio"]').forEach(radio => {
     radio.addEventListener('change', function() {
       document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('selected'));
       this.closest('.gender-card').classList.add('selected');
 
       const isGirl = this.value === 'Girl';
+      const gender = this.value;
+
       document.getElementById('styleOptionsCard').style.display = 'block';
       document.getElementById('girlsStyleOptions').style.display = isGirl ? 'block' : 'none';
       document.getElementById('boysStyleOptions').style.display = isGirl ? 'none' : 'block';
 
       document.querySelectorAll('input[name="styleOption"]').forEach(r => r.checked = false);
       document.querySelectorAll('#styleOptionsCard .gender-card').forEach(c => c.classList.remove('selected'));
+
+      ['backline','frontline','ultra'].forEach(tier => {
+        document.getElementById('includes-' + tier).textContent = costumeIncludes[gender][tier];
+      });
     });
   });
 
