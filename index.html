@@ -292,6 +292,27 @@
 
   .costume-card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,151,26,0.15); }
 
+  .costume-photos {
+    display: flex;
+    gap: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.65rem;
+    width: 100%;
+  }
+
+  .costume-photos img {
+    width: 50%;
+    height: 130px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .costume-photos.single img {
+    width: 100%;
+  }
+
   .costume-card.selected {
     border-color: var(--gold);
     background: #fffbf0;
@@ -628,6 +649,10 @@
       <div class="costume-options">
         <label class="costume-card" id="card-backline">
           <input type="radio" name="costume" value="Backline" data-price="150" required>
+          <div class="costume-photos">
+            <img src="girls backline.jpg" alt="Girls Backline costume">
+            <img src="boys backline.jpg" alt="Boys Backline costume">
+          </div>
           <span class="costume-badge badge-back">Backline</span>
           <span class="costume-price">$150</span>
         </label>
