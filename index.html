@@ -199,7 +199,6 @@
 
   @media (max-width: 520px) {
     .field-group { grid-template-columns: 1fr; }
-    .costume-options { grid-template-columns: 1fr !important; }
     .gender-options { grid-template-columns: 1fr 1fr; }
   }
 
@@ -269,8 +268,8 @@
   }
 
   .costume-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     margin-top: 0.25rem;
   }
