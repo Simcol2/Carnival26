@@ -399,11 +399,32 @@
   }
 
   .addon-item input[type="checkbox"] {
-    width: 17px; height: 17px; min-width: 17px;
-    accent-color: var(--gold);
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px; height: 22px; min-width: 22px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background: white;
     cursor: pointer;
     flex-shrink: 0;
     pointer-events: auto;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .addon-item input[type="checkbox"]:checked {
+    background: var(--gold);
+    border-color: var(--gold);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 2L10 10M10 2L2 10' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 68%;
+  }
+
+  .addon-item input[type="checkbox"]:disabled {
+    border-color: #ddd;
+    background: #f5f5f5;
+    cursor: not-allowed;
   }
 
   label.addon-item {
