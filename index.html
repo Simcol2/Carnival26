@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kiddies Carnival 2026 - Registration</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@700;800&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
   :root {
     --gold: #C8971A;
@@ -90,34 +90,39 @@
     overflow: hidden;
   }
 
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 6vw, 3.8rem);
-    font-weight: 800;
-    line-height: 1.05;
+  .header-cursive {
+    margin: 0.5rem auto 0.5rem;
+    text-align: center;
+  }
+
+  .cursive-line {
+    font-family: 'Great Vibes', cursive;
     color: var(--black);
-    letter-spacing: -0.5px;
+    line-height: 1.3;
+    margin: 0;
   }
 
-  header h1 .kiddies { color: var(--red); }
-  header h1 .carnival { color: var(--black); }
-  header h1 .year { color: var(--gold); }
-
-  header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(0.85rem, 2.5vw, 1.15rem);
-    color: var(--text-light);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-top: 0.5rem;
-    font-weight: 600;
+  .cursive-line:first-child {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    color: var(--red);
   }
 
-  .black-star {
-    width: 28px;
-    height: 28px;
-    margin: 0.75rem auto 0;
-    display: block;
+  .cursive-mid {
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    color: var(--black);
+  }
+
+  .cursive-small {
+    font-size: clamp(1.3rem, 3.8vw, 1.9rem);
+    color: var(--gold);
+    margin-top: 0.1rem;
+  }
+
+  .cursive-flag-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
   }
 
   .form-container {
@@ -885,23 +890,25 @@
            style="border-radius:10px;">
     </div>
 
-    <svg class="ghana-flag" viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg">
-      <rect width="52" height="34" fill="#CE1126"/>
-      <rect y="11.33" width="52" height="11.34" fill="#FCD116"/>
-      <rect y="22.67" width="52" height="11.33" fill="#006B3F"/>
-      <polygon points="26,12 27.9,17.8 33.9,17.8 29,21.3 30.9,27.1 26,23.6 21.1,27.1 23,21.3 18.1,17.8 24.1,17.8" fill="#000000"/>
-    </svg>
-
-    <h1>
-      <span class="kiddies">Kiddies </span>
-      <span class="carnival">Carnival </span>
-      <span class="year">2026</span>
-    </h1>
-    <h2>The Black Stars World Cup Edition</h2>
-
-    <svg class="black-star" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="14,2 17.1,10.6 26.3,10.6 19.1,16.1 21.7,24.9 14,19.8 6.3,24.9 8.9,16.1 1.7,10.6 10.9,10.6" fill="#1a1a1a" opacity="0.15"/>
-    </svg>
+    <div class="header-cursive">
+      <p class="cursive-line">Representing Ghana</p>
+      <div class="cursive-flag-row">
+        <svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:21px;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);flex-shrink:0;">
+          <rect width="52" height="34" fill="#CE1126"/>
+          <rect y="11.33" width="52" height="11.34" fill="#FCD116"/>
+          <rect y="22.67" width="52" height="11.33" fill="#006B3F"/>
+          <polygon points="26,12 27.9,17.8 33.9,17.8 29,21.3 30.9,27.1 26,23.6 21.1,27.1 23,21.3 18.1,17.8 24.1,17.8" fill="#000000"/>
+        </svg>
+        <p class="cursive-line cursive-mid">The Black Stars</p>
+        <svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:21px;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);flex-shrink:0;">
+          <rect width="52" height="34" fill="#CE1126"/>
+          <rect y="11.33" width="52" height="11.34" fill="#FCD116"/>
+          <rect y="22.67" width="52" height="11.33" fill="#006B3F"/>
+          <polygon points="26,12 27.9,17.8 33.9,17.8 29,21.3 30.9,27.1 26,23.6 21.1,27.1 23,21.3 18.1,17.8 24.1,17.8" fill="#000000"/>
+        </svg>
+      </div>
+      <p class="cursive-line cursive-small">Kiddies Carnival &amp; FIFA World Cup 2026</p>
+    </div>
 
     <div class="header-social">
       <a href="https://www.instagram.com/mas.mentality" target="_blank" class="social-link">
