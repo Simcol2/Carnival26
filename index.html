@@ -1341,30 +1341,30 @@
     // ← Paste your Google Apps Script Web App URL below after deployment
     const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxEfg8Gl51uXm7CB15KpNTI2swIUGhFrxM9kziM1Zuppq-_Z4liNaKwIuY8kAkWCPpf/exec';
 
+    // Send to Formspree (email notification)
     try {
-      const requests = [
-        fetch('https://formspree.io/f/mqejdpla', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            _subject: `Carnival Registration - ${formData.firstName} ${formData.lastName} - ${formData.costume}`
-          })
+      await fetch('https://formspree.io/f/mqejdpla', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          _replyto: formData.email,
+          _subject: `Carnival Registration - ${formData.firstName} ${formData.lastName} - ${formData.costume}`
         })
-      ];
+      });
+    } catch(err) { console.error('Formspree error:', err); }
 
-      if (SHEETS_URL !== 'YOUR_WEB_APP_URL_HERE') {
-        requests.push(
-          fetch(SHEETS_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(formData)
-          })
-        );
-      }
-
-      await Promise.all(requests);
-    } catch(err) { console.error(err); }
+    // Send to Google Sheets (no-cors to avoid CORS block)
+    if (SHEETS_URL !== 'YOUR_WEB_APP_URL_HERE') {
+      try {
+        fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(formData)
+        });
+      } catch(err) { console.error('Sheets error:', err); }
+    }
 
     document.getElementById('successName').textContent = formData.firstName + ' ' + formData.lastName;
     document.getElementById('successMessage').style.display = 'block';
