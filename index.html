@@ -1004,6 +1004,31 @@
     </div>
 
     <div class="section-card">
+      <div class="section-title">👕 Parent T-Shirts</div>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">Show your support in style! Each shirt is <strong style="color:var(--black);">$40</strong>. Select a size for each shirt you'd like to order — add a row for each additional shirt.</p>
+
+      <div style="display:flex;gap:6px;margin-bottom:1rem;border-radius:10px;overflow:hidden;">
+        <img src="masfam.png" alt="Parent T-Shirt" style="width:33.33%;height:auto;display:block;">
+        <img src="masmama.png" alt="Parent T-Shirt" style="width:33.33%;height:auto;display:block;">
+        <img src="maspapa.png" alt="Parent T-Shirt" style="width:33.33%;height:auto;display:block;">
+      </div>
+
+      <div id="tshirtRows">
+        <div class="tshirt-row" style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.6rem;">
+          <select name="tshirtSize[]" style="flex:1;">
+            <option value="">Select size</option>
+            <option>XS</option><option>S</option><option>M</option><option>L</option>
+            <option>XL</option><option>XXL</option><option>XXXL</option>
+          </select>
+          <span style="font-size:0.85rem;font-weight:700;color:var(--green);white-space:nowrap;">$40</span>
+          <button type="button" onclick="removeTshirtRow(this)" style="background:none;border:1.5px solid #ddd;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:14px;color:#aaa;flex-shrink:0;display:flex;align-items:center;justify-content:center;">✕</button>
+        </div>
+      </div>
+
+      <button type="button" onclick="addTshirtRow()" style="background:none;border:1.5px dashed var(--gold);border-radius:8px;color:var(--gold);font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:1px;padding:0.55rem 1rem;cursor:pointer;width:100%;margin-top:0.25rem;transition:all 0.2s;">+ Add Another Shirt</button>
+    </div>
+
+    <div class="section-card">
       <div class="section-title">&#128221; Additional Notes</div>
       <div class="field">
         <label for="notes">Special requests or notes</label>
@@ -1180,12 +1205,45 @@
     });
   });
 
+  function addTshirtRow() {
+    const row = document.createElement('div');
+    row.className = 'tshirt-row';
+    row.style.cssText = 'display:flex;align-items:center;gap:0.75rem;margin-bottom:0.6rem;';
+    row.innerHTML = `
+      <select name="tshirtSize[]" style="flex:1;" onchange="updateTotal()">
+        <option value="">Select size</option>
+        <option>XS</option><option>S</option><option>M</option><option>L</option>
+        <option>XL</option><option>XXL</option><option>XXXL</option>
+      </select>
+      <span style="font-size:0.85rem;font-weight:700;color:var(--green);white-space:nowrap;">$40</span>
+      <button type="button" onclick="removeTshirtRow(this)" style="background:none;border:1.5px solid #ddd;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:14px;color:#aaa;flex-shrink:0;display:flex;align-items:center;justify-content:center;">✕</button>
+    `;
+    document.getElementById('tshirtRows').appendChild(row);
+  }
+
+  function removeTshirtRow(btn) {
+    const rows = document.querySelectorAll('.tshirt-row');
+    if (rows.length > 1) {
+      btn.closest('.tshirt-row').remove();
+    } else {
+      // reset the last row's select instead of removing it
+      btn.closest('.tshirt-row').querySelector('select').value = '';
+    }
+    updateTotal();
+  }
+
+  // wire up the first t-shirt row's select
+  document.querySelector('#tshirtRows select').addEventListener('change', updateTotal);
+
   function updateTotal() {
     let total = 0;
     const selectedCostume = document.querySelector('input[name="costume"]:checked');
     if (selectedCostume) total += parseInt(selectedCostume.dataset.price);
     document.querySelectorAll('input[name="addons"]:checked').forEach(cb => {
       total += parseInt(cb.dataset.price);
+    });
+    document.querySelectorAll('#tshirtRows select').forEach(sel => {
+      if (sel.value) total += 40;
     });
     document.getElementById('totalDisplay').textContent = '$' + total;
   }
@@ -1255,6 +1313,7 @@
       styleOption: document.querySelector('input[name="styleOption"]:checked')?.value || 'N/A',
       instagram: document.getElementById('instagram').value || 'N/A',
       photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
+      tshirts: Array.from(document.querySelectorAll('#tshirtRows select')).map(s => s.value).filter(v => v).join(', ') || 'None',
       estimatedTotal: total
     };
 
