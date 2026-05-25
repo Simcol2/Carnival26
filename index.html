@@ -141,7 +141,7 @@
 
   .deposit-banner .dep-icon { font-size: 1.5rem; flex-shrink: 0; }
 
-  .deposit-banner strong {
+  .deposit-banner > div > strong {
     font-family: 'Playfair Display', serif;
     font-size: 1rem;
     color: var(--black);
@@ -153,6 +153,12 @@
     font-size: 0.85rem;
     line-height: 1.65;
     color: var(--text-light);
+  }
+
+  .deposit-banner p strong {
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
   }
 
   .dep-email { color: var(--green); font-weight: 700; }
