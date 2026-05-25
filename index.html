@@ -1131,6 +1131,17 @@
     radio.addEventListener('change', function() {
       document.querySelectorAll('#styleOptionsCard .gender-card').forEach(c => c.classList.remove('selected'));
       this.closest('.gender-card').classList.add('selected');
+
+      const currentGender = document.querySelector('input[name="gender"]:checked')?.value;
+      if (currentGender === 'Girl') {
+        if (this.value === 'White Shorts') {
+          document.getElementById('includes-backline').textContent =
+            'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Skirt, Yellow knee socks';
+        } else if (this.value === 'White Leggings') {
+          document.getElementById('includes-backline').textContent =
+            'Top, Leggings, Jewelled arm bands (2), Ankle bands, Headpiece, Skirt';
+        }
+      }
     });
   });
 
