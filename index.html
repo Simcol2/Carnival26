@@ -467,28 +467,69 @@
 
   .total-bar {
     background: var(--black);
-    border-radius: 12px;
-    padding: 1.1rem 1.5rem;
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .total-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
+  }
+
+  .total-bar-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.6rem;
   }
 
-  .total-bar span {
+  .total-bar-row:last-of-type { margin-bottom: 0; }
+
+  .total-bar-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin: 0.75rem 0;
+  }
+
+  .total-bar-label {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.7);
+    letter-spacing: 1.8px;
+    color: rgba(255,255,255,0.55);
   }
 
-  .total-bar .amount {
+  .total-bar-value {
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--gold-light);
+    font-size: 1.1rem;
     font-weight: 700;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .total-bar-value.highlight {
+    font-size: 1.5rem;
+    color: var(--gold-light);
+  }
+
+  .total-bar-value.deposit-amount {
+    color: #6ee87a;
+    font-size: 1.35rem;
+  }
+
+  .total-balance-note {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.38);
+    text-align: center;
+    margin-top: 0.9rem;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
   }
 
   .submit-btn {
@@ -1186,8 +1227,20 @@
     </div>
 
     <div class="total-bar">
-      <span>Estimated Total</span>
-      <span class="amount" id="totalDisplay">$0</span>
+      <div class="total-bar-row">
+        <span class="total-bar-label">Estimated Total</span>
+        <span class="total-bar-value highlight" id="totalDisplay">$0</span>
+      </div>
+      <hr class="total-bar-divider">
+      <div class="total-bar-row">
+        <span class="total-bar-label">Deposit Due Now (50%)</span>
+        <span class="total-bar-value deposit-amount" id="depositDisplay">$0</span>
+      </div>
+      <div class="total-bar-row">
+        <span class="total-bar-label">Remaining Balance</span>
+        <span class="total-bar-value" id="balanceDisplay">$0</span>
+      </div>
+      <p class="total-balance-note">Final balance is due 3 days prior to costume pickup &mdash; pickup date TBD</p>
     </div>
 
     <p style="font-size:0.8rem;line-height:1.7;color:var(--text-light);text-align:center;margin-bottom:1rem;padding:0 0.5rem;">
@@ -1352,7 +1405,11 @@
       const sel = document.querySelector(`select[name="${name}"]`);
       if (sel && sel.value) total += 40;
     });
+    const deposit = Math.ceil(total / 2);
+    const balance = total - deposit;
     document.getElementById('totalDisplay').textContent = '$' + total;
+    document.getElementById('depositDisplay').textContent = '$' + deposit;
+    document.getElementById('balanceDisplay').textContent = '$' + balance;
   }
 
   document.getElementById('registrationForm').addEventListener('submit', async function(e) {
