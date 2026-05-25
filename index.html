@@ -521,6 +521,125 @@
     border-top: 1px solid var(--border);
     margin: 1.25rem 0;
   }
+
+  /* Social links */
+  .header-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-light);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+
+  .social-link:hover { color: var(--gold); }
+  .social-link .soc-icon { font-size: 1rem; }
+
+  .site-footer {
+    background: var(--black);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .site-footer a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .site-footer a:hover { color: var(--gold-light); }
+
+  .site-footer .sep {
+    color: rgba(255,255,255,0.25);
+    font-size: 0.8rem;
+  }
+
+  /* View button for addon photos */
+  .view-btn {
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .view-btn:hover { background: var(--gold); color: white; }
+
+  /* Photo modal */
+  .photo-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.82);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .photo-modal.open { display: flex; }
+
+  .modal-inner {
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .modal-inner img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -14px; right: -14px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    line-height: 1;
+  }
 </style>
 </head>
 <body>
@@ -567,6 +686,15 @@
     <svg class="black-star" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
       <polygon points="14,2 17.1,10.6 26.3,10.6 19.1,16.1 21.7,24.9 14,19.8 6.3,24.9 8.9,16.1 1.7,10.6 10.9,10.6" fill="#1a1a1a" opacity="0.15"/>
     </svg>
+
+    <div class="header-social">
+      <a href="https://www.instagram.com/mas.mentality" target="_blank" class="social-link">
+        <span class="soc-icon">📸</span> @mas.mentality
+      </a>
+      <a href="mailto:masmentality@outlook.com" class="social-link">
+        <span class="soc-icon">✉️</span> masmentality@outlook.com
+      </a>
+    </div>
 
   </div>
 </header>
@@ -751,6 +879,7 @@
           <input type="checkbox" name="addons" value="Costume Shoes (Kids)" data-price="30">
           <img src="shoes.png" alt="Costume Shoes" class="addon-img">
           <span class="addon-label">Costume Shoes -- Kids Sizes<span class="addon-note">Girls and boys</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('shoes.png')">View</button>
           <span class="addon-price">$30</span>
         </label>
 
@@ -758,6 +887,7 @@
           <input type="checkbox" name="addons" value="Costume Shoes (Adult)" data-price="45">
           <img src="shoes.png" alt="Costume Shoes" class="addon-img">
           <span class="addon-label">Costume Shoes -- Adult Sizes<span class="addon-note">Girls and boys</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('shoes.png')">View</button>
           <span class="addon-price">$45</span>
         </label>
 
@@ -849,7 +979,40 @@
   </form>
 </div>
 
+<footer class="site-footer">
+  <a href="https://www.instagram.com/mas.mentality" target="_blank">
+    <span>📸</span> @mas.mentality
+  </a>
+  <span class="sep">•</span>
+  <a href="mailto:masmentality@outlook.com">
+    <span>✉️</span> masmentality@outlook.com
+  </a>
+</footer>
+
+<!-- Photo Modal -->
+<div id="photoModal" class="photo-modal" onclick="closeModal()">
+  <div class="modal-inner" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img id="modalImg" src="" alt="Costume photo">
+  </div>
+</div>
+
 <script>
+  function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('photoModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('photoModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
   function toggleConsent(div) {
     const cb = div.querySelector('input[type="checkbox"]');
     cb.checked = !cb.checked;
