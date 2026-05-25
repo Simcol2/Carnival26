@@ -1176,8 +1176,8 @@
 
     <div class="section-card">
       <div class="section-title">&#128247; Photo &amp; Social Media Consent</div>
-      <label class="addon-item" id="consentItem" onclick="toggleConsent(this)">
-        <input type="checkbox" name="photoConsent" value="yes" onclick="event.stopPropagation()">
+      <label class="addon-item" id="consentItem">
+        <input type="checkbox" name="photoConsent" value="yes">
         <span class="addon-label">
           I consent to photos and videos of my child being shared on social media
           <span class="addon-note">Instagram, Facebook, and other platforms used to promote the event</span>
@@ -1246,12 +1246,6 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
   });
-
-  function toggleConsent(div) {
-    const cb = div.querySelector('input[type="checkbox"]');
-    cb.checked = !cb.checked;
-    div.classList.toggle('addon-selected', cb.checked);
-  }
 
   document.querySelectorAll('.addon-item input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', function() {
