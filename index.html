@@ -58,10 +58,18 @@
     position: relative;
   }
 
-  .banner-logo {
-    max-width: 340px;
-    width: 88%;
+  .banner-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
     margin: 0 auto 1rem;
+    flex-wrap: wrap;
+  }
+
+  .banner-logo {
+    max-width: 240px;
+    width: 42%;
     display: block;
     border-radius: 10px;
   }
@@ -866,9 +874,16 @@
       </svg>
     </div>
 
-    <img src="overview_image_152727140_1284252.png"
-         alt="Kiddies Carnival 2026"
-         class="banner-logo">
+    <div class="banner-logos">
+      <img src="overview_image_152727140_1284252.png"
+           alt="Mas Mentality"
+           class="banner-logo"
+           style="border-radius:10px;">
+      <img src="lil nationz logo.jpg"
+           alt="Lil Nationz"
+           class="banner-logo"
+           style="border-radius:10px;">
+    </div>
 
     <svg class="ghana-flag" viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg">
       <rect width="52" height="34" fill="#CE1126"/>
