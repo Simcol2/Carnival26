@@ -1256,16 +1256,21 @@
     </div>
 
     <div class="section-card">
-      <div class="section-title">👕 Parent T-Shirts</div>
-      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">Show your support in style! Each shirt is <strong style="color:var(--black);">$40</strong>. Pick your design and select a size.</p>
+      <div class="section-title">👕 Parent Apparel</div>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">Show your support in style! Select a style and size below.</p>
 
       <div class="tshirt-cards">
 
         <div class="tshirt-card">
+          <div class="tshirt-photo-wrap">
+            <img src="parent-tshirt.jpg" alt="Cotton T-Shirt Mas Fam" class="tshirt-thumb">
+            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('parent-tshirt.jpg')">View</button>
+          </div>
           <div class="tshirt-details">
-            <span class="tshirt-name">Mas Fam</span>
-            <span class="tshirt-price-badge">$40</span>
-            <select name="tshirt_masfam" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
+            <span class="tshirt-name">Cotton T-Shirt</span>
+            <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam — Unisex</span>
+            <span class="tshirt-price-badge">$25</span>
+            <select name="tshirt_cotton" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
               <option value="">No thanks</option>
               <option>XS</option><option>S</option><option>M</option><option>L</option>
               <option>XL</option><option>XXL</option><option>XXXL</option>
@@ -1274,22 +1279,15 @@
         </div>
 
         <div class="tshirt-card">
-          <div class="tshirt-details">
-            <span class="tshirt-name">Mas Mama</span>
-            <span class="tshirt-price-badge">$40</span>
-            <select name="tshirt_masmama" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
-              <option value="">No thanks</option>
-              <option>XS</option><option>S</option><option>M</option><option>L</option>
-              <option>XL</option><option>XXL</option><option>XXXL</option>
-            </select>
+          <div class="tshirt-photo-wrap">
+            <img src="parentjersey.jpg" alt="Ghana Jersey Mas Fam" class="tshirt-thumb">
+            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('parentjersey.jpg')">View</button>
           </div>
-        </div>
-
-        <div class="tshirt-card">
           <div class="tshirt-details">
-            <span class="tshirt-name">Mas Papa</span>
+            <span class="tshirt-name">Ghana Jersey</span>
+            <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam on back — Unisex</span>
             <span class="tshirt-price-badge">$40</span>
-            <select name="tshirt_maspapa" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
+            <select name="tshirt_jersey" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
               <option value="">No thanks</option>
               <option>XS</option><option>S</option><option>M</option><option>L</option>
               <option>XL</option><option>XXL</option><option>XXXL</option>
@@ -1505,10 +1503,10 @@
     document.querySelectorAll('input[name="addons"]:checked').forEach(cb => {
       total += parseInt(cb.dataset.price);
     });
-    ['tshirt_masfam','tshirt_masmama','tshirt_maspapa'].forEach(name => {
-      const sel = document.querySelector(`select[name="${name}"]`);
-      if (sel && sel.value) total += 40;
-    });
+    const cottonSel = document.querySelector('select[name="tshirt_cotton"]');
+    if (cottonSel && cottonSel.value) total += 25;
+    const jerseySel = document.querySelector('select[name="tshirt_jersey"]');
+    if (jerseySel && jerseySel.value) total += 40;
     const deposit = Math.ceil(total / 2);
     const balance = total - deposit;
     document.getElementById('totalDisplay').textContent = '$' + total;
@@ -1581,9 +1579,8 @@
       instagram: document.getElementById('instagram').value || 'N/A',
       photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
       tshirts: [
-        document.querySelector('select[name="tshirt_masfam"]')?.value ? `Mas Fam – ${document.querySelector('select[name="tshirt_masfam"]').value}` : '',
-        document.querySelector('select[name="tshirt_masmama"]')?.value ? `Mas Mama – ${document.querySelector('select[name="tshirt_masmama"]').value}` : '',
-        document.querySelector('select[name="tshirt_maspapa"]')?.value ? `Mas Papa – ${document.querySelector('select[name="tshirt_maspapa"]').value}` : ''
+        document.querySelector('select[name="tshirt_cotton"]')?.value ? `Cotton T-Shirt – ${document.querySelector('select[name="tshirt_cotton"]').value}` : '',
+        document.querySelector('select[name="tshirt_jersey"]')?.value ? `Ghana Jersey – ${document.querySelector('select[name="tshirt_jersey"]').value}` : ''
       ].filter(v => v).join(', ') || 'None',
       estimatedTotal: total
     };
