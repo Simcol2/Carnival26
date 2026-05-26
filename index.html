@@ -1243,8 +1243,8 @@
       </div>
       <div class="size-grid">
         <div class="field">
-          <label for="waistSize">Waist Size (inches)</label>
-          <input type="number" id="waistSize" name="waistSize" placeholder="e.g. 22" min="10" max="40" required>
+          <label for="waistSize">Waist Size (inches) <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:0.7rem;">(optional)</span></label>
+          <input type="number" id="waistSize" name="waistSize" placeholder="e.g. 22" min="10" max="40">
           <div class="error-msg" id="waistSizeError">Required</div>
         </div>
         <div class="field">
@@ -1262,10 +1262,6 @@
       <div class="tshirt-cards">
 
         <div class="tshirt-card">
-          <div class="tshirt-photo-wrap">
-            <img src="masfam.png" alt="Mas Fam T-Shirt" class="tshirt-thumb">
-            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('masfam.png')">View</button>
-          </div>
           <div class="tshirt-details">
             <span class="tshirt-name">Mas Fam</span>
             <span class="tshirt-price-badge">$40</span>
@@ -1278,10 +1274,6 @@
         </div>
 
         <div class="tshirt-card">
-          <div class="tshirt-photo-wrap">
-            <img src="masmama.png" alt="Mas Mama T-Shirt" class="tshirt-thumb">
-            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('masmama.png')">View</button>
-          </div>
           <div class="tshirt-details">
             <span class="tshirt-name">Mas Mama</span>
             <span class="tshirt-price-badge">$40</span>
@@ -1294,10 +1286,6 @@
         </div>
 
         <div class="tshirt-card">
-          <div class="tshirt-photo-wrap">
-            <img src="maspapa.png" alt="Mas Papa T-Shirt" class="tshirt-thumb">
-            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('maspapa.png')">View</button>
-          </div>
           <div class="tshirt-details">
             <span class="tshirt-name">Mas Papa</span>
             <span class="tshirt-price-badge">$40</span>
@@ -1537,7 +1525,6 @@
       ['age','ageError'],['parentName','parentNameError'],
       ['phone','phoneError'],['email','emailError'],
       ['topSize','topSizeError'],['bottomSize','bottomSizeError'],
-      ['waistSize','waistSizeError'],
     ];
 
     required.forEach(([fieldId, errorId]) => {
