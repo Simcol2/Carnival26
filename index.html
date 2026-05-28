@@ -1168,11 +1168,17 @@
           <span class="addon-price">$60</span>
         </label>
 
-        <label class="addon-item">
+        <label class="addon-item" data-gender="girl">
           <input type="checkbox" name="addons" value="Ultra Frontline Backpack" data-price="100">
           <img src="ava-ultra-front.jpg" alt="Ultra Frontline Backpack" class="addon-img">
-          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Ultra Frontline costume</span></span>
+          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Girls only</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('ava-ultra-front.jpg')">View</button>
+          <span class="addon-price">$100</span>
+        </label>
+
+        <label class="addon-item" data-gender="boy">
+          <input type="checkbox" name="addons" value="Ultra Frontline Backpack (Boys)" data-price="100">
+          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Boys only</span></span>
           <span class="addon-price">$100</span>
         </label>
 
@@ -1190,6 +1196,12 @@
           <span class="addon-label">Small Tiara<span class="addon-note">Girls only</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('small-tiara.png')">View</button>
           <span class="addon-price">$30</span>
+        </label>
+
+        <label class="addon-item" data-gender="girl">
+          <input type="checkbox" name="addons" value="Small Collar" data-price="45">
+          <span class="addon-label">Small Collar<span class="addon-note">Girls only</span></span>
+          <span class="addon-price">$45</span>
         </label>
 
         <label class="addon-item">
