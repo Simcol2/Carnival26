@@ -918,6 +918,7 @@
     line-height: 1;
   }
 </style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -1403,6 +1404,8 @@
 </div>
 
 <script>
+  emailjs.init('unpxBZwGT7DS_NN8G');
+
   function openModal(src) {
     document.getElementById('modalImg').src = src;
     document.getElementById('photoModal').classList.add('open');
@@ -1598,7 +1601,8 @@
         document.querySelector('select[name="tshirt_cotton"]')?.value ? `Cotton T-Shirt – ${document.querySelector('select[name="tshirt_cotton"]').value}` : '',
         document.querySelector('select[name="tshirt_jersey"]')?.value ? `Ghana Jersey – ${document.querySelector('select[name="tshirt_jersey"]').value}` : ''
       ].filter(v => v).join(', ') || 'None',
-      estimatedTotal: total
+      estimatedTotal: total,
+      depositDue: document.getElementById('depositDisplay').textContent
     };
 
     // ← Paste your Google Apps Script Web App URL below after deployment
@@ -1616,6 +1620,24 @@
         })
       });
     } catch(err) { console.error('Formspree error:', err); }
+
+    // Send confirmation email to registrant via EmailJS
+    try {
+      await emailjs.send('service_4tgahbz', 'template_6uso1xm', {
+        to_email:       formData.email,
+        to_name:        formData.parentName,
+        parentName:     formData.parentName,
+        firstName:      formData.firstName,
+        lastName:       formData.lastName,
+        costume:        formData.costume,
+        addons:         formData.addons,
+        topSize:        formData.topSize,
+        bottomSize:     formData.bottomSize,
+        tshirts:        formData.tshirts,
+        estimatedTotal: formData.estimatedTotal,
+        depositDue:     formData.depositDue
+      });
+    } catch(err) { console.error('EmailJS error:', err); }
 
     // Send to Google Sheets via GET + URL params (avoids CORS redirect issue)
     if (SHEETS_URL !== 'YOUR_WEB_APP_URL_HERE') {
