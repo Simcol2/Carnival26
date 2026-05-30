@@ -1335,11 +1335,17 @@
             <span class="tshirt-name">Cotton T-Shirt</span>
             <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam — Unisex</span>
             <span class="tshirt-price-badge">$25</span>
-            <select name="tshirt_cotton" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
+            <select name="tshirt_cotton" id="sel_cotton" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
               <option value="">No thanks</option>
               <option>XS</option><option>S</option><option>M</option><option>L</option>
               <option>XL</option><option>XXL</option><option>XXXL</option>
             </select>
+            <div id="cottonQtyWrap" style="display:none;margin-top:0.4rem;display:none;align-items:center;gap:0.5rem;">
+              <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;">Qty:</label>
+              <input type="number" id="cottonQty" name="cottonQty" min="1" max="20" value="1"
+                style="width:56px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;"
+                onchange="updateTotal()">
+            </div>
           </div>
         </div>
 
@@ -1352,11 +1358,17 @@
             <span class="tshirt-name">Ghana Jersey</span>
             <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam on back — Unisex</span>
             <span class="tshirt-price-badge">$40</span>
-            <select name="tshirt_jersey" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
+            <select name="tshirt_jersey" id="sel_jersey" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
               <option value="">No thanks</option>
               <option>XS</option><option>S</option><option>M</option><option>L</option>
               <option>XL</option><option>XXL</option><option>XXXL</option>
             </select>
+            <div id="jerseyQtyWrap" style="display:none;margin-top:0.4rem;display:none;align-items:center;gap:0.5rem;">
+              <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;">Qty:</label>
+              <input type="number" id="jerseyQty" name="jerseyQty" min="1" max="20" value="1"
+                style="width:56px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;"
+                onchange="updateTotal()">
+            </div>
           </div>
         </div>
 
@@ -1612,7 +1624,16 @@
   });
 
   function updateTshirtCard(sel) {
-    sel.closest('.tshirt-card').classList.toggle('tshirt-selected', sel.value !== '');
+    const selected = sel.value !== '';
+    sel.closest('.tshirt-card').classList.toggle('tshirt-selected', selected);
+    const qtyWrap = sel.id === 'sel_cotton'
+      ? document.getElementById('cottonQtyWrap')
+      : document.getElementById('jerseyQtyWrap');
+    if (qtyWrap) qtyWrap.style.display = selected ? 'flex' : 'none';
+    if (!selected) {
+      const qtyInput = qtyWrap && qtyWrap.querySelector('input');
+      if (qtyInput) qtyInput.value = 1;
+    }
   }
 
   // ── Discount codes ────────────────────────────────────────────────────────
@@ -1670,6 +1691,7 @@
     let costumeTotal = 0;
     let addonsTotal  = 0;
     let tshirtTotal  = 0;
+    let totalShirts  = 0;
 
     const selectedCostume = document.querySelector('input[name="costume"]:checked');
     if (selectedCostume) costumeTotal = parseInt(selectedCostume.dataset.price);
@@ -1686,19 +1708,34 @@
       if (hpOpt && hpOpt.dataset.price) addonsTotal += parseInt(hpOpt.dataset.price) || 0;
     }
 
-    const cottonSel = document.querySelector('select[name="tshirt_cotton"]');
-    if (cottonSel && cottonSel.value) tshirtTotal += 25;
-    const jerseySel = document.querySelector('select[name="tshirt_jersey"]');
-    if (jerseySel && jerseySel.value) tshirtTotal += 40;
+    const cottonSel = document.getElementById('sel_cotton');
+    if (cottonSel && cottonSel.value) {
+      const qty = parseInt(document.getElementById('cottonQty')?.value || 1);
+      tshirtTotal += 25 * qty;
+      totalShirts += qty;
+    }
+    const jerseySel = document.getElementById('sel_jersey');
+    if (jerseySel && jerseySel.value) {
+      const qty = parseInt(document.getElementById('jerseyQty')?.value || 1);
+      tshirtTotal += 40 * qty;
+      totalShirts += qty;
+    }
 
     const subtotal = costumeTotal + addonsTotal + tshirtTotal;
 
-    // Apply promo
+    // Promo qualification:
+    // A) Has a costume → costume + add-ons + shirts all count
+    // B) No costume but 5+ shirts → shirts + add-ons count
+    // Anything else (no costume, <5 shirts) → promo does not apply
     let discountAmount = 0;
+    const hasCostume = costumeTotal > 0;
     if (activePromo) {
       let discountable = 0;
-      if (activePromo.appliesToCostume) discountable += costumeTotal;
-      if (activePromo.appliesToAddons)  discountable += addonsTotal;
+      if (hasCostume) {
+        discountable = costumeTotal + addonsTotal + tshirtTotal;
+      } else if (totalShirts >= 5) {
+        discountable = addonsTotal + tshirtTotal;
+      }
       discountAmount = activePromo.getDiscount(discountable);
     }
 
@@ -1711,7 +1748,7 @@
     const discountRow = document.getElementById('discountRow');
     if (discountAmount > 0) {
       discountRow.style.display = 'block';
-      document.getElementById('discountRowLabel').textContent = activePromo.percent + '% promo discount';
+      document.getElementById('discountRowLabel').textContent = 'Promo discount (' + activePromo.label + ')';
       document.getElementById('discountDisplay').textContent  = '-$' + discountAmount;
       document.getElementById('afterDiscountDisplay').textContent = '$' + total;
     } else {
@@ -1780,15 +1817,38 @@
     const total = document.getElementById('totalDisplay').textContent;
 
     const isFLSection = document.getElementById('frontlineGirlsSection').style.display !== 'none';
-    const discountAmountFinal = activePromo
-      ? (() => {
-          let d = 0;
-          const sc = document.querySelector('input[name="costume"]:checked');
-          if (activePromo.appliesToCostume && sc) d += parseInt(sc.dataset.price);
-          if (activePromo.appliesToAddons) document.querySelectorAll('input[name="addons"]:checked').forEach(cb => { d += parseInt(cb.dataset.price); });
-          return activePromo.getDiscount(d);
-        })()
-      : 0;
+    const discountAmountFinal = (() => {
+      if (!activePromo) return 0;
+      const sc = document.querySelector('input[name="costume"]:checked');
+      const costumePrice = sc ? parseInt(sc.dataset.price) : 0;
+      let addonsAmt = 0;
+      document.querySelectorAll('input[name="addons"]:checked').forEach(cb => { addonsAmt += parseInt(cb.dataset.price); });
+      if (isFLSection) {
+        const hpSel = document.getElementById('frontlineHeadpiece');
+        const hpOpt = hpSel && hpSel.options[hpSel.selectedIndex];
+        if (hpOpt && hpOpt.dataset.price) addonsAmt += parseInt(hpOpt.dataset.price) || 0;
+      }
+      let shirtAmt = 0;
+      let totalShirtsF = 0;
+      const cottonSel = document.getElementById('sel_cotton');
+      if (cottonSel && cottonSel.value) {
+        const qty = parseInt(document.getElementById('cottonQty')?.value || 1);
+        shirtAmt += 25 * qty; totalShirtsF += qty;
+      }
+      const jerseySel = document.getElementById('sel_jersey');
+      if (jerseySel && jerseySel.value) {
+        const qty = parseInt(document.getElementById('jerseyQty')?.value || 1);
+        shirtAmt += 40 * qty; totalShirtsF += qty;
+      }
+      const hasCostume = costumePrice > 0;
+      let discountable = 0;
+      if (hasCostume) {
+        discountable = costumePrice + addonsAmt + shirtAmt;
+      } else if (totalShirtsF >= 5) {
+        discountable = addonsAmt + shirtAmt;
+      }
+      return activePromo.getDiscount(discountable);
+    })();
     const formData = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
@@ -1814,8 +1874,8 @@
       instagram: document.getElementById('instagram').value || 'N/A',
       photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
       tshirts: [
-        document.querySelector('select[name="tshirt_cotton"]')?.value ? `Cotton T-Shirt – ${document.querySelector('select[name="tshirt_cotton"]').value}` : '',
-        document.querySelector('select[name="tshirt_jersey"]')?.value ? `Ghana Jersey – ${document.querySelector('select[name="tshirt_jersey"]').value}` : ''
+        document.querySelector('select[name="tshirt_cotton"]')?.value ? `Cotton T-Shirt – ${document.querySelector('select[name="tshirt_cotton"]').value} x${document.getElementById('cottonQty')?.value || 1}` : '',
+        document.querySelector('select[name="tshirt_jersey"]')?.value ? `Ghana Jersey – ${document.querySelector('select[name="tshirt_jersey"]').value} x${document.getElementById('jerseyQty')?.value || 1}` : ''
       ].filter(v => v).join(', ') || 'None',
       estimatedTotal: total,
       depositDue: document.getElementById('depositDisplay').textContent
