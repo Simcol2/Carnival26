@@ -1037,6 +1037,14 @@
         </div>
       </div>
 
+      <div class="field-group full" style="margin-top:1rem;">
+        <div class="field">
+          <label for="country">What country do you represent? <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+          <input type="text" id="country" name="country" placeholder="Example: Jamaica" required>
+          <div class="error-msg" id="countryError">Required</div>
+        </div>
+      </div>
+
       <div id="styleOptionsCard" style="display:none; margin-top:1rem;">
         <hr style="border:none;border-top:1px solid var(--border);margin-bottom:1rem;">
 
@@ -1147,6 +1155,32 @@
         </label>
       </div>
       <div class="error-msg" id="costumeError" style="margin-top:0.5rem;">Please select a costume</div>
+    </div>
+
+    <!-- Frontline Girls extras — shown when Frontline + Girl both selected -->
+    <div id="frontlineGirlsSection" class="section-card" style="display:none; border:2px solid var(--gold); background:rgba(200,151,26,0.04);">
+      <div class="section-title" style="color:var(--gold);">&#10022; Frontline Girls — Additional Selections</div>
+      <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">These selections are required for all Frontline Girls registrations.</p>
+      <div class="field-group">
+        <div class="field">
+          <label for="frontlineHeadpiece">Headpiece Choice <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+          <select id="frontlineHeadpiece" name="frontlineHeadpiece" onchange="updateTotal()">
+            <option value="">— Select headpiece —</option>
+            <option value="Large Headpiece (Crown)" data-price="65">Large Headpiece (Crown) — +$65</option>
+            <option value="Small Tiara" data-price="0">Small Tiara — Included</option>
+          </select>
+          <div class="error-msg" id="frontlineHeadpieceError">Please select a headpiece</div>
+        </div>
+        <div class="field">
+          <label for="frontlineSizeCat">Size Category <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+          <select id="frontlineSizeCat" name="frontlineSizeCat">
+            <option value="">— Select size category —</option>
+            <option value="Likkle Miss — Toddler">Likkle Miss — Toddler</option>
+            <option value="Grown Gyal — Size 7 and up">Grown Gyal — Size 7 and up</option>
+          </select>
+          <div class="error-msg" id="frontlineSizeCatError">Please select a size category</div>
+        </div>
+      </div>
     </div>
 
     <div class="section-card">
@@ -1432,9 +1466,34 @@
     radio.addEventListener('change', function() {
       document.querySelectorAll('.costume-card').forEach(c => c.classList.remove('selected'));
       this.closest('.costume-card').classList.add('selected');
+      updateFrontlineGirlsSection();
       updateTotal();
     });
   });
+
+  function updateFrontlineGirlsSection() {
+    const isGirl     = document.querySelector('input[name="gender"]:checked')?.value === 'Girl';
+    const isFrontline = document.querySelector('input[name="costume"]:checked')?.value === 'Frontline';
+    const show       = isGirl && isFrontline;
+    const section    = document.getElementById('frontlineGirlsSection');
+    section.style.display = show ? 'block' : 'none';
+
+    // disable the standalone headpiece/tiara add-on checkboxes to avoid double-counting
+    const headpieceAddon = document.querySelector('input[name="addons"][value="Large Headpiece (Crown)"]');
+    const tiaraAddon     = document.querySelector('input[name="addons"][value="Small Tiara"]');
+    [headpieceAddon, tiaraAddon].forEach(cb => {
+      if (!cb) return;
+      cb.disabled = show;
+      if (show && cb.checked) { cb.checked = false; cb.closest('.addon-item').classList.remove('addon-selected'); }
+      cb.closest('.addon-item').classList.toggle('addon-disabled', show);
+    });
+
+    // reset dropdowns when hidden
+    if (!show) {
+      document.getElementById('frontlineHeadpiece').value = '';
+      document.getElementById('frontlineSizeCat').value   = '';
+    }
+  }
 
   const costumeIncludes = {
     Girl: {
@@ -1490,6 +1549,7 @@
       });
 
       updateAddonAvailability(gender);
+      updateFrontlineGirlsSection();
     });
   });
 
@@ -1522,6 +1582,13 @@
     document.querySelectorAll('input[name="addons"]:checked').forEach(cb => {
       total += parseInt(cb.dataset.price);
     });
+    // Frontline Girls headpiece upgrade price
+    const flSection = document.getElementById('frontlineGirlsSection');
+    if (flSection && flSection.style.display !== 'none') {
+      const hpSel = document.getElementById('frontlineHeadpiece');
+      const hpOpt = hpSel && hpSel.options[hpSel.selectedIndex];
+      if (hpOpt && hpOpt.dataset.price) total += parseInt(hpOpt.dataset.price) || 0;
+    }
     const cottonSel = document.querySelector('select[name="tshirt_cotton"]');
     if (cottonSel && cottonSel.value) total += 25;
     const jerseySel = document.querySelector('select[name="tshirt_jersey"]');
@@ -1541,6 +1608,7 @@
       ['firstName','firstNameError'],['lastName','lastNameError'],
       ['age','ageError'],['parentName','parentNameError'],
       ['phone','phoneError'],['email','emailError'],
+      ['country','countryError'],
       ['topSize','topSizeError'],['bottomSize','bottomSizeError'],
     ];
 
@@ -1568,6 +1636,17 @@
     if (!styleOption) { document.getElementById('styleOptionError').style.display = 'block'; valid = false; }
     else { document.getElementById('styleOptionError').style.display = 'none'; }
 
+    // Validate Frontline Girls extras if section is visible
+    const flSection = document.getElementById('frontlineGirlsSection');
+    if (flSection.style.display !== 'none') {
+      if (!document.getElementById('frontlineHeadpiece').value) {
+        document.getElementById('frontlineHeadpieceError').style.display = 'block'; valid = false;
+      } else { document.getElementById('frontlineHeadpieceError').style.display = 'none'; }
+      if (!document.getElementById('frontlineSizeCat').value) {
+        document.getElementById('frontlineSizeCatError').style.display = 'block'; valid = false;
+      } else { document.getElementById('frontlineSizeCatError').style.display = 'none'; }
+    }
+
     const shoesSelected = document.querySelector('input[value="Costume Shoes (Kids)"]:checked') || document.querySelector('input[value="Costume Shoes (Adult)"]:checked');
     const shoeSize = document.getElementById('shoeSize').value.trim();
     if (shoesSelected && !shoeSize) { document.getElementById('shoeSizeError').style.display = 'block'; valid = false; }
@@ -1578,15 +1657,19 @@
     const addons = Array.from(document.querySelectorAll('input[name="addons"]:checked')).map(cb => cb.value);
     const total = document.getElementById('totalDisplay').textContent;
 
+    const isFLSection = document.getElementById('frontlineGirlsSection').style.display !== 'none';
     const formData = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
       age: document.getElementById('age').value,
       gender: gender.value,
+      country: document.getElementById('country').value,
       parentName: document.getElementById('parentName').value,
       phone: document.getElementById('phone').value,
       email: email,
       costume: costume.value,
+      frontlineHeadpiece: isFLSection ? document.getElementById('frontlineHeadpiece').value : 'N/A',
+      frontlineSizeCat:   isFLSection ? document.getElementById('frontlineSizeCat').value   : 'N/A',
       costumePrice: '$' + costume.dataset.price,
       addons: addons.join(', ') || 'None',
       topSize: document.getElementById('topSize').value,
@@ -1629,13 +1712,16 @@
         parentName:     formData.parentName,
         firstName:      formData.firstName,
         lastName:       formData.lastName,
-        costume:        formData.costume,
-        addons:         formData.addons,
-        topSize:        formData.topSize,
-        bottomSize:     formData.bottomSize,
-        tshirts:        formData.tshirts,
-        estimatedTotal: formData.estimatedTotal,
-        depositDue:     formData.depositDue
+        costume:            formData.costume,
+        country:            formData.country,
+        frontlineHeadpiece: formData.frontlineHeadpiece,
+        frontlineSizeCat:   formData.frontlineSizeCat,
+        addons:             formData.addons,
+        topSize:            formData.topSize,
+        bottomSize:         formData.bottomSize,
+        tshirts:            formData.tshirts,
+        estimatedTotal:     formData.estimatedTotal,
+        depositDue:         formData.depositDue
       });
     } catch(err) { console.error('EmailJS error:', err); }
 
