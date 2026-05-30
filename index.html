@@ -1619,12 +1619,16 @@
   const PROMO_CODES = {
     'roundtwo15': {
       label: 'Roundtwo15',
-      percent: 15,
       expiry: new Date('2026-06-06T23:59:59'),
       appliesToCostume: true,
       appliesToAddons: true,
       appliesToTshirts: false,
-      description: '15% off costume & add-ons'
+      description: '$20 off $150+ · $40 off $250+',
+      getDiscount: function(discountable) {
+        if (discountable >= 250) return 40;
+        if (discountable >= 150) return 20;
+        return 0;
+      }
     }
   };
 
@@ -1695,7 +1699,7 @@
       let discountable = 0;
       if (activePromo.appliesToCostume) discountable += costumeTotal;
       if (activePromo.appliesToAddons)  discountable += addonsTotal;
-      discountAmount = Math.round(discountable * activePromo.percent / 100);
+      discountAmount = activePromo.getDiscount(discountable);
     }
 
     const total   = subtotal - discountAmount;
@@ -1777,13 +1781,13 @@
 
     const isFLSection = document.getElementById('frontlineGirlsSection').style.display !== 'none';
     const discountAmountFinal = activePromo
-      ? Math.round((() => {
+      ? (() => {
           let d = 0;
           const sc = document.querySelector('input[name="costume"]:checked');
           if (activePromo.appliesToCostume && sc) d += parseInt(sc.dataset.price);
           if (activePromo.appliesToAddons) document.querySelectorAll('input[name="addons"]:checked').forEach(cb => { d += parseInt(cb.dataset.price); });
-          return d;
-        })() * activePromo.percent / 100)
+          return activePromo.getDiscount(d);
+        })()
       : 0;
     const formData = {
       firstName: document.getElementById('firstName').value,
