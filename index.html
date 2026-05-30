@@ -1166,7 +1166,7 @@
           <label for="frontlineHeadpiece">Headpiece Choice <span style="color:#CE1126;font-size:0.9em;">*</span></label>
           <select id="frontlineHeadpiece" name="frontlineHeadpiece" onchange="updateTotal()">
             <option value="">— Select headpiece —</option>
-            <option value="Large Headpiece (Crown)" data-price="65">Large Headpiece (Crown) — +$65</option>
+            <option value="Large Headpiece (Crown)" data-price="60">Large Headpiece (Crown) — +$60</option>
             <option value="Small Tiara" data-price="0">Small Tiara — Included</option>
           </select>
           <div class="error-msg" id="frontlineHeadpieceError">Please select a headpiece</div>
@@ -1203,6 +1203,14 @@
           <span class="addon-price">$60</span>
         </label>
 
+        <label class="addon-item" data-gender="girl" data-costume="frontline">
+          <input type="checkbox" name="addons" value="Large Backpack" data-price="80">
+          <img src="large backpack.jpg" alt="Large Backpack" class="addon-img">
+          <span class="addon-label">Large Backpack<span class="addon-note">Girls — Frontline only</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('large backpack.jpg')">View</button>
+          <span class="addon-price">$80</span>
+        </label>
+
         <label class="addon-item" data-gender="girl">
           <input type="checkbox" name="addons" value="Ultra Frontline Backpack" data-price="100">
           <img src="ava-ultra-front.jpg" alt="Ultra Frontline Backpack" class="addon-img">
@@ -1220,11 +1228,11 @@
         </label>
 
         <label class="addon-item" data-gender="girl">
-          <input type="checkbox" name="addons" value="Large Headpiece (Crown)" data-price="65">
+          <input type="checkbox" name="addons" value="Large Headpiece (Crown)" data-price="60">
           <img src="ava-head-crop.jpg" alt="Large Headpiece" class="addon-img">
           <span class="addon-label">Large Headpiece (Crown)<span class="addon-note">Girls only</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('ava-head-crop.jpg')">View</button>
-          <span class="addon-price">$65</span>
+          <span class="addon-price">$60</span>
         </label>
 
         <label class="addon-item" data-gender="girl">
