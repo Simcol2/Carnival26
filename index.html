@@ -1166,8 +1166,8 @@
           <label for="frontlineHeadpiece">Headpiece Choice <span style="color:#CE1126;font-size:0.9em;">*</span></label>
           <select id="frontlineHeadpiece" name="frontlineHeadpiece" onchange="updateTotal()">
             <option value="">— Select headpiece —</option>
-            <option value="Large Headpiece (Crown)" data-price="60">Large Headpiece (Crown) — +$60</option>
-            <option value="Small Tiara" data-price="0">Small Tiara — Included</option>
+            <option value="Small Crown" data-price="40">Small Crown — +$40</option>
+            <option value="Tiara" data-price="0">Tiara — Included</option>
           </select>
           <div class="error-msg" id="frontlineHeadpieceError">Please select a headpiece</div>
         </div>
@@ -1188,33 +1188,55 @@
       <div class="addon-group">
 
         <label class="addon-item" data-gender="girl">
-          <input type="checkbox" name="addons" value="Girls Cage Skirt" data-price="75">
-          <img src="cage skirt.png" alt="Girls Cage Skirt" class="addon-img">
-          <span class="addon-label">Girls Cage Skirt<span class="addon-note">Girls only</span></span>
+          <input type="checkbox" name="addons" value="Cage Skirt &amp; Metallic Shorts" data-price="130">
+          <img src="cage skirt.png" alt="Cage Skirt &amp; Metallic Shorts" class="addon-img">
+          <span class="addon-label">Cage Skirt &amp; Metallic Shorts<span class="addon-note">Girls only</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('cage skirt.png')">View</button>
+          <span class="addon-price">$130</span>
+        </label>
+
+        <label class="addon-item" data-gender="girl">
+          <input type="checkbox" name="addons" value="Ultra Frontline Crown" data-price="60">
+          <img src="ava-head-crop.jpg" alt="Ultra Frontline Crown" class="addon-img">
+          <span class="addon-label">Ultra Frontline Crown<span class="addon-note">Girls — Ultra Frontline</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('ava-head-crop.jpg')">View</button>
+          <span class="addon-price">$60</span>
+        </label>
+
+        <label class="addon-item" data-gender="girl">
+          <input type="checkbox" name="addons" value="Small Crown" data-price="40">
+          <span class="addon-label">Small Crown<span class="addon-note">Girls only</span></span>
+          <span class="addon-price">$40</span>
+        </label>
+
+        <label class="addon-item" data-gender="girl">
+          <input type="checkbox" name="addons" value="Tiara" data-price="30">
+          <img src="small-tiara.png" alt="Tiara" class="addon-img">
+          <span class="addon-label">Tiara<span class="addon-note">Girls only</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('small-tiara.png')">View</button>
+          <span class="addon-price">$30</span>
+        </label>
+
+        <label class="addon-item" data-gender="girl">
+          <input type="checkbox" name="addons" value="Small Girls Backpack" data-price="75">
+          <img src="small-backpack.jpg" alt="Small Girls Backpack" class="addon-img">
+          <span class="addon-label">Small Girls Backpack<span class="addon-note">Girls only</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('small-backpack.jpg')">View</button>
           <span class="addon-price">$75</span>
         </label>
 
         <label class="addon-item" data-gender="girl">
-          <input type="checkbox" name="addons" value="Small Backpack" data-price="60">
-          <img src="small-backpack.jpg" alt="Small Backpack" class="addon-img">
-          <span class="addon-label">Small Backpack<span class="addon-note">Girls only</span></span>
-          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('small-backpack.jpg')">View</button>
-          <span class="addon-price">$60</span>
-        </label>
-
-        <label class="addon-item" data-gender="girl" data-costume="frontline">
-          <input type="checkbox" name="addons" value="Large Backpack" data-price="80">
-          <img src="large backpack.jpg" alt="Large Backpack" class="addon-img">
-          <span class="addon-label">Large Backpack<span class="addon-note">Girls — Frontline only</span></span>
+          <input type="checkbox" name="addons" value="Medium Backpack w Ostrich" data-price="115">
+          <img src="large backpack.jpg" alt="Medium Backpack w Ostrich" class="addon-img">
+          <span class="addon-label">Medium Backpack w Ostrich<span class="addon-note">Girls — Frontline</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('large backpack.jpg')">View</button>
-          <span class="addon-price">$80</span>
+          <span class="addon-price">$115</span>
         </label>
 
         <label class="addon-item" data-gender="girl">
           <input type="checkbox" name="addons" value="Ultra Frontline Backpack" data-price="100">
           <img src="ava-ultra-front.jpg" alt="Ultra Frontline Backpack" class="addon-img">
-          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Girls only</span></span>
+          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Girls — Ultra Frontline</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('ava-ultra-front.jpg')">View</button>
           <span class="addon-price">$100</span>
         </label>
@@ -1222,55 +1244,51 @@
         <label class="addon-item" data-gender="boy">
           <input type="checkbox" name="addons" value="Ultra Frontline Backpack (Boys)" data-price="100">
           <img src="boys-ultra-backpack.png" alt="Ultra Frontline Backpack Boys" class="addon-img">
-          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Boys only</span></span>
+          <span class="addon-label">Ultra Frontline Backpack<span class="addon-note">Boys — Ultra Frontline</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('boys-ultra-backpack.png')">View</button>
           <span class="addon-price">$100</span>
         </label>
 
-        <label class="addon-item" data-gender="girl">
-          <input type="checkbox" name="addons" value="Large Headpiece (Crown)" data-price="60">
-          <img src="ava-head-crop.jpg" alt="Large Headpiece" class="addon-img">
-          <span class="addon-label">Large Headpiece (Crown)<span class="addon-note">Girls only</span></span>
-          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('ava-head-crop.jpg')">View</button>
+        <label class="addon-item" data-gender="boy">
+          <input type="checkbox" name="addons" value="Boys Large Feather Head" data-price="30">
+          <span class="addon-label">Boys Large Feather Head<span class="addon-note">Boys only</span></span>
+          <span class="addon-price">$30</span>
+        </label>
+
+        <label class="addon-item">
+          <input type="checkbox" name="addons" value="Toddler Collar" data-price="35">
+          <span class="addon-label">Toddler Collar<span class="addon-note">Toddler sizes</span></span>
+          <span class="addon-price">$35</span>
+        </label>
+
+        <label class="addon-item">
+          <input type="checkbox" name="addons" value="Large Diamond Flag" data-price="60">
+          <img src="flag.jpg" alt="Large Diamond Flag" class="addon-img">
+          <span class="addon-label">Large Diamond Flag<span class="addon-note">Frontline &amp; Ultra Frontline</span></span>
+          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('flag.jpg')">View</button>
           <span class="addon-price">$60</span>
         </label>
 
-        <label class="addon-item" data-gender="girl">
-          <input type="checkbox" name="addons" value="Small Tiara" data-price="30">
-          <img src="small-tiara.png" alt="Small Tiara" class="addon-img">
-          <span class="addon-label">Small Tiara<span class="addon-note">Girls only</span></span>
-          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('small-tiara.png')">View</button>
-          <span class="addon-price">$30</span>
-        </label>
-
         <label class="addon-item">
-          <input type="checkbox" name="addons" value="Small Collar" data-price="45">
-          <span class="addon-label">Small Collar<span class="addon-note">Available to all</span></span>
-          <span class="addon-price">$45</span>
-        </label>
-
-        <label class="addon-item">
-          <input type="checkbox" name="addons" value="Frontline Ghana Flag" data-price="65">
-          <img src="flag.jpg" alt="Frontline Ghana Flag" class="addon-img">
-          <span class="addon-label">Frontline Ghana Flag<span class="addon-note">Frontline and Ultra Frontline</span></span>
-          <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('flag.jpg')">View</button>
-          <span class="addon-price">$65</span>
-        </label>
-
-        <label class="addon-item">
-          <input type="checkbox" name="addons" value="Costume Shoes (Kids)" data-price="30">
-          <img src="shoes.png" alt="Costume Shoes" class="addon-img">
-          <span class="addon-label">Decorated Shoes -- Kids Sizes<span class="addon-note">Available to all tiers</span></span>
+          <input type="checkbox" name="addons" value="Decorated Shoes (Child)" data-price="30">
+          <img src="shoes.png" alt="Decorated Shoes" class="addon-img">
+          <span class="addon-label">Decorated Shoes — Child Sizes<span class="addon-note">All tiers</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('shoes.png')">View</button>
           <span class="addon-price">$30</span>
         </label>
 
         <label class="addon-item">
-          <input type="checkbox" name="addons" value="Costume Shoes (Adult)" data-price="45">
-          <img src="shoes.png" alt="Costume Shoes" class="addon-img">
-          <span class="addon-label">Decorated Shoes -- Adult Sizes<span class="addon-note">Available to all tiers</span></span>
+          <input type="checkbox" name="addons" value="Decorated Shoes (Adult)" data-price="40">
+          <img src="shoes.png" alt="Decorated Shoes" class="addon-img">
+          <span class="addon-label">Decorated Shoes — Adult Sizes<span class="addon-note">All tiers</span></span>
           <button type="button" class="view-btn" onclick="event.preventDefault(); event.stopPropagation(); openModal('shoes.png')">View</button>
-          <span class="addon-price">$45</span>
+          <span class="addon-price">$40</span>
+        </label>
+
+        <label class="addon-item">
+          <input type="checkbox" name="addons" value="Sun Glasses" data-price="5">
+          <span class="addon-label">Sun Glasses<span class="addon-note">All masqueraders</span></span>
+          <span class="addon-price">$5</span>
         </label>
 
       </div>
