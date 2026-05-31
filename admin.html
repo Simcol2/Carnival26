@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carnival Registration Admin</title>
+<style>
+  :root {
+    --gold: #C8971A;
+    --gold-light: #F0C040;
+    --gold-dim: rgba(200,151,26,0.18);
+    --red: #CE1126;
+    --green: #006B3F;
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #212121;
+    --surface3: #2a2a2a;
+    --border: rgba(255,255,255,0.08);
+    --border-gold: rgba(200,151,26,0.3);
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --text-faint: #555;
+    --input-bg: #1e1e1e;
+    --danger: #e53e3e;
+    --success: #38a169;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ─────────────────────────────────────────────── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 0 1.5rem;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  }
+
+  .topbar-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .topbar-title svg { flex-shrink: 0; }
+
+  .topbar-divider {
+    width: 1px;
+    height: 26px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+  }
+
+  .btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(200,151,26,0.07); }
+
+  .btn-gold {
+    background: var(--gold);
+    color: #0a0a0a;
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+
+  .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); color: #0a0a0a; }
+
+  .btn-danger { border-color: rgba(229,62,62,0.35); color: #fc8181; }
+  .btn-danger:hover { border-color: var(--danger); color: white; background: rgba(229,62,62,0.18); }
+
+  .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.72rem; }
+
+  .save-indicator {
+    margin-left: auto;
+    font-size: 0.73rem;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .save-indicator.saved { color: var(--success); }
+  .save-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ─────────────────────────────────────────── */
+  .admin-body {
+    display: flex;
+    min-height: calc(100vh - 54px);
+  }
+
+  /* ── TABS (left sidebar style on wide, top tabs on narrow) ── */
+  .tab-sidebar {
+    width: 180px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1rem 0;
+    position: sticky;
+    top: 54px;
+    height: calc(100vh - 54px);
+    overflow-y: auto;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 0.65rem 1.1rem;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    letter-spacing: 0.2px;
+  }
+
+  .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+
+  .tab-btn.active {
+    color: var(--gold);
+    background: rgba(200,151,26,0.08);
+    border-left-color: var(--gold);
+  }
+
+  .tab-btn svg { flex-shrink: 0; opacity: 0.7; }
+  .tab-btn.active svg { opacity: 1; }
+
+  /* ── CONTENT AREA ────────────────────────────────────────── */
+  .tab-content-wrap {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .tab-pane {
+    display: none;
+    padding: 1.75rem;
+    max-width: 900px;
+  }
+
+  .tab-pane.active { display: block; }
+
+  /* ── SECTION CARDS ───────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card-title-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border-gold);
+    margin-left: 0.5rem;
+  }
+
+  /* ── FORM FIELDS ─────────────────────────────────────────── */
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .field-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .field-grid.cols-1 { grid-template-columns: 1fr; }
+
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+  .field.span2 { grid-column: span 2; }
+
+  .field label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+  }
+
+  .field input[type="text"],
+  .field input[type="number"],
+  .field input[type="email"],
+  .field input[type="url"],
+  .field input[type="tel"],
+  .field input[type="date"],
+  .field input[type="password"],
+  .field select,
+  .field textarea {
+    background: var(--input-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.84rem;
+    padding: 0.55rem 0.8rem;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(200,151,26,0.15);
+  }
+
+  .field textarea { resize: vertical; min-height: 80px; }
+
+  input[type="color"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 44px;
+    height: 36px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+    background: var(--input-bg);
+    flex-shrink: 0;
+  }
+
+  .color-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .color-row input[type="text"] {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: monospace;
+    font-size: 0.84rem;
+    padding: 0.5rem 0.7rem;
+    outline: none;
+    width: 100px;
+  }
+
+  .color-row input[type="text"]:focus { border-color: var(--gold); }
+
+  /* ── PREVIEW STRIPE ──────────────────────────────────────── */
+  #colorPreviewStripe {
+    height: 8px;
+    border-radius: 4px;
+    margin-top: 0.75rem;
+    transition: background 0.2s;
+  }
+
+  /* ── IMAGE UPLOAD AREAS ──────────────────────────────────── */
+  .upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .upload-preview {
+    width: 100%;
+    max-width: 140px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    display: block;
+    background: var(--surface2);
+  }
+
+  .upload-preview.tall { height: 120px; max-width: 200px; }
+  .upload-preview.wide { max-width: 260px; height: 120px; }
+  .upload-preview.logo-thumb { max-width: 110px; height: 80px; object-fit: contain; }
+
+  .upload-no-img {
+    width: 140px;
+    height: 90px;
+    border: 1.5px dashed rgba(255,255,255,0.12);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    font-size: 0.72rem;
+    background: var(--surface2);
+  }
+
+  .upload-no-img.logo-thumb { width: 110px; height: 80px; }
+
+  .upload-row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+  .file-input-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.38rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .file-input-label:hover { border-color: var(--gold); color: var(--gold); }
+  .file-input-label input { display: none; }
+
+  /* ── LOGOS SIDE BY SIDE ─────────────────────────────────── */
+  .logos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .logo-upload-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    background: var(--surface2);
+  }
+
+  .logo-upload-card label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 0.65rem;
+  }
+
+  /* ── COLOR GRID ─────────────────────────────────────────── */
+  .colors-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .color-field label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 0.45rem;
+  }
+
+  /* ── COSTUME CARDS ───────────────────────────────────────── */
+  .costume-tier-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem;
+    margin-bottom: 1rem;
+    background: var(--surface2);
+  }
+
+  .costume-tier-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .tier-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .tier-back  { background: var(--green); color: white; }
+  .tier-front { background: var(--red); color: white; }
+  .tier-ultra { background: var(--gold); color: #0a0a0a; }
+
+  .costume-photos-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .costume-photo-upload label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── TABLE STYLES ────────────────────────────────────────── */
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .admin-table th {
+    text-align: left;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-faint);
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .admin-table td {
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+
+  .admin-table tr:last-child td { border-bottom: none; }
+
+  .admin-table input[type="text"],
+  .admin-table input[type="number"],
+  .admin-table input[type="date"],
+  .admin-table input[type="email"],
+  .admin-table input[type="url"],
+  .admin-table select {
+    background: var(--input-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+
+  .admin-table input:focus,
+  .admin-table select:focus { border-color: var(--gold); }
+
+  .admin-table .thumb-preview {
+    width: 48px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    display: block;
+    background: var(--surface2);
+  }
+
+  .add-row-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1.5px dashed var(--border-gold);
+    border-radius: 7px;
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    font-family: inherit;
+    margin-top: 0.75rem;
+    transition: background 0.15s;
+    letter-spacing: 0.3px;
+  }
+
+  .add-row-btn:hover { background: rgba(200,151,26,0.06); }
+
+  .delete-row-btn {
+    background: none;
+    border: 1px solid rgba(229,62,62,0.25);
+    border-radius: 5px;
+    color: #fc8181;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .delete-row-btn:hover { background: rgba(229,62,62,0.15); border-color: var(--danger); }
+
+  /* ── TOGGLE ──────────────────────────────────────────────── */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 0;
+  }
+
+  .toggle-label {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .toggle-sub {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    display: block;
+    margin-top: 1px;
+  }
+
+  .toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--surface3);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    left: 3px; top: 3px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .toggle input:checked + .toggle-slider { background: rgba(200,151,26,0.3); }
+  .toggle input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+    background: var(--gold);
+  }
+
+  /* ── INTEGRATION FIELDS ──────────────────────────────────── */
+  .integration-field {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .integration-field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .integration-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .integration-input-row input {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: monospace;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.8rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .integration-input-row input:focus { border-color: var(--gold); }
+
+  .copy-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-dim);
+    padding: 0.5rem 0.65rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    font-size: 0.78rem;
+  }
+
+  .copy-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+  .help-text {
+    font-size: 0.73rem;
+    color: var(--text-faint);
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--border-gold);
+    border-radius: 0 5px 5px 0;
+  }
+
+  .help-text a { color: var(--gold); text-decoration: none; }
+  .help-text a:hover { text-decoration: underline; }
+
+  /* ── PROMO CODE CARD ─────────────────────────────────────── */
+  .promo-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: var(--surface2);
+    position: relative;
+  }
+
+  .promo-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .promo-code-badge {
+    font-family: monospace;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--gold);
+    background: rgba(200,151,26,0.12);
+    border: 1px solid var(--border-gold);
+    padding: 2px 10px;
+    border-radius: 5px;
+    letter-spacing: 1px;
+  }
+
+  .promo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .promo-applies-row {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+
+  .check-label input[type="checkbox"] {
+    accent-color: var(--gold);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+
+  .tiered-rows {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(200,151,26,0.05);
+    border: 1px solid var(--border-gold);
+    border-radius: 7px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+  }
+
+  .tiered-rows label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── SECTION HEADING ─────────────────────────────────────── */
+  .section-heading {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── HEADPIECE TABLE ─────────────────────────────────────── */
+  .headpiece-section {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── MODAL ──────────────────────────────────────────────── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .modal-box h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .modal-box p {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-btns { display: flex; gap: 0.6rem; justify-content: flex-end; }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────── */
+  @media (max-width: 680px) {
+    .tab-sidebar {
+      display: none;
+    }
+    .topbar { padding: 0 0.75rem; }
+    .tab-pane { padding: 1rem; }
+    .field-grid { grid-template-columns: 1fr; }
+    .field-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .logos-grid { grid-template-columns: 1fr; }
+    .costume-photos-row { grid-template-columns: 1fr; }
+    .promo-grid { grid-template-columns: 1fr 1fr; }
+    .tiered-rows { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ── ADDON UPLOAD CELL ───────────────────────────────────── */
+  .addon-img-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    align-items: flex-start;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     TOP BAR
+     ══════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <div class="topbar-title">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    Carnival Registration Admin
+  </div>
+  <div class="topbar-divider"></div>
+  <div class="topbar-actions">
+    <button class="btn btn-gold" onclick="previewSite()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Preview Site
+    </button>
+    <button class="btn" onclick="exportConfig()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export JSON
+    </button>
+    <label class="btn" style="cursor:pointer;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import JSON
+      <input type="file" accept=".json" style="display:none;" onchange="importConfig(this)">
+    </label>
+    <button class="btn btn-danger" onclick="confirmReset()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.88"/></svg>
+      Reset
+    </button>
+  </div>
+  <div class="save-indicator" id="saveIndicator">
+    <span class="save-dot"></span>
+    <span id="saveText">Not saved</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN BODY
+     ══════════════════════════════════════════════════════════ -->
+<div class="admin-body">
+
+  <!-- SIDEBAR TABS -->
+  <nav class="tab-sidebar" id="tabSidebar">
+    <button class="tab-btn active" onclick="switchTab('branding',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Event & Branding
+    </button>
+    <button class="tab-btn" onclick="switchTab('costumes',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+      Costumes
+    </button>
+    <button class="tab-btn" onclick="switchTab('addons',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Add-Ons
+    </button>
+    <button class="tab-btn" onclick="switchTab('apparel',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+      Apparel
+    </button>
+    <button class="tab-btn" onclick="switchTab('promos',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      Promo Codes
+    </button>
+    <button class="tab-btn" onclick="switchTab('integrations',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Integrations
+    </button>
+  </nav>
+
+  <!-- CONTENT AREA -->
+  <div class="tab-content-wrap">
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         TAB 1: EVENT & BRANDING
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="tab-pane active" id="tab-branding">
+
+      <div class="card">
+        <div class="card-title">Event Details <span class="card-title-rule"></span></div>
+        <div class="field-grid">
+          <div class="field">
+            <label>Event Name</label>
+            <input type="text" data-key="eventName" placeholder="Kiddies Carnival 2026" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Event Theme</label>
+            <input type="text" data-key="eventTheme" placeholder="The Black Stars" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Event Subtitle</label>
+            <input type="text" data-key="eventSubtitle" placeholder="Kiddies Carnival &amp; FIFA World Cup 2026" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Country Line</label>
+            <input type="text" data-key="countryLine" placeholder="Representing Ghana" oninput="fieldChanged(this)">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Contact Info <span class="card-title-rule"></span></div>
+        <div class="field-grid">
+          <div class="field">
+            <label>Contact Email (e-transfer)</label>
+            <input type="email" data-key="contactEmail" placeholder="simone.cole2@gmail.com" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Contact Phone</label>
+            <input type="tel" data-key="contactPhone" placeholder="236.464.7970" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Contact Instagram (no @)</label>
+            <input type="text" data-key="contactInstagram" placeholder="mas.mentality" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Business Email</label>
+            <input type="email" data-key="contactEmail2" placeholder="masmentality@outlook.com" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Partner Instagram 1 (no @)</label>
+            <input type="text" data-key="partnerInstagram1" placeholder="lilnationz" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Partner Instagram 2 (no @)</label>
+            <input type="text" data-key="partnerInstagram2" placeholder="cnzinc" oninput="fieldChanged(this)">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Colors <span class="card-title-rule"></span></div>
+        <div class="colors-grid">
+          <div class="color-field">
+            <label>Primary / Gold</label>
+            <div class="color-row">
+              <input type="color" id="cp-gold" oninput="colorPickerChanged('gold','cp-gold')">
+              <input type="text" id="ct-gold" placeholder="#C8971A" oninput="colorTextChanged('gold','ct-gold','cp-gold')">
+            </div>
+          </div>
+          <div class="color-field">
+            <label>Primary Light</label>
+            <div class="color-row">
+              <input type="color" id="cp-goldLight" oninput="colorPickerChanged('goldLight','cp-goldLight')">
+              <input type="text" id="ct-goldLight" placeholder="#F0C040" oninput="colorTextChanged('goldLight','ct-goldLight','cp-goldLight')">
+            </div>
+          </div>
+          <div class="color-field">
+            <label>Accent 1 (Red)</label>
+            <div class="color-row">
+              <input type="color" id="cp-red" oninput="colorPickerChanged('red','cp-red')">
+              <input type="text" id="ct-red" placeholder="#CE1126" oninput="colorTextChanged('red','ct-red','cp-red')">
+            </div>
+          </div>
+          <div class="color-field">
+            <label>Accent 2 (Green)</label>
+            <div class="color-row">
+              <input type="color" id="cp-green" oninput="colorPickerChanged('green','cp-green')">
+              <input type="text" id="ct-green" placeholder="#006B3F" oninput="colorTextChanged('green','ct-green','cp-green')">
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:0.9rem;">
+          <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dim);margin-bottom:0.4rem;">Live Preview — Header Stripe</div>
+          <div id="colorPreviewStripe"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Logos <span class="card-title-rule"></span></div>
+        <div class="logos-grid">
+          <div class="logo-upload-card">
+            <label>Logo 1 (Left)</label>
+            <div id="logo1Preview" class="upload-no-img logo-thumb" style="width:110px;height:80px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload
+                <input type="file" accept="image/*" onchange="uploadImage('cfg_logo1','logo1Preview',this)">
+              </label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_logo1','logo1Preview')">Remove</button>
+            </div>
+          </div>
+          <div class="logo-upload-card">
+            <label>Logo 2 (Right)</label>
+            <div id="logo2Preview" class="upload-no-img logo-thumb" style="width:110px;height:80px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload
+                <input type="file" accept="image/*" onchange="uploadImage('cfg_logo2','logo2Preview',this)">
+              </label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_logo2','logo2Preview')">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Background Image <span class="card-title-rule"></span></div>
+        <div id="bgPreview" class="upload-no-img" style="width:100%;max-width:320px;height:100px;margin-bottom:0.6rem;">No image</div>
+        <div class="upload-row">
+          <label class="file-input-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Background
+            <input type="file" accept="image/*" onchange="uploadImage('cfg_bg','bgPreview',this)">
+          </label>
+          <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_bg','bgPreview')">Remove</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Display Options <span class="card-title-rule"></span></div>
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" data-key="showFlag" onchange="fieldChanged(this,'checkbox')">
+            <span class="toggle-slider"></span>
+          </label>
+          <div>
+            <div class="toggle-label">Show Country Flag</div>
+            <span class="toggle-sub">Displays the Ghana flag inline with the event theme in the header</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         TAB 2: COSTUMES
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="tab-pane" id="tab-costumes">
+
+      <!-- BACKLINE -->
+      <div class="costume-tier-card">
+        <div class="costume-tier-header">
+          <span class="tier-badge tier-back">Backline</span>
+          <span style="font-size:0.78rem;color:var(--text-dim);">Tier 1</span>
+        </div>
+        <div class="field-grid" style="margin-bottom:1rem;">
+          <div class="field">
+            <label>Costume Name</label>
+            <input type="text" data-key="backlineName" placeholder="Backline" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Price ($)</label>
+            <input type="number" data-key="backlinePrice" placeholder="150" oninput="fieldChanged(this)">
+          </div>
+        </div>
+        <div class="costume-photos-row">
+          <div class="costume-photo-upload">
+            <label>Girls Photo</label>
+            <div id="backlineGirlPreview" class="upload-no-img" style="width:140px;height:100px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_costume_backline_girl','backlineGirlPreview',this)"></label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_costume_backline_girl','backlineGirlPreview')">✕</button>
+            </div>
+          </div>
+          <div class="costume-photo-upload">
+            <label>Boys Photo</label>
+            <div id="backlineBoyPreview" class="upload-no-img" style="width:140px;height:100px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_costume_backline_boy','backlineBoyPreview',this)"></label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_costume_backline_boy','backlineBoyPreview')">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top:0.5rem;">
+          <div class="field">
+            <label>Includes (Girl — Shorts option)</label>
+            <textarea data-key="backlineIncludesGirlShorts" placeholder="Top, Shorts, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+          <div class="field">
+            <label>Includes (Girl — Leggings option)</label>
+            <textarea data-key="backlineIncludesGirlLeggings" placeholder="Top, Leggings, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+          <div class="field span2">
+            <label>Includes (Boy)</label>
+            <textarea data-key="backlineIncludesBoy" placeholder="Top, Shorts, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRONTLINE -->
+      <div class="costume-tier-card">
+        <div class="costume-tier-header">
+          <span class="tier-badge tier-front">Frontline</span>
+          <span style="font-size:0.78rem;color:var(--text-dim);">Tier 2</span>
+        </div>
+        <div class="field-grid" style="margin-bottom:1rem;">
+          <div class="field">
+            <label>Costume Name</label>
+            <input type="text" data-key="frontlineName" placeholder="Frontline" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Price ($)</label>
+            <input type="number" data-key="frontlinePrice" placeholder="280" oninput="fieldChanged(this)">
+          </div>
+        </div>
+        <div class="costume-photos-row">
+          <div class="costume-photo-upload">
+            <label>Girls Photo</label>
+            <div id="frontlineGirlPreview" class="upload-no-img" style="width:140px;height:100px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_costume_frontline_girl','frontlineGirlPreview',this)"></label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_costume_frontline_girl','frontlineGirlPreview')">✕</button>
+            </div>
+          </div>
+          <div class="costume-photo-upload">
+            <label>Boys Photo</label>
+            <div id="frontlineBoyPreview" class="upload-no-img" style="width:140px;height:100px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_costume_frontline_boy','frontlineBoyPreview',this)"></label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_costume_frontline_boy','frontlineBoyPreview')">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top:0.5rem;">
+          <div class="field">
+            <label>Includes (Girl)</label>
+            <textarea data-key="frontlineIncludesGirl" placeholder="Top, Shorts, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+          <div class="field">
+            <label>Includes (Boy)</label>
+            <textarea data-key="frontlineIncludesBoy" placeholder="Top, Shorts, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+        </div>
+
+        <div class="headpiece-section">
+          <div class="section-heading">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Frontline Girls Headpiece Options
+          </div>
+          <table class="admin-table" id="headpieceTable">
+            <thead>
+              <tr>
+                <th>Option Name</th>
+                <th>Price (+$)</th>
+                <th>Is Upgrade?</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="headpieceTbody"></tbody>
+          </table>
+          <button class="add-row-btn" onclick="addHeadpieceRow()">+ Add Headpiece Option</button>
+        </div>
+      </div>
+
+      <!-- ULTRA FRONTLINE -->
+      <div class="costume-tier-card">
+        <div class="costume-tier-header">
+          <span class="tier-badge tier-ultra">Ultra Frontline</span>
+          <span style="font-size:0.78rem;color:var(--text-dim);">Tier 3</span>
+        </div>
+        <div class="field-grid" style="margin-bottom:1rem;">
+          <div class="field">
+            <label>Costume Name</label>
+            <input type="text" data-key="ultraName" placeholder="Ultra Frontline" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Price ($)</label>
+            <input type="number" data-key="ultraPrice" placeholder="420" oninput="fieldChanged(this)">
+          </div>
+        </div>
+        <div class="costume-photos-row">
+          <div class="costume-photo-upload">
+            <label>Girls Photo</label>
+            <div id="ultraGirlPreview" class="upload-no-img" style="width:140px;height:100px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_costume_ultra_girl','ultraGirlPreview',this)"></label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_costume_ultra_girl','ultraGirlPreview')">✕</button>
+            </div>
+          </div>
+          <div class="costume-photo-upload">
+            <label>Boys Photo</label>
+            <div id="ultraBoyPreview" class="upload-no-img" style="width:140px;height:100px;">No image</div>
+            <div class="upload-row" style="margin-top:0.5rem;">
+              <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_costume_ultra_boy','ultraBoyPreview',this)"></label>
+              <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_costume_ultra_boy','ultraBoyPreview')">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top:0.5rem;">
+          <div class="field">
+            <label>Includes (Girl)</label>
+            <textarea data-key="ultraIncludesGirl" placeholder="Top, Gold Shorts, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+          <div class="field">
+            <label>Includes (Boy)</label>
+            <textarea data-key="ultraIncludesBoy" placeholder="Top, Shorts, Jewelled arm bands (2), ..." oninput="fieldChanged(this)"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- KEEP IT SIMPLE INFO -->
+      <div class="card" style="border-color:rgba(85,85,85,0.5);">
+        <div class="card-title" style="color:var(--text-dim);">Keep It Simple (Contact for Pricing) <span class="card-title-rule"></span></div>
+        <p style="font-size:0.8rem;color:var(--text-faint);line-height:1.6;">This tier is informational only — customers are directed to contact you for pricing and availability. No editable fields here. The description shown on the form is: <em style="color:var(--text-dim);">"Reach out to us for details &amp; pricing"</em>.</p>
+      </div>
+
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         TAB 3: ADD-ONS
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="tab-pane" id="tab-addons">
+      <div class="card">
+        <div class="card-title">Add-On Items <span class="card-title-rule"></span></div>
+        <div style="overflow-x:auto;">
+          <table class="admin-table" id="addonsTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Display Name</th>
+                <th>Value (ID)</th>
+                <th>Price ($)</th>
+                <th>Note / Restriction</th>
+                <th>Gender Filter</th>
+                <th>Image</th>
+                <th>Carousel Caption</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="addonsTbody"></tbody>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addAddonRow()">+ Add New Add-On</button>
+      </div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         TAB 4: APPAREL
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="tab-pane" id="tab-apparel">
+
+      <div class="costume-tier-card">
+        <div class="costume-tier-header">
+          <span style="font-size:0.82rem;font-weight:700;color:var(--text);">Cotton T-Shirt</span>
+        </div>
+        <div class="field-grid" style="margin-bottom:1rem;">
+          <div class="field">
+            <label>Item Name</label>
+            <input type="text" data-key="cottonName" placeholder="Cotton T-Shirt" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Price ($)</label>
+            <input type="number" data-key="cottonPrice" placeholder="25" oninput="fieldChanged(this)">
+          </div>
+          <div class="field span2">
+            <label>Photo Alt Text</label>
+            <input type="text" data-key="cottonAlt" placeholder="Cotton T-Shirt Mas Fam" oninput="fieldChanged(this)">
+          </div>
+        </div>
+        <div class="costume-photo-upload">
+          <label>Photo</label>
+          <div id="cottonPreview" class="upload-no-img" style="width:140px;height:140px;">No image</div>
+          <div class="upload-row" style="margin-top:0.5rem;">
+            <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_apparel_cotton','cottonPreview',this)"></label>
+            <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_apparel_cotton','cottonPreview')">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="costume-tier-card">
+        <div class="costume-tier-header">
+          <span style="font-size:0.82rem;font-weight:700;color:var(--text);">Ghana Jersey</span>
+        </div>
+        <div class="field-grid" style="margin-bottom:1rem;">
+          <div class="field">
+            <label>Item Name</label>
+            <input type="text" data-key="jerseyName" placeholder="Ghana Jersey" oninput="fieldChanged(this)">
+          </div>
+          <div class="field">
+            <label>Price ($)</label>
+            <input type="number" data-key="jerseyPrice" placeholder="40" oninput="fieldChanged(this)">
+          </div>
+          <div class="field span2">
+            <label>Photo Alt Text</label>
+            <input type="text" data-key="jerseyAlt" placeholder="Ghana Jersey Mas Fam" oninput="fieldChanged(this)">
+          </div>
+        </div>
+        <div class="costume-photo-upload">
+          <label>Photo</label>
+          <div id="jerseyPreview" class="upload-no-img" style="width:140px;height:140px;">No image</div>
+          <div class="upload-row" style="margin-top:0.5rem;">
+            <label class="file-input-label">Upload <input type="file" accept="image/*" onchange="uploadImage('cfg_apparel_jersey','jerseyPreview',this)"></label>
+            <button class="btn btn-sm btn-danger" onclick="removeImage('cfg_apparel_jersey','jerseyPreview')">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Apparel Sizes <span class="card-title-rule"></span></div>
+        <div class="field cols-1">
+          <label>Sizes (comma-separated)</label>
+          <input type="text" data-key="apparelSizes" placeholder="XS,S,M,L,XL,XXL,XXXL" oninput="fieldChanged(this)">
+        </div>
+        <p style="font-size:0.72rem;color:var(--text-faint);margin-top:0.5rem;">These sizes appear in the size selector dropdowns on the Parent Apparel section of the registration form.</p>
+      </div>
+
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         TAB 5: PROMO CODES
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="tab-pane" id="tab-promos">
+      <div class="card">
+        <div class="card-title">Promo Codes <span class="card-title-rule"></span></div>
+        <div id="promosContainer"></div>
+        <button class="add-row-btn" onclick="addPromoCode()">+ Add Promo Code</button>
+      </div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         TAB 6: INTEGRATIONS
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="tab-pane" id="tab-integrations">
+      <div class="card">
+        <div class="card-title">EmailJS <span class="card-title-rule"></span></div>
+
+        <div class="integration-field">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:0.45rem;">Public Key</div>
+          <div class="integration-input-row">
+            <input type="text" id="int-emailjsKey" data-key="emailjsKey" placeholder="unpxBZwGT7DS_NN8G" oninput="fieldChanged(this)" onblur="fieldChanged(this)">
+            <button class="copy-btn" onclick="copyIntegration('int-emailjsKey',this)" title="Copy">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <div class="help-text">Your EmailJS public key identifies your account. Find it at <a href="https://dashboard.emailjs.com/admin/account" target="_blank">dashboard.emailjs.com → Account → API Keys</a>. It typically starts with a short alphanumeric string. This is safe to expose client-side.</div>
+        </div>
+
+        <div class="integration-field">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:0.45rem;">Service ID</div>
+          <div class="integration-input-row">
+            <input type="text" id="int-emailjsService" data-key="emailjsService" placeholder="service_4tgahbz" oninput="fieldChanged(this)" onblur="fieldChanged(this)">
+            <button class="copy-btn" onclick="copyIntegration('int-emailjsService',this)" title="Copy">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <div class="help-text">The Service ID links to your email provider connection (Gmail, Outlook, etc.). Find it at <a href="https://dashboard.emailjs.com/admin" target="_blank">dashboard.emailjs.com → Email Services</a>. It looks like <code style="color:var(--gold-light);">service_xxxxxxx</code>.</div>
+        </div>
+
+        <div class="integration-field">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:0.45rem;">Template ID</div>
+          <div class="integration-input-row">
+            <input type="text" id="int-emailjsTemplate" data-key="emailjsTemplate" placeholder="template_6uso1xm" oninput="fieldChanged(this)" onblur="fieldChanged(this)">
+            <button class="copy-btn" onclick="copyIntegration('int-emailjsTemplate',this)" title="Copy">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <div class="help-text">The Template ID refers to the confirmation email template sent to registrants. Found at <a href="https://dashboard.emailjs.com/admin/templates" target="_blank">dashboard.emailjs.com → Email Templates</a>. Looks like <code style="color:var(--gold-light);">template_xxxxxxx</code>.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Formspree <span class="card-title-rule"></span></div>
+        <div class="integration-field" style="border:none;padding:0;margin:0;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:0.45rem;">Form Endpoint URL</div>
+          <div class="integration-input-row">
+            <input type="url" id="int-formspree" data-key="formspreeUrl" placeholder="https://formspree.io/f/mqejdpla" oninput="fieldChanged(this)" onblur="fieldChanged(this)">
+            <button class="copy-btn" onclick="copyIntegration('int-formspree',this)" title="Copy">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <div class="help-text">Formspree receives a copy of every registration submission and can forward it to your email. Log in at <a href="https://formspree.io" target="_blank">formspree.io</a>, create a new form, and copy the endpoint URL — it will look like <code style="color:var(--gold-light);">https://formspree.io/f/xxxxxxxx</code>.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Google Sheets <span class="card-title-rule"></span></div>
+        <div class="integration-field" style="border:none;padding:0;margin:0;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:0.45rem;">Web App URL</div>
+          <div class="integration-input-row">
+            <input type="url" id="int-sheets" data-key="sheetsUrl" placeholder="https://script.google.com/macros/s/..." oninput="fieldChanged(this)" onblur="fieldChanged(this)">
+            <button class="copy-btn" onclick="copyIntegration('int-sheets',this)" title="Copy">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <div class="help-text">This is a Google Apps Script Web App URL that appends rows to a Google Sheet on each submission. In your spreadsheet open <em>Extensions → Apps Script</em>, paste your logging script, deploy as a Web App (access: Anyone), and copy the URL. Starts with <code style="color:var(--gold-light);">https://script.google.com/macros/s/</code>.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">PDF Lookbook <span class="card-title-rule"></span></div>
+        <div class="integration-field" style="border:none;padding:0;margin:0;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:0.45rem;">PDF URL</div>
+          <div class="integration-input-row">
+            <input type="url" id="int-pdf" data-key="pdfUrl" placeholder="https://register.masmentality.com/The%20Black%20Stars%20Binder%20(1).pdf" oninput="fieldChanged(this)" onblur="fieldChanged(this)">
+            <button class="copy-btn" onclick="copyIntegration('int-pdf',this)" title="Copy">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <div class="help-text">URL of the costume lookbook PDF shown in the registration form's "View Costumes" modal. Host it on your domain or any CORS-friendly storage (e.g. GitHub Pages, Cloudflare R2). Must be publicly accessible and served with permissive CORS headers so PDF.js can load it.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tab-content-wrap -->
+</div><!-- end admin-body -->
+
+<!-- ══════════════════════════════════════════════════════════
+     RESET CONFIRMATION MODAL
+     ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box">
+    <h3>Reset to Defaults?</h3>
+    <p>This will clear all saved configuration from localStorage and restore the original default values. Images stored separately (logos, costume photos, etc.) will also be removed.<br><br>This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeResetModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="doReset()">Yes, Reset Everything</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DEFAULT CONFIG
+// ═══════════════════════════════════════════════════════════════
+const DEFAULTS = {
+  // Event & Branding
+  eventName:       'Kiddies Carnival 2026',
+  eventTheme:      'The Black Stars',
+  eventSubtitle:   'Kiddies Carnival & FIFA World Cup 2026',
+  countryLine:     'Representing Ghana',
+  contactEmail:    'simone.cole2@gmail.com',
+  contactPhone:    '236.464.7970',
+  contactInstagram: 'mas.mentality',
+  contactEmail2:   'masmentality@outlook.com',
+  partnerInstagram1: 'lilnationz',
+  partnerInstagram2: 'cnzinc',
+
+  // Colors
+  gold:      '#C8971A',
+  goldLight: '#F0C040',
+  red:       '#CE1126',
+  green:     '#006B3F',
+
+  // Display
+  showFlag: true,
+
+  // Costumes
+  backlineName:  'Backline',
+  backlinePrice: 150,
+  backlineIncludesGirlShorts:   'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Skirt, Yellow knee socks',
+  backlineIncludesGirlLeggings: 'Top, Leggings, Jewelled arm bands (2), Ankle bands, Headpiece, Skirt',
+  backlineIncludesBoy:          'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Chest piece, Belt',
+
+  frontlineName:  'Frontline',
+  frontlinePrice: 280,
+  frontlineIncludesGirl: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Feather collar, Tiara, Frontline skirt',
+  frontlineIncludesBoy:  'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Feather collar, Belt, Chest piece, Large headpiece',
+
+  ultraName:  'Ultra Frontline',
+  ultraPrice: 420,
+  ultraIncludesGirl: 'Top, Gold Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Caged skirt, Large Headpiece, Large feather collar',
+  ultraIncludesBoy:  'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Belt, Chest piece, Large headpiece, Large feather backpack with flag',
+
+  // Headpieces
+  headpieceOptions: [
+    { name: 'Small Crown',          price: 0,  upgrade: false },
+    { name: 'Tiara',                price: 0,  upgrade: false },
+    { name: 'Large Crown (Upgrade)', price: 40, upgrade: true  }
+  ],
+
+  // Add-ons
+  addons: [
+    { l: 'Cage Skirt & Metallic Shorts',   v: 'Cage Skirt & Metallic Shorts',   price: 130, note: 'Girls only',                    gender: 'girl', caption: 'Cage Skirt & Metallic Shorts' },
+    { l: 'Ultra Frontline Crown',           v: 'Ultra Frontline Crown',           price: 60,  note: 'Girls / Ultra Frontline',       gender: 'girl', caption: 'Ultra Frontline Crown' },
+    { l: 'Small Crown',                     v: 'Small Crown',                     price: 40,  note: 'Girls only',                    gender: 'girl', caption: 'Small Crown' },
+    { l: 'Tiara',                           v: 'Tiara',                           price: 30,  note: 'Girls only',                    gender: 'girl', caption: 'Tiara' },
+    { l: 'Small Girls Backpack',            v: 'Small Girls Backpack',            price: 75,  note: 'Girls only',                    gender: 'girl', caption: 'Small Girls Backpack' },
+    { l: 'Medium Backpack w Ostrich',       v: 'Medium Backpack w Ostrich',       price: 115, note: 'Girls / Frontline',             gender: 'girl', caption: 'Medium Backpack w Ostrich' },
+    { l: 'Ultra Frontline Backpack',        v: 'Ultra Frontline Backpack',        price: 100, note: 'Girls / Ultra Frontline',       gender: 'girl', caption: 'Ultra Frontline Backpack' },
+    { l: 'Ultra Frontline Backpack (Boys)', v: 'Ultra Frontline Backpack (Boys)', price: 100, note: 'Boys / Ultra Frontline',        gender: 'boy',  caption: 'Ultra Frontline Backpack' },
+    { l: 'Boys Large Feather Head',         v: 'Boys Large Feather Head',         price: 30,  note: 'Boys only',                    gender: 'boy',  caption: 'Boys Large Feather Head' },
+    { l: 'Toddler Collar',                  v: 'Toddler Collar',                  price: 35,  note: 'Toddler sizes',                 gender: '',     caption: 'Toddler Collar' },
+    { l: 'Large Diamond Flag',              v: 'Large Diamond Flag',              price: 60,  note: 'Frontline & Ultra Frontline',   gender: '',     caption: 'Large Diamond Flag' },
+    { l: 'Decorated Shoes (Child)',         v: 'Decorated Shoes (Child)',         price: 30,  note: 'All tiers',                     gender: '',     caption: 'Decorated Shoes, Child Sizes' },
+    { l: 'Decorated Shoes (Adult)',         v: 'Decorated Shoes (Adult)',         price: 40,  note: 'All tiers',                     gender: '',     caption: 'Decorated Shoes, Adult Sizes' },
+    { l: 'Sun Glasses',                     v: 'Sun Glasses',                     price: 5,   note: 'All masqueraders',              gender: '',     caption: 'Sun Glasses' }
+  ],
+
+  // Apparel
+  cottonName:  'Cotton T-Shirt',
+  cottonPrice: 25,
+  cottonAlt:   'Cotton T-Shirt Mas Fam',
+  jerseyName:  'Ghana Jersey',
+  jerseyPrice: 40,
+  jerseyAlt:   'Ghana Jersey Mas Fam',
+  apparelSizes: 'XS,S,M,L,XL,XXL,XXXL',
+
+  // Promos
+  promoCodes: [
+    {
+      code: 'ROUNDTWO15',
+      label: 'Roundtwo15',
+      expiry: '2026-06-06',
+      description: '$20 off $150+ · $40 off $250+',
+      discountType: 'tiered',
+      tier1Threshold: 150, tier1Amount: 20,
+      tier2Threshold: 250, tier2Amount: 40,
+      appliesToCostumes: true,
+      appliesToAddons: true,
+      appliesToApparel: false
+    }
+  ],
+
+  // Integrations
+  emailjsKey:      'unpxBZwGT7DS_NN8G',
+  emailjsService:  'service_4tgahbz',
+  emailjsTemplate: 'template_6uso1xm',
+  formspreeUrl:    'https://formspree.io/f/mqejdpla',
+  sheetsUrl:       'https://script.google.com/macros/s/AKfycbxEfg8Gl51uXm7CB15KpNTI2swIUGhFrxM9kziM1Zuppq-_Z4liNaKwIuY8kAkWCPpf/exec',
+  pdfUrl:          'https://register.masmentality.com/The%20Black%20Stars%20Binder%20(1).pdf'
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  CONFIG LOAD / SAVE
+// ═══════════════════════════════════════════════════════════════
+let cfg = {};
+
+function loadConfig() {
+  try {
+    const stored = localStorage.getItem('carnival_config');
+    const parsed = stored ? JSON.parse(stored) : {};
+    cfg = Object.assign({}, DEFAULTS, parsed);
+    // Deep-merge arrays if present
+    if (parsed.addons)          cfg.addons          = parsed.addons;
+    if (parsed.headpieceOptions) cfg.headpieceOptions = parsed.headpieceOptions;
+    if (parsed.promoCodes)      cfg.promoCodes      = parsed.promoCodes;
+  } catch(e) {
+    cfg = Object.assign({}, DEFAULTS);
+  }
+  return cfg;
+}
+
+function saveConfig() {
+  try {
+    localStorage.setItem('carnival_config', JSON.stringify(cfg));
+    showSaved();
+  } catch(e) {
+    console.error('Save failed:', e);
+  }
+}
+
+function showSaved() {
+  const ind  = document.getElementById('saveIndicator');
+  const txt  = document.getElementById('saveText');
+  const now  = new Date();
+  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  txt.textContent = 'Saved ' + time;
+  ind.classList.add('saved');
+  clearTimeout(window._saveTimer);
+  window._saveTimer = setTimeout(() => { ind.classList.remove('saved'); }, 4000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  IMAGE HELPERS
+// ═══════════════════════════════════════════════════════════════
+function uploadImage(key, previewElId, fileInput) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    try { localStorage.setItem(key, dataUrl); } catch(err) { alert('Image too large for localStorage: ' + err.message); return; }
+    renderImagePreview(previewElId, dataUrl);
+    showSaved();
+    // Reset file input so same file can be re-uploaded
+    fileInput.value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage(key, previewElId) {
+  localStorage.removeItem(key);
+  const el = document.getElementById(previewElId);
+  if (!el) return;
+  // Replace img with placeholder div
+  const placeholder = document.createElement('div');
+  placeholder.id = previewElId;
+  placeholder.className = el.className.replace('upload-preview','upload-no-img');
+  placeholder.style.cssText = el.style.cssText;
+  placeholder.textContent = 'No image';
+  el.parentNode.replaceChild(placeholder, el);
+  showSaved();
+}
+
+function renderImagePreview(elId, dataUrl) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  let img;
+  if (el.tagName === 'IMG') {
+    img = el;
+  } else {
+    img = document.createElement('img');
+    img.id = elId;
+    img.className = 'upload-preview ' + (el.className.replace('upload-no-img','').trim());
+    img.style.cssText = el.style.cssText;
+    el.parentNode.replaceChild(img, el);
+  }
+  img.src = dataUrl;
+  img.alt = 'Preview';
+}
+
+function loadImagePreviews() {
+  const keys = [
+    ['cfg_logo1','logo1Preview'],
+    ['cfg_logo2','logo2Preview'],
+    ['cfg_bg','bgPreview'],
+    ['cfg_costume_backline_girl','backlineGirlPreview'],
+    ['cfg_costume_backline_boy','backlineBoyPreview'],
+    ['cfg_costume_frontline_girl','frontlineGirlPreview'],
+    ['cfg_costume_frontline_boy','frontlineBoyPreview'],
+    ['cfg_costume_ultra_girl','ultraGirlPreview'],
+    ['cfg_costume_ultra_boy','ultraBoyPreview'],
+    ['cfg_apparel_cotton','cottonPreview'],
+    ['cfg_apparel_jersey','jerseyPreview']
+  ];
+  keys.forEach(([k,id]) => {
+    const data = localStorage.getItem(k);
+    if (data) renderImagePreview(id, data);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FIELD HELPERS
+// ═══════════════════════════════════════════════════════════════
+function fieldChanged(el, type) {
+  const key = el.dataset.key;
+  if (!key) return;
+  if (type === 'checkbox') {
+    cfg[key] = el.checked;
+  } else if (el.type === 'number') {
+    cfg[key] = parseFloat(el.value) || 0;
+  } else {
+    cfg[key] = el.value;
+  }
+  saveConfig();
+}
+
+function populateFields() {
+  // Text / number / textarea / select inputs with data-key
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    const val = cfg[key];
+    if (val === undefined) return;
+    if (el.type === 'checkbox') {
+      el.checked = !!val;
+    } else {
+      el.value = val;
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  COLOR HELPERS
+// ═══════════════════════════════════════════════════════════════
+function colorPickerChanged(cfgKey, pickerId) {
+  const picker = document.getElementById(pickerId);
+  const textId = pickerId.replace('cp-','ct-');
+  document.getElementById(textId).value = picker.value;
+  cfg[cfgKey] = picker.value;
+  saveConfig();
+  updateColorPreview();
+}
+
+function colorTextChanged(cfgKey, textId, pickerId) {
+  const text = document.getElementById(textId);
+  const val = text.value.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById(pickerId).value = val;
+    cfg[cfgKey] = val;
+    saveConfig();
+    updateColorPreview();
+  }
+}
+
+function populateColors() {
+  const map = [
+    ['gold',      'cp-gold',      'ct-gold'],
+    ['goldLight', 'cp-goldLight', 'ct-goldLight'],
+    ['red',       'cp-red',       'ct-red'],
+    ['green',     'cp-green',     'ct-green']
+  ];
+  map.forEach(([k, pid, tid]) => {
+    const v = cfg[k] || DEFAULTS[k];
+    document.getElementById(pid).value = v;
+    document.getElementById(tid).value = v;
+  });
+  updateColorPreview();
+}
+
+function updateColorPreview() {
+  const r = cfg.red   || DEFAULTS.red;
+  const g = cfg.gold  || DEFAULTS.gold;
+  const gr = cfg.green || DEFAULTS.green;
+  document.getElementById('colorPreviewStripe').style.background =
+    `linear-gradient(90deg, ${r} 33.33%, ${g} 33.33%, ${g} 66.66%, ${gr} 66.66%)`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HEADPIECE TABLE
+// ═══════════════════════════════════════════════════════════════
+function renderHeadpieceTable() {
+  const tbody = document.getElementById('headpieceTbody');
+  tbody.innerHTML = '';
+  (cfg.headpieceOptions || []).forEach((hp, i) => {
+    tbody.insertAdjacentHTML('beforeend', headpieceRowHTML(hp, i));
+  });
+}
+
+function headpieceRowHTML(hp, i) {
+  return `<tr>
+    <td><input type="text" value="${esc(hp.name)}" oninput="updateHeadpieceField(${i},'name',this.value)"></td>
+    <td><input type="number" value="${hp.price}" style="width:75px;" oninput="updateHeadpieceField(${i},'price',this.value)"></td>
+    <td style="text-align:center;">
+      <input type="checkbox" ${hp.upgrade ? 'checked' : ''} style="accent-color:var(--gold);width:16px;height:16px;cursor:pointer;" onchange="updateHeadpieceField(${i},'upgrade',this.checked)">
+    </td>
+    <td><button class="delete-row-btn" onclick="deleteHeadpieceRow(${i})">✕</button></td>
+  </tr>`;
+}
+
+function updateHeadpieceField(i, field, val) {
+  if (!cfg.headpieceOptions[i]) return;
+  if (field === 'price') cfg.headpieceOptions[i][field] = parseFloat(val) || 0;
+  else if (field === 'upgrade') cfg.headpieceOptions[i][field] = val;
+  else cfg.headpieceOptions[i][field] = val;
+  saveConfig();
+}
+
+function addHeadpieceRow() {
+  cfg.headpieceOptions = cfg.headpieceOptions || [];
+  cfg.headpieceOptions.push({ name: '', price: 0, upgrade: false });
+  saveConfig();
+  renderHeadpieceTable();
+}
+
+function deleteHeadpieceRow(i) {
+  cfg.headpieceOptions.splice(i, 1);
+  saveConfig();
+  renderHeadpieceTable();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ADD-ONS TABLE
+// ═══════════════════════════════════════════════════════════════
+function renderAddonsTable() {
+  const tbody = document.getElementById('addonsTbody');
+  tbody.innerHTML = '';
+  (cfg.addons || []).forEach((a, i) => {
+    const imgKey = `cfg_addon_${i}`;
+    const imgData = localStorage.getItem(imgKey);
+    const imgHtml = imgData
+      ? `<img src="${imgData}" class="thumb-preview" id="addon-img-${i}">`
+      : `<div id="addon-img-${i}" style="width:48px;height:36px;background:var(--surface3);border-radius:5px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--text-faint);">none</div>`;
+
+    tbody.insertAdjacentHTML('beforeend', `<tr id="addon-row-${i}">
+      <td style="color:var(--text-dim);font-size:0.75rem;">${i + 1}</td>
+      <td><input type="text" value="${esc(a.l)}" style="min-width:140px;" oninput="updateAddonField(${i},'l',this.value)"></td>
+      <td><input type="text" value="${esc(a.v)}" style="min-width:130px;" oninput="updateAddonField(${i},'v',this.value)"></td>
+      <td><input type="number" value="${a.price}" style="width:70px;" oninput="updateAddonField(${i},'price',this.value)"></td>
+      <td><input type="text" value="${esc(a.note)}" style="min-width:120px;" oninput="updateAddonField(${i},'note',this.value)"></td>
+      <td>
+        <select style="min-width:100px;" onchange="updateAddonField(${i},'gender',this.value)">
+          <option value="" ${a.gender === '' ? 'selected' : ''}>All</option>
+          <option value="girl" ${a.gender === 'girl' ? 'selected' : ''}>Girl only</option>
+          <option value="boy"  ${a.gender === 'boy'  ? 'selected' : ''}>Boy only</option>
+        </select>
+      </td>
+      <td>
+        <div class="addon-img-cell">
+          ${imgHtml}
+          <label class="file-input-label" style="margin-top:3px;font-size:0.65rem;padding:2px 6px;">
+            Upload<input type="file" accept="image/*" onchange="uploadAddonImage(${i},this)">
+          </label>
+          <button class="btn btn-sm btn-danger" style="font-size:0.65rem;padding:2px 6px;margin-top:2px;" onclick="removeAddonImage(${i})">✕</button>
+        </div>
+      </td>
+      <td><input type="text" value="${esc(a.caption)}" style="min-width:130px;" oninput="updateAddonField(${i},'caption',this.value)"></td>
+      <td><button class="delete-row-btn" onclick="deleteAddonRow(${i})">✕</button></td>
+    </tr>`);
+  });
+}
+
+function updateAddonField(i, field, val) {
+  if (!cfg.addons[i]) return;
+  if (field === 'price') cfg.addons[i][field] = parseFloat(val) || 0;
+  else cfg.addons[i][field] = val;
+  saveConfig();
+}
+
+function uploadAddonImage(i, fileInput) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    try { localStorage.setItem(`cfg_addon_${i}`, dataUrl); } catch(err) { alert('Image too large: ' + err.message); return; }
+    const el = document.getElementById(`addon-img-${i}`);
+    if (!el) return;
+    if (el.tagName === 'IMG') {
+      el.src = dataUrl;
+    } else {
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.className = 'thumb-preview';
+      img.id = `addon-img-${i}`;
+      el.parentNode.replaceChild(img, el);
+    }
+    fileInput.value = '';
+    showSaved();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeAddonImage(i) {
+  localStorage.removeItem(`cfg_addon_${i}`);
+  const el = document.getElementById(`addon-img-${i}`);
+  if (!el) return;
+  const placeholder = document.createElement('div');
+  placeholder.id = `addon-img-${i}`;
+  placeholder.style.cssText = 'width:48px;height:36px;background:var(--surface3);border-radius:5px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--text-faint);';
+  placeholder.textContent = 'none';
+  el.parentNode.replaceChild(placeholder, el);
+  showSaved();
+}
+
+function addAddonRow() {
+  cfg.addons = cfg.addons || [];
+  cfg.addons.push({ l: '', v: '', price: 0, note: '', gender: '', caption: '' });
+  saveConfig();
+  renderAddonsTable();
+}
+
+function deleteAddonRow(i) {
+  cfg.addons.splice(i, 1);
+  // Shift addon images down
+  for (let j = i; j < cfg.addons.length + 1; j++) {
+    const next = localStorage.getItem(`cfg_addon_${j + 1}`);
+    if (next) localStorage.setItem(`cfg_addon_${j}`, next);
+    else localStorage.removeItem(`cfg_addon_${j}`);
+  }
+  saveConfig();
+  renderAddonsTable();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PROMO CODES
+// ═══════════════════════════════════════════════════════════════
+function renderPromoCodes() {
+  const container = document.getElementById('promosContainer');
+  container.innerHTML = '';
+  (cfg.promoCodes || []).forEach((p, i) => {
+    container.insertAdjacentHTML('beforeend', promoCardHTML(p, i));
+  });
+}
+
+function promoCardHTML(p, i) {
+  const isTiered   = (p.discountType || 'tiered') === 'tiered';
+  const isFlatPct  = p.discountType === 'flat_pct';
+  const isFlatDlr  = p.discountType === 'flat_dollar';
+
+  return `<div class="promo-card" id="promo-card-${i}">
+    <div class="promo-header">
+      <span class="promo-code-badge">${esc(p.code || '')}</span>
+      <span style="font-size:0.75rem;color:var(--text-dim);flex:1;">${esc(p.label || '')}</span>
+      <button class="delete-row-btn" onclick="deletePromoCode(${i})" title="Delete promo code">✕</button>
+    </div>
+    <div class="promo-grid">
+      <div class="field">
+        <label>Code (uppercase)</label>
+        <input type="text" value="${esc(p.code)}" style="text-transform:uppercase;font-family:monospace;" oninput="updatePromoField(${i},'code',this.value.toUpperCase());this.value=this.value.toUpperCase();refreshPromoHeader(${i})">
+      </div>
+      <div class="field">
+        <label>Internal Label</label>
+        <input type="text" value="${esc(p.label)}" oninput="updatePromoField(${i},'label',this.value);refreshPromoHeader(${i})">
+      </div>
+      <div class="field">
+        <label>Expiry Date</label>
+        <input type="date" value="${p.expiry || ''}" oninput="updatePromoField(${i},'expiry',this.value)">
+      </div>
+      <div class="field span2">
+        <label>Description (shown to customer on success)</label>
+        <input type="text" value="${esc(p.description)}" oninput="updatePromoField(${i},'description',this.value)">
+      </div>
+      <div class="field">
+        <label>Discount Type</label>
+        <select onchange="updatePromoField(${i},'discountType',this.value);renderTieredSection(${i},this.value)">
+          <option value="tiered"      ${isTiered  ? 'selected':''}>Tiered ($20/$40)</option>
+          <option value="flat_pct"    ${isFlatPct ? 'selected':''}>Flat %</option>
+          <option value="flat_dollar" ${isFlatDlr ? 'selected':''}>Flat $</option>
+        </select>
+      </div>
+    </div>
+    <div id="promo-tiered-${i}" style="display:${isTiered ? 'grid' : 'none'};" class="tiered-rows">
+      <div>
+        <label>Threshold 1 ($)</label>
+        <input type="number" value="${p.tier1Threshold ?? 150}" oninput="updatePromoField(${i},'tier1Threshold',this.value)">
+      </div>
+      <div>
+        <label>Discount 1 ($)</label>
+        <input type="number" value="${p.tier1Amount ?? 20}" oninput="updatePromoField(${i},'tier1Amount',this.value)">
+      </div>
+      <div>
+        <label>Threshold 2 ($)</label>
+        <input type="number" value="${p.tier2Threshold ?? 250}" oninput="updatePromoField(${i},'tier2Threshold',this.value)">
+      </div>
+      <div>
+        <label>Discount 2 ($)</label>
+        <input type="number" value="${p.tier2Amount ?? 40}" oninput="updatePromoField(${i},'tier2Amount',this.value)">
+      </div>
+    </div>
+    <div id="promo-flat-${i}" style="display:${(isFlatPct||isFlatDlr) ? 'block' : 'none'};margin-top:0.75rem;">
+      <div class="field" style="max-width:180px;">
+        <label>${isFlatPct ? 'Discount (%)' : 'Discount ($)'}</label>
+        <input type="number" value="${p.flatAmount ?? ''}" oninput="updatePromoField(${i},'flatAmount',this.value)">
+      </div>
+    </div>
+    <div class="promo-applies-row">
+      <label class="check-label">
+        <input type="checkbox" ${p.appliesToCostumes ? 'checked' : ''} onchange="updatePromoField(${i},'appliesToCostumes',this.checked)"> Applies to Costumes
+      </label>
+      <label class="check-label">
+        <input type="checkbox" ${p.appliesToAddons ? 'checked' : ''} onchange="updatePromoField(${i},'appliesToAddons',this.checked)"> Applies to Add-Ons
+      </label>
+      <label class="check-label">
+        <input type="checkbox" ${p.appliesToApparel ? 'checked' : ''} onchange="updatePromoField(${i},'appliesToApparel',this.checked)"> Applies to Apparel
+      </label>
+    </div>
+  </div>`;
+}
+
+function updatePromoField(i, field, val) {
+  if (!cfg.promoCodes[i]) return;
+  const numFields = ['tier1Threshold','tier1Amount','tier2Threshold','tier2Amount','flatAmount'];
+  cfg.promoCodes[i][field] = numFields.includes(field) ? (parseFloat(val) || 0) : val;
+  saveConfig();
+}
+
+function refreshPromoHeader(i) {
+  const p    = cfg.promoCodes[i];
+  const card = document.getElementById('promo-card-' + i);
+  if (!card || !p) return;
+  const badge = card.querySelector('.promo-code-badge');
+  const lbl   = card.querySelector('.promo-header span:nth-child(2)');
+  if (badge) badge.textContent = p.code || '';
+  if (lbl)   lbl.textContent   = p.label || '';
+}
+
+function renderTieredSection(i, type) {
+  document.getElementById('promo-tiered-' + i).style.display = type === 'tiered' ? 'grid' : 'none';
+  document.getElementById('promo-flat-' + i).style.display   = (type === 'flat_pct' || type === 'flat_dollar') ? 'block' : 'none';
+}
+
+function addPromoCode() {
+  cfg.promoCodes = cfg.promoCodes || [];
+  cfg.promoCodes.push({
+    code: 'NEWCODE',
+    label: 'New Promo',
+    expiry: '',
+    description: '',
+    discountType: 'tiered',
+    tier1Threshold: 150, tier1Amount: 20,
+    tier2Threshold: 250, tier2Amount: 40,
+    appliesToCostumes: true,
+    appliesToAddons: true,
+    appliesToApparel: false
+  });
+  saveConfig();
+  renderPromoCodes();
+}
+
+function deletePromoCode(i) {
+  cfg.promoCodes.splice(i, 1);
+  saveConfig();
+  renderPromoCodes();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INTEGRATIONS
+// ═══════════════════════════════════════════════════════════════
+function populateIntegrations() {
+  const map = {
+    'int-emailjsKey':      'emailjsKey',
+    'int-emailjsService':  'emailjsService',
+    'int-emailjsTemplate': 'emailjsTemplate',
+    'int-formspree':       'formspreeUrl',
+    'int-sheets':          'sheetsUrl',
+    'int-pdf':             'pdfUrl'
+  };
+  for (const [elId, cfgKey] of Object.entries(map)) {
+    const el = document.getElementById(elId);
+    if (el && cfg[cfgKey] !== undefined) el.value = cfg[cfgKey];
+  }
+}
+
+function copyIntegration(inputId, btn) {
+  const val = document.getElementById(inputId).value;
+  if (!val) return;
+  navigator.clipboard.writeText(val).then(() => {
+    btn.classList.add('copied');
+    btn.title = 'Copied!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.title = 'Copy'; }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = val;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 2000);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════════════
+function switchTab(tabId, btnEl) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById('tab-' + tabId);
+  if (pane) pane.classList.add('active');
+  if (btnEl) btnEl.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  EXPORT / IMPORT
+// ═══════════════════════════════════════════════════════════════
+function exportConfig() {
+  const data = JSON.stringify(cfg, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'carnival_config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importConfig(fileInput) {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      Object.assign(cfg, imported);
+      saveConfig();
+      initUI();
+      alert('Config imported successfully.');
+    } catch(err) {
+      alert('Failed to parse JSON: ' + err.message);
+    }
+    fileInput.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  RESET
+// ═══════════════════════════════════════════════════════════════
+function confirmReset() {
+  document.getElementById('resetModal').classList.add('open');
+}
+
+function closeResetModal() {
+  document.getElementById('resetModal').classList.remove('open');
+}
+
+function doReset() {
+  // Remove all config keys
+  localStorage.removeItem('carnival_config');
+  // Remove image keys
+  const imgKeys = [
+    'cfg_logo1','cfg_logo2','cfg_bg',
+    'cfg_costume_backline_girl','cfg_costume_backline_boy',
+    'cfg_costume_frontline_girl','cfg_costume_frontline_boy',
+    'cfg_costume_ultra_girl','cfg_costume_ultra_boy',
+    'cfg_apparel_cotton','cfg_apparel_jersey'
+  ];
+  for (let i = 0; i < 20; i++) imgKeys.push(`cfg_addon_${i}`);
+  imgKeys.forEach(k => localStorage.removeItem(k));
+  cfg = Object.assign({}, DEFAULTS);
+  closeResetModal();
+  initUI();
+  showSaved();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PREVIEW
+// ═══════════════════════════════════════════════════════════════
+function previewSite() {
+  window.open('index.html', '_blank');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════
+function esc(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+function initUI() {
+  loadConfig();
+  populateFields();
+  populateColors();
+  populateIntegrations();
+  loadImagePreviews();
+  renderHeadpieceTable();
+  renderAddonsTable();
+  renderPromoCodes();
+}
+
+// Close modals on escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeResetModal();
+});
+
+document.getElementById('resetModal').addEventListener('click', function(e) {
+  if (e.target === this) closeResetModal();
+});
+
+// Bootstrap
+initUI();
+</script>
+</body>
+</html>
