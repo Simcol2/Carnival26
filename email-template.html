@@ -1,0 +1,403 @@
+<!--
+=============================================================================
+  EMAILJS TEMPLATE — Kiddies Carnival 2026 Registration Confirmation
+  Organization: Mas Mentality × Lil Nationz
+=============================================================================
+
+HOW TO USE IN EMAILJS:
+1. Log in to https://www.emailjs.com and open your Email Templates.
+2. Create a new template (or open an existing one).
+3. Switch to the "HTML" editor tab (not the visual editor).
+4. Select ALL content in the editor and DELETE it.
+5. Paste the entire contents of this file into the HTML editor.
+6. Set the Subject line to:
+      Registration Confirmed — Kiddies Carnival 2026 🎉
+7. Save the template.
+8. In your JavaScript code, pass the following variables when calling
+   emailjs.send() or emailjs.sendForm().
+
+REQUIRED VARIABLES:
+  {{to_name}}        — Parent/guardian display name (e.g. "Sarah Johnson")
+  {{to_email}}       — Recipient email address
+  {{firstName}}      — First masquerader's first name
+  {{lastName}}       — First masquerader's last name
+  {{costume}}        — Costume tier (e.g. "Frontline", "Backline", "Ultra")
+  {{country}}        — Country of representation
+  {{topSize}}        — Top size (e.g. "4T", "S", "M")
+  {{bottomSize}}     — Bottom size
+  {{estimatedTotal}} — Total price string (e.g. "$420.00")
+  {{depositDue}}     — Deposit amount string (e.g. "$210.00")
+
+OPTIONAL VARIABLES (can be empty string — template handles gracefully):
+  {{parentName}}         — Same as to_name; used in greeting
+  {{frontlineHeadpiece}} — Headpiece choice for frontline girls
+  {{frontlineSizeCat}}   — Size category for frontline girls
+  {{addons}}             — Pre-formatted masquerader details block
+  {{tshirts}}            — Parent apparel summary (shows "None" if empty)
+
+IMPORTANT: All CSS in this file is intentionally inline.
+Email clients (Gmail, Outlook, Apple Mail) strip <style> blocks and external
+stylesheets. Inline styles are the ONLY reliable way to style HTML email.
+=============================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Carnival Registration Confirmation</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+</head>
+<body style="margin: 0; padding: 0; background-color: #F8F8F6; font-family: Arial, Helvetica, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+
+  <!-- OUTER WRAPPER TABLE -->
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #F8F8F6; margin: 0; padding: 0;">
+    <tr>
+      <td align="center" style="padding: 24px 16px;">
+
+        <!-- INNER CONTENT TABLE (max 600px) -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.12);">
+
+          <!-- ===================== GOLD TOP BORDER STRIP ===================== -->
+          <tr>
+            <td style="background-color: #C8971A; height: 6px; font-size: 1px; line-height: 1px;">&nbsp;</td>
+          </tr>
+
+          <!-- ===================== HEADER ===================== -->
+          <tr>
+            <td style="background-color: #1a1a1a; padding: 36px 40px 28px 40px; text-align: center;">
+
+              <!-- Organization Name -->
+              <p style="margin: 0 0 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C8971A;">
+                Mas Mentality &times; Lil Nationz
+              </p>
+
+              <!-- Main Heading -->
+              <h1 style="margin: 0 0 10px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 38px; font-weight: 700; color: #ffffff; line-height: 1.15; letter-spacing: -0.5px;">
+                Registration Confirmed!
+              </h1>
+
+              <!-- Subheading -->
+              <p style="margin: 0 0 24px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 400; font-style: italic; color: #C8971A; letter-spacing: 0.5px;">
+                Kiddies Carnival 2026 &mdash; The Black Stars
+              </p>
+
+              <!-- Gold Divider -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="padding: 0 60px;">
+                    <div style="border-top: 1px solid #C8971A; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- ===================== MAIN BODY CARD ===================== -->
+          <tr>
+            <td style="background-color: #ffffff; padding: 36px 40px 0 40px; border-left: 1px solid #e8dfc4; border-right: 1px solid #e8dfc4;">
+
+              <!-- ---- GREETING ---- -->
+              <p style="margin: 0 0 8px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 22px; color: #1a1a1a; font-weight: 400;">
+                Hi {{to_name}},
+              </p>
+              <p style="margin: 0 0 28px 0; font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.7; color: #444444;">
+                Thank you for registering for <strong style="color: #1a1a1a;">Kiddies Carnival 2026!</strong> We&rsquo;re so excited to have you on the road with us this year. Here&rsquo;s a summary of your registration.
+              </p>
+
+              <!-- ---- REGISTRATION SUMMARY CARD ---- -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border: 2px solid #C8971A; border-radius: 5px; margin-bottom: 24px; overflow: hidden;">
+
+                <!-- Card Header -->
+                <tr>
+                  <td colspan="2" style="background-color: #C8971A; padding: 12px 20px;">
+                    <h2 style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 700; color: #1a1a1a; letter-spacing: 0.5px; text-transform: uppercase;">
+                      Your Registration Summary
+                    </h2>
+                  </td>
+                </tr>
+
+                <!-- Masquerader -->
+                <tr>
+                  <td style="padding: 12px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Masquerader</td>
+                  <td style="padding: 12px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a1a1a; font-weight: 600; vertical-align: top;">{{firstName}} {{lastName}}</td>
+                </tr>
+
+                <!-- Divider row -->
+                <tr><td colspan="2" style="padding: 0 20px;"><div style="border-top: 1px solid #f0e8d0; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td></tr>
+
+                <!-- Costume -->
+                <tr>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Costume</td>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a1a1a; vertical-align: top;">{{costume}}</td>
+                </tr>
+
+                <!-- Divider row -->
+                <tr><td colspan="2" style="padding: 0 20px;"><div style="border-top: 1px solid #f0e8d0; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td></tr>
+
+                <!-- Country -->
+                <tr>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Country Representing</td>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a1a1a; vertical-align: top;">{{country}}</td>
+                </tr>
+
+                <!-- Divider row -->
+                <tr><td colspan="2" style="padding: 0 20px;"><div style="border-top: 1px solid #f0e8d0; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td></tr>
+
+                <!-- Top Size -->
+                <tr>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Top Size</td>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a1a1a; vertical-align: top;">{{topSize}}</td>
+                </tr>
+
+                <!-- Divider row -->
+                <tr><td colspan="2" style="padding: 0 20px;"><div style="border-top: 1px solid #f0e8d0; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td></tr>
+
+                <!-- Bottom Size -->
+                <tr>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Bottom Size</td>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a1a1a; vertical-align: top;">{{bottomSize}}</td>
+                </tr>
+
+                <!-- Divider row -->
+                <tr><td colspan="2" style="padding: 0 20px;"><div style="border-top: 1px solid #f0e8d0; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td></tr>
+
+                <!-- Add-Ons / Details (includes frontline headpiece/size if present) -->
+                <tr>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Add-Ons / Details</td>
+                  <td style="padding: 10px 20px 4px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a1a1a; vertical-align: top; white-space: pre-line; line-height: 1.6;">{{addons}}{{#frontlineHeadpiece}}
+<span style="display: block; margin-top: 6px;"><strong>Headpiece:</strong> {{frontlineHeadpiece}}</span>{{/frontlineHeadpiece}}{{#frontlineSizeCat}}
+<span style="display: block;"><strong>Size Category:</strong> {{frontlineSizeCat}}</span>{{/frontlineSizeCat}}</td>
+                </tr>
+
+                <!-- Divider row -->
+                <tr><td colspan="2" style="padding: 0 20px;"><div style="border-top: 1px solid #f0e8d0; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td></tr>
+
+                <!-- Parent Apparel -->
+                <tr>
+                  <td style="padding: 10px 20px 14px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; width: 38%; vertical-align: top;">Parent Apparel</td>
+                  <td style="padding: 10px 20px 14px 20px; font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #1a1a1a; vertical-align: top;">{{tshirts}}</td>
+                </tr>
+
+              </table>
+              <!-- END REGISTRATION SUMMARY CARD -->
+
+              <!-- ---- PAYMENT SUMMARY CARD ---- -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border: 2px solid #006B3F; border-radius: 5px; margin-bottom: 24px; overflow: hidden;">
+
+                <!-- Card Header -->
+                <tr>
+                  <td style="background-color: #006B3F; padding: 12px 20px;">
+                    <h2 style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 16px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; text-transform: uppercase;">
+                      &#x1F4B3; Payment Due
+                    </h2>
+                  </td>
+                </tr>
+
+                <!-- Totals block -->
+                <tr>
+                  <td style="padding: 20px 20px 6px 20px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #555555; padding-bottom: 6px;">Estimated Total</td>
+                        <td align="right" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a1a1a; font-weight: 600; padding-bottom: 6px;">{{estimatedTotal}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding: 4px 0;"><div style="border-top: 1px solid #d4edda; height: 1px; font-size: 1px; line-height: 1px;">&nbsp;</div></td>
+                      </tr>
+                      <tr>
+                        <td style="font-family: Georgia, 'Times New Roman', serif; font-size: 17px; font-weight: 700; color: #006B3F; padding-top: 8px;">Deposit Due Now</td>
+                        <td align="right" style="font-family: Georgia, 'Times New Roman', serif; font-size: 22px; font-weight: 700; color: #006B3F; padding-top: 8px;">{{depositDue}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- E-Transfer Instructions -->
+                <tr>
+                  <td style="padding: 16px 20px 6px 20px;">
+                    <div style="background-color: #f4faf6; border-left: 3px solid #006B3F; padding: 14px 16px; border-radius: 0 4px 4px 0;">
+                      <p style="margin: 0 0 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.65; color: #333333;">
+                        To confirm your registration, please send your deposit via&nbsp;<strong>e-transfer</strong>&nbsp;to:
+                      </p>
+                      <p style="margin: 0 0 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; color: #1a1a1a; letter-spacing: 0.2px;">
+                        simone.cole2@gmail.com
+                      </p>
+                      <p style="margin: 0 0 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #555555; line-height: 1.5;">
+                        <strong>Message / Reference:</strong> [Your Name] &mdash; Carnival 2026
+                      </p>
+                      <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #555555; line-height: 1.5;">
+                        You will receive a payment confirmation within 24 hours. <strong style="color: #CE1126;">Your registration is NOT confirmed until your deposit is received.</strong>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Balance Note -->
+                <tr>
+                  <td style="padding: 12px 20px 18px 20px;">
+                    <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #777777; font-style: italic; text-align: center;">
+                      Final balance is due 3 days before costume pickup.
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+              <!-- END PAYMENT SUMMARY CARD -->
+
+              <!-- ---- IMPORTANT NOTES CARD ---- -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #fdf9ee; border: 1px solid #e8dfc4; border-radius: 5px; margin-bottom: 24px; overflow: hidden;">
+
+                <tr>
+                  <td style="padding: 18px 20px 6px 20px;">
+                    <h3 style="margin: 0 0 12px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 15px; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px;">
+                      Important Notes
+                    </h3>
+                  </td>
+                </tr>
+
+                <!-- Note 1 -->
+                <tr>
+                  <td style="padding: 0 20px 10px 20px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <td style="width: 24px; vertical-align: top; padding-top: 1px;">
+                          <div style="width: 8px; height: 8px; background-color: #C8971A; border-radius: 50%; margin-top: 5px;">&nbsp;</div>
+                        </td>
+                        <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.6; color: #444444;">
+                          Keep an eye on your inbox for payment confirmation and costume pickup details.
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Note 2 -->
+                <tr>
+                  <td style="padding: 0 20px 18px 20px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <td style="width: 24px; vertical-align: top; padding-top: 1px;">
+                          <div style="width: 8px; height: 8px; background-color: #C8971A; border-radius: 50%; margin-top: 5px;">&nbsp;</div>
+                        </td>
+                        <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; line-height: 1.6; color: #444444;">
+                          If you have any questions, reply to this email or reach out via Instagram.
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+              </table>
+              <!-- END IMPORTANT NOTES CARD -->
+
+              <!-- ---- CONTACT / SOCIAL CARD ---- -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border: 1px solid #e0e0e0; border-radius: 5px; margin-bottom: 36px; overflow: hidden;">
+
+                <tr>
+                  <td style="background-color: #1a1a1a; padding: 10px 20px;">
+                    <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #C8971A; text-align: center;">
+                      Get In Touch
+                    </p>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding: 18px 20px;">
+
+                    <!-- Instagram row -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 10px;">
+                      <tr>
+                        <td style="width: 80px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; vertical-align: top; padding-top: 2px;">Instagram</td>
+                        <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a1a1a;">
+                          <a href="https://instagram.com/mas.mentality" style="color: #CE1126; text-decoration: none; font-weight: 600;">@mas.mentality</a>
+                          <span style="color: #cccccc; margin: 0 6px;">|</span>
+                          <a href="https://instagram.com/lilnationz" style="color: #CE1126; text-decoration: none; font-weight: 600;">@lilnationz</a>
+                          <span style="color: #cccccc; margin: 0 6px;">|</span>
+                          <a href="https://instagram.com/cnzinc" style="color: #CE1126; text-decoration: none; font-weight: 600;">@cnzinc</a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Email row -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 10px;">
+                      <tr>
+                        <td style="width: 80px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; vertical-align: top; padding-top: 2px;">Email</td>
+                        <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a1a1a;">
+                          <a href="mailto:masmentality@outlook.com" style="color: #1a1a1a; text-decoration: none;">masmentality@outlook.com</a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Phone row -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                      <tr>
+                        <td style="width: 80px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #888888; vertical-align: top; padding-top: 2px;">Phone</td>
+                        <td style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #1a1a1a;">
+                          <a href="tel:+12364647970" style="color: #1a1a1a; text-decoration: none;">(236) 464-7970</a>
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+
+              </table>
+              <!-- END CONTACT CARD -->
+
+            </td>
+          </tr>
+          <!-- END MAIN BODY CARD -->
+
+          <!-- ===================== FOOTER ===================== -->
+          <tr>
+            <td style="background-color: #1a1a1a; padding: 28px 40px; text-align: center; border-top: 4px solid #C8971A;">
+
+              <!-- Logo text -->
+              <p style="margin: 0 0 6px 0; font-family: Georgia, 'Times New Roman', serif; font-size: 14px; font-weight: 700; color: #C8971A; letter-spacing: 1px;">
+                Mas Mentality &times; Lil Nationz
+              </p>
+
+              <!-- Copyright -->
+              <p style="margin: 0 0 10px 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #888888;">
+                &copy; 2026 Mas Mentality. All rights reserved.
+              </p>
+
+              <!-- Legal note -->
+              <p style="margin: 0 0 6px 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666666; line-height: 1.5;">
+                You received this email because you submitted a registration form for Kiddies Carnival 2026.
+              </p>
+
+              <!-- Transactional note -->
+              <p style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #555555; font-style: italic;">
+                This is a transactional confirmation email.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Gold bottom border strip -->
+          <tr>
+            <td style="background-color: #C8971A; height: 4px; font-size: 1px; line-height: 1px;">&nbsp;</td>
+          </tr>
+
+        </table>
+        <!-- END INNER CONTENT TABLE -->
+
+      </td>
+    </tr>
+  </table>
+  <!-- END OUTER WRAPPER TABLE -->
+
+</body>
+</html>
