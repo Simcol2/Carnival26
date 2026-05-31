@@ -1692,6 +1692,16 @@
     <!-- Masquerader sections (built dynamically by JS) -->
     <div id="masqueraderSections"></div>
 
+    <!-- Crew name — shown when 4+ masqueraders selected -->
+    <div id="crewNameCard" class="section-card" style="display:none; border:2px solid var(--gold); background:rgba(200,151,26,0.04);">
+      <div class="section-title" style="color:var(--gold);">&#128081; Group Registration — Crew Name</div>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.9rem;line-height:1.6;">Your costumes will be customized with your crew name in iridescent lettering. Enter your crew name below.</p>
+      <div class="field">
+        <label for="crewName">Crew Name</label>
+        <input type="text" id="crewName" name="crewName" placeholder="e.g. The Golden Squad">
+      </div>
+    </div>
+
     <div class="section-card">
       <div class="section-title">&#128222; Parent / Guardian Contact</div>
       <div class="field-group" style="margin-bottom:1rem;">
@@ -1786,6 +1796,13 @@
         <span class="addon-label">
           I consent to photos and videos of my child being shared on social media
           <span class="addon-note">Instagram, Facebook, and other platforms used to promote the event</span>
+        </span>
+      </label>
+      <label class="addon-item" style="margin-top:0.5rem;">
+        <input type="checkbox" name="modellingInterest" value="yes">
+        <span class="addon-label">
+          I am potentially interested in modelling for the 2027 season
+          <span class="addon-note">We will reach out with more details closer to the season</span>
         </span>
       </label>
     </div>
@@ -2222,6 +2239,13 @@
     container.innerHTML = '';
     for (var i = 1; i <= MASQ_COUNT; i++) {
       container.insertAdjacentHTML('beforeend', masqSectionHTML(i));
+    }
+    // Show crew name card only for 4+ masqueraders
+    var crewCard = document.getElementById('crewNameCard');
+    if (crewCard) crewCard.style.display = MASQ_COUNT >= 4 ? 'block' : 'none';
+    if (MASQ_COUNT < 4) {
+      var cn = document.getElementById('crewName');
+      if (cn) cn.value = '';
     }
     updateTotal();
   }
@@ -2690,6 +2714,15 @@
         '</div></div>';
     }
 
+    // Crew name (if 4+)
+    if (MASQ_COUNT >= 4) {
+      var crewNameVal = document.getElementById('crewName')?.value || '';
+      html += '<div class="review-shared-block" style="border-color:var(--gold);background:rgba(200,151,26,0.04);">' +
+        '<div class="review-shared-title" style="color:var(--gold);">Crew Name</div>' +
+        '<div class="review-row"><span class="review-row-value" style="text-align:left;font-size:0.9rem;">' +
+        (crewNameVal || '(not entered)') + '</span></div></div>';
+    }
+
     // Parent info
     var pName = document.getElementById('parentName')?.value || '';
     var pEmail= document.getElementById('email')?.value || '';
@@ -2800,7 +2833,9 @@
       email: emailVal,
       instagram: document.getElementById('instagram').value || 'N/A',
       notes: document.getElementById('notes').value || 'None',
+      crewName: (MASQ_COUNT >= 4 ? (document.getElementById('crewName')?.value || 'Not provided') : 'N/A'),
       photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
+      modellingInterest: document.querySelector('input[name="modellingInterest"]:checked') ? 'Yes' : 'No',
       tshirts: shirts.join(', ') || 'None',
       promoCode: activePromo ? activePromo.label : 'None',
       estimatedTotal: totalTxt,
