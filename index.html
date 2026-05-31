@@ -1916,8 +1916,8 @@
 
   function openPdfModal() {
     var frame = document.getElementById('pdfFrame');
-    if (!frame.src || frame.src === window.location.href) {
-      frame.src = 'The%20Black%20Stars%20Binder%20(1).pdf';
+    if (!frame.src || frame.src === window.location.href || frame.src === 'about:blank') {
+      frame.src = 'https://docs.google.com/viewer?url=https%3A%2F%2Fregister.masmentality.com%2FThe%2520Black%2520Stars%2520Binder%2520(1).pdf&embedded=true';
     }
     document.getElementById('pdfModal').classList.add('open');
     document.body.style.overflow = 'hidden';
