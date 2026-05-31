@@ -1146,13 +1146,89 @@
     flex: 1;
     width: 100%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
-  .pdf-modal-body iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
+  .pdf-spread-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #222;
+    padding: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .pdf-canvas-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .pdf-canvas-wrap canvas {
+    max-width: 100%;
+    max-height: 100%;
     display: block;
+    box-shadow: 0 6px 28px rgba(0,0,0,0.6);
+  }
+
+  .pdf-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: #111;
+    border-top: 1px solid rgba(200,151,26,0.25);
+  }
+
+  .pdf-nav-btn {
+    background: none;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    padding: 6px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .pdf-nav-btn:hover:not(:disabled) {
+    background: var(--gold);
+    color: #0d0d0d;
+  }
+
+  .pdf-nav-btn:disabled {
+    opacity: 0.28;
+    cursor: default;
+  }
+
+  .pdf-page-info {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    font-family: inherit;
+  }
+
+  .pdf-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    z-index: 5;
   }
 
   /* Photo modal */
@@ -1201,6 +1277,7 @@
   }
 </style>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 </head>
 <body>
 
@@ -1820,7 +1897,20 @@
     <button class="pdf-modal-close" onclick="closePdfModal()">✕</button>
   </div>
   <div class="pdf-modal-body">
-    <iframe id="pdfFrame" src="" title="Black Stars 2026 Costume Lookbook"></iframe>
+    <div id="pdfSpreadContainer" class="pdf-spread-container">
+      <div class="pdf-loading" id="pdfLoading">Loading Lookbook...</div>
+      <div class="pdf-canvas-wrap" id="pdfLeftWrap">
+        <canvas id="pdfCanvasLeft"></canvas>
+      </div>
+      <div class="pdf-canvas-wrap" id="pdfRightWrap">
+        <canvas id="pdfCanvasRight"></canvas>
+      </div>
+    </div>
+    <div class="pdf-nav">
+      <button class="pdf-nav-btn" id="pdfPrevBtn" onclick="pdfPrevSpread()" disabled>&#8592; Prev</button>
+      <span class="pdf-page-info" id="pdfPageInfo">Loading...</span>
+      <button class="pdf-nav-btn" id="pdfNextBtn" onclick="pdfNextSpread()">Next &#8594;</button>
+    </div>
   </div>
 </div>
 
@@ -1914,19 +2004,91 @@
     document.body.style.overflow = '';
   }
 
+  // ── PDF Lookbook ──────────────────────────────────────────
+  var _pdfDoc       = null;
+  var _pdfSpread    = 1;   // 1-indexed; each spread = 2 pages
+  var _pdfTotal     = 0;
+  var PDF_SRC = 'https://register.masmentality.com/The%20Black%20Stars%20Binder%20(1).pdf';
+
   function openPdfModal() {
-    var frame = document.getElementById('pdfFrame');
-    if (!frame.src || frame.src === window.location.href || frame.src === 'about:blank') {
-      frame.src = 'https://docs.google.com/viewer?url=https%3A%2F%2Fregister.masmentality.com%2FThe%2520Black%2520Stars%2520Binder%2520(1).pdf&embedded=true';
-    }
     document.getElementById('pdfModal').classList.add('open');
     document.body.style.overflow = 'hidden';
+    if (!_pdfDoc) _initPdf();
   }
 
   function closePdfModal() {
     document.getElementById('pdfModal').classList.remove('open');
     document.body.style.overflow = '';
   }
+
+  function _initPdf() {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    pdfjsLib.getDocument(PDF_SRC).promise.then(function(doc) {
+      _pdfDoc    = doc;
+      _pdfTotal  = doc.numPages;
+      _pdfSpread = 1;
+      document.getElementById('pdfLoading').style.display = 'none';
+      _renderSpread();
+    }).catch(function() {
+      document.getElementById('pdfLoading').textContent =
+        'Could not load the lookbook — please try again.';
+    });
+  }
+
+  function _isMobile() { return window.innerWidth < 640; }
+
+  function _totalSpreads() {
+    return _isMobile() ? _pdfTotal : Math.ceil(_pdfTotal / 2);
+  }
+
+  function _renderSpread() {
+    var left  = (_pdfSpread - 1) * (_isMobile() ? 1 : 2) + 1;
+    var right = left + 1;
+    var mob   = _isMobile();
+
+    // hide right canvas on mobile or last odd page
+    var rightWrap = document.getElementById('pdfRightWrap');
+    rightWrap.style.display = (!mob && right <= _pdfTotal) ? 'flex' : 'none';
+
+    _renderPage(left, 'pdfCanvasLeft', function() {
+      if (!mob && right <= _pdfTotal) _renderPage(right, 'pdfCanvasRight');
+    });
+
+    var info = mob
+      ? 'Page ' + left + ' of ' + _pdfTotal
+      : 'Pages ' + left + (right <= _pdfTotal ? '-' + right : '') + ' of ' + _pdfTotal;
+    document.getElementById('pdfPageInfo').textContent = info;
+    document.getElementById('pdfPrevBtn').disabled = _pdfSpread <= 1;
+    document.getElementById('pdfNextBtn').disabled = _pdfSpread >= _totalSpreads();
+  }
+
+  function _renderPage(num, canvasId, cb) {
+    _pdfDoc.getPage(num).then(function(page) {
+      var container  = document.getElementById('pdfSpreadContainer');
+      var mob        = _isMobile();
+      var availW     = mob ? container.clientWidth - 28
+                           : (container.clientWidth / 2) - 22;
+      var availH     = container.clientHeight - 28;
+      var vp0        = page.getViewport({ scale: 1 });
+      var scale      = Math.min(availW / vp0.width, availH / vp0.height);
+      var vp         = page.getViewport({ scale: scale });
+      var canvas     = document.getElementById(canvasId);
+      canvas.width   = vp.width;
+      canvas.height  = vp.height;
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: vp })
+          .promise.then(function() { if (cb) cb(); });
+    });
+  }
+
+  function pdfPrevSpread() {
+    if (_pdfSpread > 1) { _pdfSpread--; _renderSpread(); }
+  }
+
+  function pdfNextSpread() {
+    if (_pdfSpread < _totalSpreads()) { _pdfSpread++; _renderSpread(); }
+  }
+  // ─────────────────────────────────────────────────────────
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
