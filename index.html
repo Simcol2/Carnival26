@@ -426,6 +426,7 @@
   .badge-back { background: var(--green); color: white; }
   .badge-front { background: var(--red); color: white; }
   .badge-ultra { background: var(--gold); color: white; }
+  .badge-simple { background: #555; color: white; }
 
   .costume-price {
     font-family: 'Playfair Display', serif;
@@ -1042,7 +1043,7 @@
 
 <div class="form-container">
 
-  <a href="https://register.masmentality.com/The%20Black%20Stars%20Binder.pdf"
+  <a href="https://register.masmentality.com/The%20Black%20Stars%20Binder%20(1).pdf"
      target="_blank"
      style="display:flex;align-items:center;justify-content:center;gap:0.6rem;background:var(--gold);color:#0d0d0d;text-decoration:none;padding:14px 20px;border-radius:12px;margin-bottom:1.25rem;font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;letter-spacing:0.5px;box-shadow:0 4px 18px rgba(200,151,26,0.35);transition:filter 0.2s;" onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter='none'">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -1187,20 +1188,20 @@
           </div>
         </label>
         <label class="costume-card" id="card-frontline">
-          <input type="radio" name="costume" value="Frontline" data-price="275">
+          <input type="radio" name="costume" value="Frontline" data-price="280">
           <div class="costume-photos">
             <img src="frontline girls updated.jpg" alt="Girls Frontline costume">
             <img src="boys front line.jpg" alt="Boys Frontline costume">
           </div>
           <span class="costume-badge badge-front">Frontline</span>
-          <span class="costume-price">$275</span>
+          <span class="costume-price">$280</span>
           <div class="costume-includes">
             <span class="includes-label">Includes</span>
             <span class="includes-text" id="includes-frontline"><span class="includes-placeholder">Select gender above to see what's included</span></span>
           </div>
         </label>
         <label class="costume-card" id="card-ultra">
-          <input type="radio" name="costume" value="Ultra Frontline" data-price="430">
+          <input type="radio" name="costume" value="Ultra Frontline" data-price="420">
           <div class="costume-photos">
             <img src="ava-ultra-front.jpg" alt="Girls Ultra Frontline costume">
             <img src="boys ultraffront.jpg" alt="Boys Ultra Frontline costume">
@@ -1210,6 +1211,14 @@
           <div class="costume-includes">
             <span class="includes-label">Includes</span>
             <span class="includes-text" id="includes-ultra"><span class="includes-placeholder">Select gender above to see what's included</span></span>
+          </div>
+        </label>
+        <label class="costume-card" id="card-simple">
+          <input type="radio" name="costume" value="Keep It Simple" data-price="0">
+          <span class="costume-badge badge-simple">Keep It Simple</span>
+          <span class="costume-price" style="font-size:1rem;color:var(--text-light);">Please Contact</span>
+          <div class="costume-includes" style="margin-top:0.5rem;">
+            <span class="includes-text" style="color:var(--text-light);font-style:italic;font-size:0.78rem;display:block;text-align:center;">Reach out to us for details &amp; pricing</span>
           </div>
         </label>
       </div>
@@ -1488,7 +1497,14 @@
       <h3>Thank you for your submission!</h3>
       <p>Please check your email for your confirmation email.<br><br>
       Your registration for <strong id="successName" style="color:#1a1a1a;"></strong> has been received.<br><br>
-      Please send your <strong style="color:#C8971A;">50% deposit</strong> via e-transfer to <strong style="color:#006B3F;">simone.cole2@gmail.com</strong> to confirm your spot.</p>
+      <span id="successDepositMsg">Please send your <strong style="color:#C8971A;">50% deposit</strong> via e-transfer to <strong style="color:#006B3F;">simone.cole2@gmail.com</strong> to confirm your spot.</span></p>
+      <div id="simpleContactReminder" style="display:none;margin-top:1.25rem;padding:1rem 1.25rem;border:2px solid var(--gold);border-radius:10px;background:rgba(200,151,26,0.07);text-align:left;">
+        <p style="font-weight:700;color:var(--black);margin-bottom:0.6rem;">⭐ Keep It Simple — Next Steps</p>
+        <p style="font-size:0.88rem;line-height:1.7;">Since you selected <strong>Keep It Simple</strong>, please reach out to us directly for pricing and availability before sending any payment.<br><br>
+        📱 <strong>@mas.mentality</strong><br>
+        📞 <a href="tel:2364647970" style="color:var(--gold);font-weight:700;">236.464.7970</a><br>
+        ✉️ <a href="mailto:masmentality@outlook.com" style="color:var(--gold);font-weight:700;">masmentality@outlook.com</a></p>
+      </div>
     </div>
 
   </form>
@@ -1744,12 +1760,22 @@
   }
 
   function updateTotal() {
+    // If "Keep It Simple" is selected, show contact prompt instead of totals
+    const selectedCostume = document.querySelector('input[name="costume"]:checked');
+    const isContactPricing = selectedCostume && selectedCostume.dataset.price === '0' && selectedCostume.value === 'Keep It Simple';
+    if (isContactPricing) {
+      document.getElementById('totalDisplay').textContent = 'Contact for Pricing';
+      document.getElementById('depositDisplay').textContent = '—';
+      document.getElementById('balanceDisplay').textContent = '—';
+      document.getElementById('discountRow').style.display = 'none';
+      return;
+    }
+
     let costumeTotal = 0;
     let addonsTotal  = 0;
     let tshirtTotal  = 0;
     let totalShirts  = 0;
 
-    const selectedCostume = document.querySelector('input[name="costume"]:checked');
     if (selectedCostume) costumeTotal = parseInt(selectedCostume.dataset.price);
 
     document.querySelectorAll('input[name="addons"]:checked').forEach(cb => {
@@ -1990,6 +2016,10 @@
         fetch(SHEETS_URL + '?' + params.toString(), { mode: 'no-cors' });
       } catch(err) { console.error('Sheets error:', err); }
     }
+
+    const isSimple = costume.value === 'Keep It Simple';
+    document.getElementById('successDepositMsg').style.display = isSimple ? 'none' : 'inline';
+    document.getElementById('simpleContactReminder').style.display = isSimple ? 'block' : 'none';
 
     document.getElementById('successName').textContent = formData.firstName + ' ' + formData.lastName;
     document.getElementById('successMessage').style.display = 'block';
