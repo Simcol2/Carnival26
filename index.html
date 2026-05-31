@@ -1000,6 +1000,74 @@
 
   .view-btn:hover { background: var(--gold); color: white; }
 
+  /* PDF lookbook modal */
+  .pdf-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.92);
+    z-index: 2000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .pdf-modal.open { display: flex; }
+
+  .pdf-modal-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #111;
+    border-bottom: 2px solid var(--gold);
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+
+  .pdf-modal-close {
+    background: none;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .pdf-modal-close:hover {
+    background: var(--gold);
+    color: #0d0d0d;
+  }
+
+  .pdf-modal-body {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .pdf-modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
   /* Photo modal */
   .photo-modal {
     display: none;
@@ -1118,13 +1186,12 @@
 
 <div class="form-container">
 
-  <a href="https://register.masmentality.com/The%20Black%20Stars%20Binder%20(1).pdf"
-     target="_blank"
-     style="display:flex;align-items:center;justify-content:center;gap:0.6rem;background:var(--gold);color:#0d0d0d;text-decoration:none;padding:14px 20px;border-radius:12px;margin-bottom:1.25rem;font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;letter-spacing:0.5px;box-shadow:0 4px 18px rgba(200,151,26,0.35);transition:filter 0.2s;" onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter='none'">
+  <button onclick="openPdfModal()"
+     style="display:flex;align-items:center;justify-content:center;gap:0.6rem;background:var(--gold);color:#0d0d0d;border:none;cursor:pointer;padding:14px 20px;border-radius:12px;margin-bottom:1.25rem;font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;letter-spacing:0.5px;box-shadow:0 4px 18px rgba(200,151,26,0.35);transition:filter 0.2s;width:100%;" onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter='none'">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
     View Costumes
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-  </a>
+  </button>
 
   <div class="deposit-banner">
     <div class="dep-icon">⚽</div>
@@ -1617,6 +1684,17 @@
   </a>
 </footer>
 
+<!-- PDF Lookbook Modal -->
+<div id="pdfModal" class="pdf-modal">
+  <div class="pdf-modal-header">
+    <span class="pdf-modal-title">✦ Black Stars 2026 — Costume Lookbook</span>
+    <button class="pdf-modal-close" onclick="closePdfModal()">✕</button>
+  </div>
+  <div class="pdf-modal-body">
+    <iframe id="pdfFrame" src="" title="Black Stars 2026 Costume Lookbook"></iframe>
+  </div>
+</div>
+
 <!-- Photo Modal -->
 <div id="photoModal" class="photo-modal" onclick="closeModal()">
   <div class="modal-inner" onclick="event.stopPropagation()">
@@ -1707,8 +1785,30 @@
     document.body.style.overflow = '';
   }
 
+  function openPdfModal() {
+    var frame = document.getElementById('pdfFrame');
+    if (!frame.src || frame.src === window.location.href) {
+      frame.src = 'The%20Black%20Stars%20Binder%20(1).pdf';
+    }
+    document.getElementById('pdfModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePdfModal() {
+    document.getElementById('pdfModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+      closeModal();
+      closePdfModal();
+    }
+  });
+
+  // Close PDF modal on backdrop click (outside header/body area)
+  document.getElementById('pdfModal').addEventListener('click', function(e) {
+    if (e.target === this) closePdfModal();
   });
 
   document.querySelectorAll('.addon-item input[type="checkbox"]').forEach(cb => {
