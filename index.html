@@ -854,6 +854,57 @@
     font-size: 0.85rem;
   }
 
+  /* Multi-size shirt rows */
+  .shirt-size-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.35rem;
+  }
+  .shirt-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .shirt-row select { flex: 1; font-size: 0.78rem; padding: 5px 8px; }
+  .shirt-row input[type="number"] {
+    width: 50px;
+    padding: 5px 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+  .remove-row-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    width: 26px; height: 26px;
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 0.68rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+  }
+  .remove-row-btn:hover { border-color: var(--red); color: var(--red); }
+  .add-size-btn {
+    background: none;
+    border: 1.5px dashed var(--gold);
+    border-radius: 7px;
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.3px;
+  }
+  .add-size-btn:hover { background: rgba(200,151,26,0.06); }
+
   /* View button for addon photos */
   .view-btn {
     background: transparent;
@@ -1327,7 +1378,7 @@
 
       <div class="tshirt-cards">
 
-        <div class="tshirt-card">
+        <div class="tshirt-card" id="cottonCard">
           <div class="tshirt-photo-wrap">
             <img src="parent-tshirt.jpg" alt="Cotton T-Shirt Mas Fam" class="tshirt-thumb">
             <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('parent-tshirt.jpg')">View</button>
@@ -1335,22 +1386,13 @@
           <div class="tshirt-details">
             <span class="tshirt-name">Cotton T-Shirt</span>
             <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam — Unisex</span>
-            <span class="tshirt-price-badge">$25</span>
-            <select name="tshirt_cotton" id="sel_cotton" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
-              <option value="">No thanks</option>
-              <option>XS</option><option>S</option><option>M</option><option>L</option>
-              <option>XL</option><option>XXL</option><option>XXXL</option>
-            </select>
-            <div id="cottonQtyWrap" style="display:none;margin-top:0.4rem;display:none;align-items:center;gap:0.5rem;">
-              <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;">Qty:</label>
-              <input type="number" id="cottonQty" name="cottonQty" min="1" max="20" value="1"
-                style="width:56px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;"
-                onchange="updateTotal()">
-            </div>
+            <span class="tshirt-price-badge">$25 each</span>
+            <div id="cottonRows" class="shirt-size-rows" style="margin-top:0.4rem;"></div>
+            <button type="button" class="add-size-btn" onclick="addShirtRow('cotton')">+ Add a size</button>
           </div>
         </div>
 
-        <div class="tshirt-card">
+        <div class="tshirt-card" id="jerseyCard">
           <div class="tshirt-photo-wrap">
             <img src="parentjersey.jpg" alt="Ghana Jersey Mas Fam" class="tshirt-thumb">
             <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('parentjersey.jpg')">View</button>
@@ -1358,18 +1400,9 @@
           <div class="tshirt-details">
             <span class="tshirt-name">Ghana Jersey</span>
             <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam on back — Unisex</span>
-            <span class="tshirt-price-badge">$40</span>
-            <select name="tshirt_jersey" id="sel_jersey" class="tshirt-size-select" onchange="updateTshirtCard(this); updateTotal();">
-              <option value="">No thanks</option>
-              <option>XS</option><option>S</option><option>M</option><option>L</option>
-              <option>XL</option><option>XXL</option><option>XXXL</option>
-            </select>
-            <div id="jerseyQtyWrap" style="display:none;margin-top:0.4rem;display:none;align-items:center;gap:0.5rem;">
-              <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;">Qty:</label>
-              <input type="number" id="jerseyQty" name="jerseyQty" min="1" max="20" value="1"
-                style="width:56px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;"
-                onchange="updateTotal()">
-            </div>
+            <span class="tshirt-price-badge">$40 each</span>
+            <div id="jerseyRows" class="shirt-size-rows" style="margin-top:0.4rem;"></div>
+            <button type="button" class="add-size-btn" onclick="addShirtRow('jersey')">+ Add a size</button>
           </div>
         </div>
 
@@ -1624,17 +1657,39 @@
     });
   });
 
-  function updateTshirtCard(sel) {
-    const selected = sel.value !== '';
-    sel.closest('.tshirt-card').classList.toggle('tshirt-selected', selected);
-    const qtyWrap = sel.id === 'sel_cotton'
-      ? document.getElementById('cottonQtyWrap')
-      : document.getElementById('jerseyQtyWrap');
-    if (qtyWrap) qtyWrap.style.display = selected ? 'flex' : 'none';
-    if (!selected) {
-      const qtyInput = qtyWrap && qtyWrap.querySelector('input');
-      if (qtyInput) qtyInput.value = 1;
-    }
+  const SHIRT_SIZES_C26 = ['XS','S','M','L','XL','XXL','XXXL'];
+
+  function addShirtRow(type) {
+    const container = document.getElementById(type + 'Rows');
+    const cardId = type === 'cotton' ? 'cottonCard' : 'jerseyCard';
+    const row = document.createElement('div');
+    row.className = 'shirt-row';
+    row.innerHTML = `
+      <select class="${type}-size-sel" onchange="refreshShirtCard('${type}'); updateTotal();" style="flex:1;font-size:0.78rem;padding:5px 8px;">
+        <option value="">— Size —</option>
+        ${SHIRT_SIZES_C26.map(s => `<option>${s}</option>`).join('')}
+      </select>
+      <input type="number" class="${type}-qty-inp" min="1" max="20" value="1"
+        style="width:50px;padding:5px 6px;border:1px solid var(--border);border-radius:6px;font-size:0.78rem;flex-shrink:0;"
+        onchange="updateTotal()">
+      <button type="button" class="remove-row-btn" onclick="removeShirtRow(this,'${type}')">✕</button>
+    `;
+    container.appendChild(row);
+    document.getElementById(cardId).classList.add('tshirt-selected');
+    updateTotal();
+  }
+
+  function removeShirtRow(btn, type) {
+    btn.closest('.shirt-row').remove();
+    refreshShirtCard(type);
+    updateTotal();
+  }
+
+  function refreshShirtCard(type) {
+    const cardId = type === 'cotton' ? 'cottonCard' : 'jerseyCard';
+    const hasAny = document.querySelectorAll(`#${type}Rows .${type}-size-sel`).length > 0 &&
+                   Array.from(document.querySelectorAll(`#${type}Rows .${type}-size-sel`)).some(s => s.value);
+    document.getElementById(cardId).classList.toggle('tshirt-selected', hasAny);
   }
 
   // ── Discount codes ────────────────────────────────────────────────────────
@@ -1709,18 +1764,16 @@
       if (hpOpt && hpOpt.dataset.price) addonsTotal += parseInt(hpOpt.dataset.price) || 0;
     }
 
-    const cottonSel = document.getElementById('sel_cotton');
-    if (cottonSel && cottonSel.value) {
-      const qty = parseInt(document.getElementById('cottonQty')?.value || 1);
-      tshirtTotal += 25 * qty;
-      totalShirts += qty;
-    }
-    const jerseySel = document.getElementById('sel_jersey');
-    if (jerseySel && jerseySel.value) {
-      const qty = parseInt(document.getElementById('jerseyQty')?.value || 1);
-      tshirtTotal += 40 * qty;
-      totalShirts += qty;
-    }
+    document.querySelectorAll('#cottonRows .shirt-row').forEach(row => {
+      const sel = row.querySelector('.cotton-size-sel');
+      const qty = parseInt(row.querySelector('.cotton-qty-inp')?.value) || 1;
+      if (sel && sel.value) { tshirtTotal += qty * 25; totalShirts += qty; }
+    });
+    document.querySelectorAll('#jerseyRows .shirt-row').forEach(row => {
+      const sel = row.querySelector('.jersey-size-sel');
+      const qty = parseInt(row.querySelector('.jersey-qty-inp')?.value) || 1;
+      if (sel && sel.value) { tshirtTotal += qty * 40; totalShirts += qty; }
+    });
 
     const subtotal = costumeTotal + addonsTotal + tshirtTotal;
 
@@ -1831,16 +1884,16 @@
       }
       let shirtAmt = 0;
       let totalShirtsF = 0;
-      const cottonSel = document.getElementById('sel_cotton');
-      if (cottonSel && cottonSel.value) {
-        const qty = parseInt(document.getElementById('cottonQty')?.value || 1);
-        shirtAmt += 25 * qty; totalShirtsF += qty;
-      }
-      const jerseySel = document.getElementById('sel_jersey');
-      if (jerseySel && jerseySel.value) {
-        const qty = parseInt(document.getElementById('jerseyQty')?.value || 1);
-        shirtAmt += 40 * qty; totalShirtsF += qty;
-      }
+      document.querySelectorAll('#cottonRows .shirt-row').forEach(row => {
+        const sel = row.querySelector('.cotton-size-sel');
+        const qty = parseInt(row.querySelector('.cotton-qty-inp')?.value) || 1;
+        if (sel && sel.value) { shirtAmt += qty * 25; totalShirtsF += qty; }
+      });
+      document.querySelectorAll('#jerseyRows .shirt-row').forEach(row => {
+        const sel = row.querySelector('.jersey-size-sel');
+        const qty = parseInt(row.querySelector('.jersey-qty-inp')?.value) || 1;
+        if (sel && sel.value) { shirtAmt += qty * 40; totalShirtsF += qty; }
+      });
       const hasCostume = costumePrice > 0;
       let discountable = 0;
       if (hasCostume) {
@@ -1874,10 +1927,20 @@
       styleOption: document.querySelector('input[name="styleOption"]:checked')?.value || 'N/A',
       instagram: document.getElementById('instagram').value || 'N/A',
       photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
-      tshirts: [
-        document.querySelector('select[name="tshirt_cotton"]')?.value ? `Cotton T-Shirt – ${document.querySelector('select[name="tshirt_cotton"]').value} x${document.getElementById('cottonQty')?.value || 1}` : '',
-        document.querySelector('select[name="tshirt_jersey"]')?.value ? `Ghana Jersey – ${document.querySelector('select[name="tshirt_jersey"]').value} x${document.getElementById('jerseyQty')?.value || 1}` : ''
-      ].filter(v => v).join(', ') || 'None',
+      tshirts: (() => {
+        const items = [];
+        document.querySelectorAll('#cottonRows .shirt-row').forEach(row => {
+          const size = row.querySelector('.cotton-size-sel')?.value;
+          const qty = parseInt(row.querySelector('.cotton-qty-inp')?.value) || 1;
+          if (size) items.push(`Cotton T-Shirt – ${size} x${qty}`);
+        });
+        document.querySelectorAll('#jerseyRows .shirt-row').forEach(row => {
+          const size = row.querySelector('.jersey-size-sel')?.value;
+          const qty = parseInt(row.querySelector('.jersey-qty-inp')?.value) || 1;
+          if (size) items.push(`Ghana Jersey – ${size} x${qty}`);
+        });
+        return items.length ? items.join(', ') : 'None';
+      })(),
       estimatedTotal: total,
       depositDue: document.getElementById('depositDisplay').textContent
     };
