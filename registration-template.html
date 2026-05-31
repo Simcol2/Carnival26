@@ -1,0 +1,3077 @@
+<!--
+  ╔══════════════════════════════════════════════════════════════════════╗
+  ║  CARNIVAL REGISTRATION TEMPLATE                                      ║
+  ║  Reusable form template — update SITE_CONFIG each year               ║
+  ║                                                                      ║
+  ║  QUICKEST WAY TO UPDATE:                                             ║
+  ║  1. Open admin.html in your browser                                  ║
+  ║  2. Upload new photos, update prices and text in each tab            ║
+  ║  3. Click "Export Config JSON" and save alongside this file          ║
+  ║  4. Open this file to preview — it reads from admin's localStorage   ║
+  ║                                                                      ║
+  ║  TO EDIT CODE DIRECTLY:                                              ║
+  ║  Find SITE_CONFIG below (first thing inside <script>) and            ║
+  ║  update the values there. All event-specific data is there.          ║
+  ╚══════════════════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiddies Carnival 2026 - Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@700;800&family=Great+Vibes&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8971A;
+    --gold-light: #F0C040;
+    --red: #CE1126;
+    --green: #006B3F;
+    --black: #1a1a1a;
+    --white: #FFFFFF;
+    --off-white: #F8F8F6;
+    --card-bg: #FFFFFF;
+    --border: #E8E0D0;
+    --text: #2a2a2a;
+    --text-light: #6b6b6b;
+    --input-bg: #FDFCFA;
+  }
+
+  html {
+    background-color: #F8F8F6 !important;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: #F8F8F6 !important;
+    color: #2a2a2a !important;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 100%;
+    background-image: url('close up .jpg');
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @media (max-width: 640px) {
+    body::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 480px;
+      background-position: top center;
+      background-size: cover;
+      opacity: 0.22;
+    }
+  }
+
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .feather-left, .feather-right {
+    position: absolute;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  header {
+    background: transparent;
+    border-bottom: none;
+    padding: 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-stripe {
+    height: 5px;
+    background: linear-gradient(90deg, var(--red) 33.33%, var(--gold) 33.33%, var(--gold) 66.66%, var(--green) 66.66%);
+  }
+
+  .header-inner {
+    padding: 2rem 1rem 2.5rem;
+    position: relative;
+    background: linear-gradient(to bottom, rgba(248,248,246,0.15) 0%, rgba(248,248,246,0.82) 70%, rgba(248,248,246,0.97) 100%);
+  }
+
+  .banner-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 0 auto 1.5rem;
+  }
+
+  .banner-logo {
+    height: 80px;
+    width: auto;
+    max-width: 140px;
+    display: block;
+    border-radius: 10px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.18));
+  }
+
+  .header-logo-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .header-feathers {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .header-cursive {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .cursive-line {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--black);
+    line-height: 1.15;
+    margin: 0;
+    letter-spacing: 4px;
+    text-shadow: 0 1px 6px rgba(255,255,255,0.6);
+  }
+
+  .cursive-line:first-child {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    color: var(--red);
+    letter-spacing: 6px;
+  }
+
+  .cursive-mid {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.4rem, 6.5vw, 3.6rem);
+    color: var(--black);
+    letter-spacing: 0;
+    text-shadow: 0 2px 8px rgba(255,255,255,0.5);
+    line-height: 1.2;
+  }
+
+  .cursive-small {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: var(--gold);
+    margin-top: 0.25rem;
+    letter-spacing: 3px;
+    text-shadow: 0 1px 6px rgba(255,255,255,0.6);
+  }
+
+  .cursive-flag-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 0.2rem 0;
+  }
+
+  .header-gold-rule {
+    width: 80px;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1rem auto 0.75rem;
+  }
+
+  .form-container {
+    max-width: 680px;
+    margin: 2rem auto;
+    padding: 0 1rem 4rem;
+  }
+
+  .deposit-banner {
+    background: linear-gradient(135deg, #fffbf0, #fff8e8);
+    border: 1.5px solid var(--gold);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .deposit-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
+  }
+
+  .deposit-banner .dep-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+  .deposit-banner > div > strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--black);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .deposit-banner p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--text-light);
+  }
+
+  .deposit-banner p strong {
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  .dep-email { color: var(--green); font-weight: 700; }
+
+  /* ── Masquerader count selector ─────────────────────────── */
+  .masq-count-card {
+    background: linear-gradient(135deg, #0d0d0d, #1a1a2a);
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border: 1.5px solid rgba(200,151,26,0.3);
+  }
+
+  .masq-count-label {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--gold);
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .masq-count-sel {
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid var(--gold);
+    color: #fff;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 80px;
+    font-weight: 700;
+  }
+
+  .masq-count-sel option { background: #1a1a1a; color: #fff; }
+
+  /* ── Masquerader section wrapper ─────────────────────────── */
+  .masq-section { margin-bottom: 0.75rem; }
+
+  .masq-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--black);
+    border-radius: 12px;
+    margin-bottom: 0.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .masq-divider::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
+  }
+
+  .masq-num-badge {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.3px;
+  }
+
+  .masq-name-chip {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.65);
+    font-style: italic;
+  }
+
+  /* ── Review modal ────────────────────────────────────────── */
+  .review-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .review-modal.open { display: flex; }
+
+  .review-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 2px solid var(--gold);
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #fffbf0, #fff8e8);
+  }
+
+  .review-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--black);
+  }
+
+  .review-close {
+    background: none;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--text-light);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+  }
+
+  .review-close:hover { background: rgba(0,0,0,0.07); }
+
+  .review-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.2rem 1.4rem;
+  }
+
+  .review-intro {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    line-height: 1.65;
+    margin-bottom: 1.1rem;
+    padding: 0.7rem 1rem;
+    background: #fffbf0;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .review-masq-block {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .review-masq-header {
+    background: var(--black);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.55rem 1rem;
+    letter-spacing: 0.3px;
+  }
+
+  .review-masq-body { padding: 0.75rem 1rem; }
+
+  .review-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.28rem 0;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    gap: 0.5rem;
+  }
+
+  .review-row:last-child { border-bottom: none; }
+  .review-row-label { color: var(--text-light); flex-shrink: 0; min-width: 95px; }
+  .review-row-value { color: var(--black); font-weight: 600; text-align: right; }
+
+  .review-shared-block {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .review-shared-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--black);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-total-block {
+    background: linear-gradient(135deg, #fffbf0, #fff8e8);
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding: 0.22rem 0;
+    color: var(--text-light);
+  }
+
+  .review-total-row.big {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--black);
+    margin-top: 0.3rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(200,151,26,0.3);
+  }
+
+  .review-footer {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.4rem;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    background: #fafafa;
+  }
+
+  .review-edit-btn {
+    flex: 1;
+    background: none;
+    border: 1.5px solid var(--border);
+    color: var(--text-light);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .review-edit-btn:hover { border-color: var(--black); color: var(--black); }
+
+  .review-submit-btn {
+    flex: 2;
+    background: var(--gold);
+    border: none;
+    color: #0d0d0d;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.3px;
+    transition: filter 0.2s;
+  }
+
+  .review-submit-btn:hover:not(:disabled) { filter: brightness(1.08); }
+  .review-submit-btn:disabled { opacity: 0.55; cursor: default; }
+
+  /* Perk cards */
+  .perks-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .perk-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    background: #fff;
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid rgba(200,151,26,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .perk-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+
+  .perk-card.perk-friend::before  { background: var(--green); }
+  .perk-card.perk-return::before  { background: var(--gold); }
+  .perk-card.perk-group::before   { background: var(--red); }
+
+  .perk-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .perk-body strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--black);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .perk-body p {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text-light);
+    margin: 0;
+  }
+
+  .perk-body p b {
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .perk-list {
+    margin: 0.2rem 0 0 1rem;
+    padding: 0;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    list-style: disc;
+  }
+
+  .perk-list li { padding-left: 0.2rem; }
+
+  .perk-list b {
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .perk-code {
+    display: inline-block;
+    background: linear-gradient(135deg, #fffbf0, #fff3cc);
+    border: 1px solid var(--gold);
+    border-radius: 5px;
+    padding: 1px 7px;
+    font-weight: 800;
+    font-size: 0.78rem;
+    color: #7a5800;
+    letter-spacing: 0.5px;
+    font-family: monospace;
+  }
+
+  .section-card {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(200, 151, 26, 0.18);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.04),
+      0 8px 24px rgba(0,0,0,0.06),
+      0 0 0 0.5px rgba(200,151,26,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), var(--green));
+    border-radius: 16px 0 0 16px;
+  }
+
+  .section-card::after { display: none; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.1rem;
+    letter-spacing: 0.3px;
+  }
+
+  .field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .field-group.full { grid-template-columns: 1fr; }
+
+  @media (max-width: 520px) {
+    .field-group { grid-template-columns: 1fr; }
+    .gender-options { grid-template-columns: 1fr 1fr; }
+  }
+
+  .field { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #9a8c7a;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.4rem;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: #FEFEFE;
+    border: 1px solid rgba(200,151,26,0.22);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200, 151, 26, 0.1), 0 1px 4px rgba(0,0,0,0.04);
+    background: #fff;
+  }
+
+  select option { background: white; color: var(--text); }
+
+  .gender-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .gender-card {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #FDFCFA;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    position: relative;
+  }
+
+  .gender-card input[type="radio"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+
+  .gender-card:hover { border-color: var(--gold); color: var(--gold); }
+  .gender-card.selected {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: white;
+    box-shadow: 0 0 0 3px rgba(200,151,26,0.2);
+  }
+
+  .costume-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .costume-card {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #FDFCFA;
+    position: relative;
+  }
+
+  .costume-card input[type="radio"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+
+  .costume-card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,151,26,0.15); }
+
+  .costume-photos {
+    display: flex;
+    gap: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.65rem;
+    width: 100%;
+  }
+
+  .costume-photos img {
+    width: 50%;
+    height: auto;
+    display: block;
+  }
+
+  .costume-photos.single img {
+    width: 100%;
+  }
+
+  .costume-card.selected {
+    border-color: var(--gold);
+    background: #fffbf0;
+    box-shadow: 0 0 0 3px rgba(200,151,26,0.18);
+  }
+
+  .costume-card.selected::before {
+    content: '✓';
+    position: absolute;
+    top: 7px; right: 7px;
+    background: var(--gold);
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    line-height: 20px;
+  }
+
+  .costume-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-back { background: var(--green); color: white; }
+  .badge-front { background: var(--red); color: white; }
+  .badge-ultra { background: var(--gold); color: white; }
+  .badge-simple { background: #555; color: white; }
+
+  .costume-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--black);
+    display: block;
+  }
+
+  .addon-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .addon-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #FDFCFA;
+    border: 1.5px solid #E8E0D0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .addon-item:hover { border-color: var(--gold); background: #fffbf0; }
+
+  .addon-item.addon-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: grayscale(0.4);
+  }
+  .addon-item.addon-disabled input[type="checkbox"] {
+    pointer-events: none;
+  }
+
+  .addon-item.addon-selected {
+    border-color: #C8971A !important;
+    background: #fffbf0 !important;
+    box-shadow: 0 0 0 3px rgba(200,151,26,0.15) !important;
+  }
+  .addon-item.addon-selected .addon-label {
+    color: #1a1a1a !important;
+  }
+
+  .addon-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px; height: 22px; min-width: 22px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    pointer-events: auto;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .addon-item input[type="checkbox"]:checked {
+    background: var(--gold);
+    border-color: var(--gold);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 2L10 10M10 2L2 10' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 68%;
+  }
+
+  .addon-item input[type="checkbox"]:disabled {
+    border-color: #ddd;
+    background: #f5f5f5;
+    cursor: not-allowed;
+  }
+
+  label.addon-item {
+    display: flex;
+    font-size: unset;
+    font-weight: unset;
+    color: unset;
+    text-transform: unset;
+    letter-spacing: unset;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  .addon-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: #f5f5f5;
+  }
+
+  .addon-label { flex: 1; font-size: 0.88rem; font-weight: 600; color: var(--text); }
+  .addon-note { font-size: 0.7rem; color: var(--text-light); display: block; margin-top: 1px; font-weight: 400; }
+  .addon-price { font-weight: 800; color: var(--green); font-size: 0.95rem; }
+
+  .size-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .error-msg {
+    color: var(--red);
+    font-size: 0.72rem;
+    margin-top: 0.3rem;
+    display: none;
+    font-weight: 600;
+  }
+
+  .total-bar {
+    background: var(--black);
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .total-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--green));
+  }
+
+  .total-bar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .total-bar-row:last-of-type { margin-bottom: 0; }
+
+  .total-bar-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin: 0.75rem 0;
+  }
+
+  .total-bar-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .total-bar-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .total-bar-value.highlight {
+    font-size: 1.5rem;
+    color: var(--gold-light);
+  }
+
+  .total-bar-value.deposit-amount {
+    color: #6ee87a;
+    font-size: 1.35rem;
+  }
+
+  .total-balance-note {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.38);
+    text-align: center;
+    margin-top: 0.9rem;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--red);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--green));
+  }
+
+  .submit-btn:hover {
+    background: #a80e1d;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(206,17,38,0.3);
+  }
+
+  .success-message {
+    display: none;
+    background: white;
+    border: 1.5px solid var(--green);
+    border-radius: 14px;
+    padding: 2.5rem;
+    text-align: center;
+    margin-top: 1rem;
+    box-shadow: 0 4px 20px rgba(0,107,63,0.1);
+  }
+
+  .success-message .success-flag {
+    width: 48px; height: 32px;
+    margin: 0 auto 1rem;
+    display: block;
+    border-radius: 3px;
+  }
+
+  .success-message h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--green);
+    margin-bottom: 0.75rem;
+  }
+
+  .success-message p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.25rem 0;
+  }
+
+  /* Social links */
+  .header-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-light);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+
+  .social-link:hover { color: var(--gold); }
+  .social-link .soc-icon { font-size: 1rem; }
+
+  .site-footer {
+    background: var(--black);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .site-footer a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .site-footer a:hover { color: var(--gold-light); }
+
+  .site-footer .sep {
+    color: rgba(255,255,255,0.25);
+    font-size: 0.8rem;
+  }
+
+  /* Costume includes */
+  .costume-includes {
+    width: 100%;
+    padding: 0.6rem 0.25rem 0.1rem;
+    text-align: left;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+  }
+
+  .includes-label {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-light);
+    margin-bottom: 0.3rem;
+  }
+
+  .includes-text {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.65;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .includes-placeholder {
+    font-size: 0.75rem;
+    color: #bbb;
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* Parent T-Shirt cards */
+  .tshirt-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .tshirt-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: #FDFCFA;
+    transition: all 0.2s;
+  }
+
+  .tshirt-card.tshirt-selected {
+    border-color: var(--gold);
+    background: #fffbf0;
+    box-shadow: 0 0 0 3px rgba(200,151,26,0.15);
+  }
+
+  .tshirt-photo-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 72px;
+  }
+
+  .tshirt-thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 7px;
+    display: block;
+  }
+
+  .tshirt-view-btn {
+    position: absolute;
+    bottom: 4px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.6);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .tshirt-view-btn:hover { background: var(--gold); }
+
+  .tshirt-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .tshirt-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--black);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tshirt-price-badge {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--green);
+  }
+
+  .tshirt-size-select {
+    width: 100%;
+    font-size: 0.85rem;
+  }
+
+  /* Add-On Carousel */
+  .carousel-viewport {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .carousel-stage {
+    display: flex;
+    gap: 0.6rem;
+    flex: 1;
+    overflow: hidden;
+  }
+  .carousel-slide {
+    flex: 0 0 calc(33.333% - 0.4rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+  .carousel-slide img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    transition: border-color 0.2s;
+    display: block;
+  }
+  .carousel-slide img:hover { border-color: var(--gold); }
+  .carousel-caption {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--text-light);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1.3;
+  }
+  .carousel-arrow {
+    background: #FDFCFA;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+    cursor: pointer;
+    font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--black);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, border-color 0.2s;
+    padding: 0; line-height: 1;
+  }
+  .carousel-arrow:hover { background: var(--gold); color: #0d0d0d; border-color: var(--gold); }
+  .carousel-thumbs {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.25rem;
+  }
+  .carousel-thumb {
+    width: 42px; height: 42px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, opacity 0.2s;
+    opacity: 0.55;
+  }
+  .carousel-thumb.active { border-color: var(--gold); opacity: 1; }
+  .carousel-thumb:hover { opacity: 1; }
+
+  /* Multi-size shirt rows */
+  .shirt-size-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.35rem;
+  }
+  .shirt-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .shirt-row select { flex: 1; font-size: 0.78rem; padding: 5px 8px; }
+  .shirt-row input[type="number"] {
+    width: 50px;
+    padding: 5px 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+  .remove-row-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    width: 26px; height: 26px;
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 0.68rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+  }
+  .remove-row-btn:hover { border-color: var(--red); color: var(--red); }
+  .add-size-btn {
+    background: none;
+    border: 1.5px dashed var(--gold);
+    border-radius: 7px;
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.3px;
+  }
+  .add-size-btn:hover { background: rgba(200,151,26,0.06); }
+
+  /* View button for addon photos */
+  .view-btn {
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .view-btn:hover { background: var(--gold); color: white; }
+
+  /* PDF lookbook modal */
+  .pdf-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.92);
+    z-index: 2000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .pdf-modal.open { display: flex; }
+
+  .pdf-modal-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #111;
+    border-bottom: 2px solid var(--gold);
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+
+  .pdf-modal-close {
+    background: none;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .pdf-modal-close:hover {
+    background: var(--gold);
+    color: #0d0d0d;
+  }
+
+  .pdf-modal-body {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pdf-spread-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #222;
+    padding: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .pdf-canvas-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .pdf-canvas-wrap canvas {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    box-shadow: 0 6px 28px rgba(0,0,0,0.6);
+  }
+
+  .pdf-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: #111;
+    border-top: 1px solid rgba(200,151,26,0.25);
+  }
+
+  .pdf-nav-btn {
+    background: none;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    padding: 6px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .pdf-nav-btn:hover:not(:disabled) {
+    background: var(--gold);
+    color: #0d0d0d;
+  }
+
+  .pdf-nav-btn:disabled {
+    opacity: 0.28;
+    cursor: default;
+  }
+
+  .pdf-page-info {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    font-family: inherit;
+  }
+
+  .pdf-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    z-index: 5;
+  }
+
+  /* Photo modal */
+  .photo-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.82);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .photo-modal.open { display: flex; }
+
+  .modal-inner {
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .modal-inner img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -14px; right: -14px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    line-height: 1;
+  }
+</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-stripe"></div>
+  <div class="header-inner">
+
+    <div class="header-feathers">
+      <svg style="position:absolute;left:-10px;top:10px;opacity:0.13;transform:rotate(-30deg)" width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 200 C85 150 40 100 10 20 C50 60 80 90 90 200Z" fill="#C8971A"/>
+        <path d="M90 200 C95 140 130 85 160 10 C125 55 100 85 90 200Z" fill="#CE1126"/>
+        <path d="M90 200 C75 145 20 110 5 50 C45 80 75 110 90 200Z" fill="#006B3F"/>
+        <path d="M90 200 C105 138 155 100 175 45 C135 72 105 105 90 200Z" fill="#C8971A" opacity="0.7"/>
+        <path d="M90 200 C80 155 35 125 20 80 C55 100 80 130 90 200Z" fill="#CE1126" opacity="0.6"/>
+      </svg>
+      <svg style="position:absolute;right:-10px;top:10px;opacity:0.13;transform:rotate(30deg) scaleX(-1)" width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 200 C85 150 40 100 10 20 C50 60 80 90 90 200Z" fill="#C8971A"/>
+        <path d="M90 200 C95 140 130 85 160 10 C125 55 100 85 90 200Z" fill="#CE1126"/>
+        <path d="M90 200 C75 145 20 110 5 50 C45 80 75 110 90 200Z" fill="#006B3F"/>
+        <path d="M90 200 C105 138 155 100 175 45 C135 72 105 105 90 200Z" fill="#C8971A" opacity="0.7"/>
+        <path d="M90 200 C80 155 35 125 20 80 C55 100 80 130 90 200Z" fill="#CE1126" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="banner-logos">
+      <img src="overview_image_152727140_1284252.png"
+           alt="Mas Mentality"
+           class="banner-logo">
+      <div class="header-logo-divider"></div>
+      <img src="lil nationz logo.jpg"
+           alt="Lil Nationz"
+           class="banner-logo">
+    </div>
+    <div class="header-gold-rule"></div>
+
+    <div class="header-cursive">
+      <p class="cursive-line">Representing Ghana</p>
+      <div class="cursive-flag-row">
+        <svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:21px;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);flex-shrink:0;">
+          <rect width="52" height="34" fill="#CE1126"/>
+          <rect y="11.33" width="52" height="11.34" fill="#FCD116"/>
+          <rect y="22.67" width="52" height="11.33" fill="#006B3F"/>
+          <polygon points="26,12 27.9,17.8 33.9,17.8 29,21.3 30.9,27.1 26,23.6 21.1,27.1 23,21.3 18.1,17.8 24.1,17.8" fill="#000000"/>
+        </svg>
+        <p class="cursive-line cursive-mid">The Black Stars</p>
+        <svg viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:21px;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);flex-shrink:0;">
+          <rect width="52" height="34" fill="#CE1126"/>
+          <rect y="11.33" width="52" height="11.34" fill="#FCD116"/>
+          <rect y="22.67" width="52" height="11.33" fill="#006B3F"/>
+          <polygon points="26,12 27.9,17.8 33.9,17.8 29,21.3 30.9,27.1 26,23.6 21.1,27.1 23,21.3 18.1,17.8 24.1,17.8" fill="#000000"/>
+        </svg>
+      </div>
+      <p class="cursive-line cursive-small">Kiddies Carnival &amp; FIFA World Cup 2026</p>
+    </div>
+
+    <div class="header-gold-rule" style="margin-top:1.25rem;"></div>
+
+    <div class="header-social">
+      <a href="https://www.instagram.com/mas.mentality" target="_blank" class="social-link">
+        <svg class="soc-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;vertical-align:middle;flex-shrink:0;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @mas.mentality
+      </a>
+      <a href="mailto:masmentality@outlook.com" class="social-link">
+        <span class="soc-icon">✉️</span> masmentality@outlook.com
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<div class="form-container">
+
+  <button onclick="openPdfModal()"
+     style="display:flex;align-items:center;justify-content:center;gap:0.6rem;background:var(--gold);color:#0d0d0d;border:none;cursor:pointer;padding:14px 20px;border-radius:12px;margin-bottom:1.25rem;font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;letter-spacing:0.5px;box-shadow:0 4px 18px rgba(200,151,26,0.35);transition:filter 0.2s;width:100%;" onmouseover="this.style.filter='brightness(1.08)'" onmouseout="this.style.filter='none'">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    View Costumes
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </button>
+
+  <!-- Perks Strip -->
+  <div class="perks-strip">
+
+    <div class="perk-card perk-friend">
+      <div class="perk-icon">🎁</div>
+      <div class="perk-body">
+        <strong>Bring a Friend: Get a Limited-Edition Road Item</strong>
+        <ul class="perk-list">
+          <li>Register with a buddy and you'll <b>both</b> score an exclusive road item</li>
+          <li>Think holographic fans, thigh bags &amp; more (limited quantities)</li>
+          <li>Mention it in the <b>Notes</b> section of your form</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="perk-card perk-return">
+      <div class="perk-icon">✨</div>
+      <div class="perk-body">
+        <strong>Returning Masquerader Rewards</strong>
+        <p style="font-size:0.8rem;color:var(--text-light);margin:0.2rem 0 0.35rem;">Were you on the road with us in 2025? We've got something special for you.</p>
+        <ul class="perk-list">
+          <li>Use code <span class="perk-code">ROUNDTWO15</span> to save <b>$20 on orders $150+</b> or <b>$40 on orders $250+</b></li>
+          <li>Expires <b>June 6</b>, use it before it's gone</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="perk-card perk-group">
+      <div class="perk-icon">👑</div>
+      <div class="perk-body">
+        <strong>Group Registration Bonus (4+)</strong>
+        <ul class="perk-list">
+          <li>Costumes customized with your <b>crew name in iridescent lettering</b></li>
+          <li>Exclusive upgrades for the whole group</li>
+          <li>Dedicated <b>group photoshoot</b> before hitting the road</li>
+          <li>Add your crew name in the <b>Notes</b> section when registering</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="deposit-banner">
+    <div class="dep-icon">⚽</div>
+    <div>
+      <strong>50% Deposit Required to Confirm Your Order</strong>
+      <p>After submitting, you will receive an acknowledgement email with a payment link within <strong style="color:#1a1a1a;">24 hours</strong>. Your order is <strong style="color:#CE1126;">not confirmed</strong> until the deposit has been paid.</p>
+    </div>
+  </div>
+
+  <form id="registrationForm" novalidate>
+
+    <!-- How many masqueraders? -->
+    <div class="masq-count-card">
+      <span class="masq-count-label">How many masqueraders are you registering?</span>
+      <select class="masq-count-sel" id="masqCount" onchange="buildMasqueraderSections(this.value)">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </div>
+
+    <!-- Masquerader sections (built dynamically by JS) -->
+    <div id="masqueraderSections"></div>
+
+    <div class="section-card">
+      <div class="section-title">&#128222; Parent / Guardian Contact</div>
+      <div class="field-group" style="margin-bottom:1rem;">
+        <div class="field">
+          <label for="parentName">Parent / Guardian Name</label>
+          <input type="text" id="parentName" name="parentName" placeholder="Full name" required>
+          <div class="error-msg" id="parentNameError">Required</div>
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. 416-555-0100" required>
+          <div class="error-msg" id="phoneError">Required</div>
+        </div>
+      </div>
+      <div class="field-group full" style="margin-bottom:1rem;">
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+          <div class="error-msg" id="emailError">Valid email required</div>
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label for="instagram">Instagram Handle <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:0.7rem;">(optional)</span></label>
+          <input type="text" id="instagram" name="instagram" placeholder="@yourhandle">
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Add-On Gallery Carousel -->
+    <div class="section-card" style="padding-bottom:1.5rem;">
+      <div class="section-title">🖼️ Add-On Gallery</div>
+      <div class="carousel-viewport">
+        <button class="carousel-arrow" onclick="carouselStep(-1)" aria-label="Previous">&#8249;</button>
+        <div class="carousel-stage" id="carouselStage"></div>
+        <button class="carousel-arrow" onclick="carouselStep(1)" aria-label="Next">&#8250;</button>
+      </div>
+      <div class="carousel-thumbs" id="carouselThumbs"></div>
+    </div>
+
+
+    <div class="section-card">
+      <div class="section-title">👕 Parent Apparel</div>
+      <p style="font-size:0.8rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">Show your support in style! Select a style and size below.</p>
+
+      <div class="tshirt-cards">
+
+        <div class="tshirt-card" id="cottonCard">
+          <div class="tshirt-photo-wrap">
+            <img src="parent-tshirt.jpg" alt="Cotton T-Shirt Mas Fam" class="tshirt-thumb">
+            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('parent-tshirt.jpg')">View</button>
+          </div>
+          <div class="tshirt-details">
+            <span class="tshirt-name">Cotton T-Shirt</span>
+            <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam, Unisex</span>
+            <span class="tshirt-price-badge">$25 each</span>
+            <div id="cottonRows" class="shirt-size-rows" style="margin-top:0.4rem;"></div>
+            <button type="button" class="add-size-btn" onclick="addShirtRow('cotton')">+ Add a size</button>
+          </div>
+        </div>
+
+        <div class="tshirt-card" id="jerseyCard">
+          <div class="tshirt-photo-wrap">
+            <img src="parentjersey.jpg" alt="Ghana Jersey Mas Fam" class="tshirt-thumb">
+            <button type="button" class="tshirt-view-btn" onclick="event.stopPropagation(); openModal('parentjersey.jpg')">View</button>
+          </div>
+          <div class="tshirt-details">
+            <span class="tshirt-name">Ghana Jersey</span>
+            <span style="font-size:0.7rem;color:var(--text-light);display:block;margin-bottom:0.3rem;">Mas Fam on back, Unisex</span>
+            <span class="tshirt-price-badge">$40 each</span>
+            <div id="jerseyRows" class="shirt-size-rows" style="margin-top:0.4rem;"></div>
+            <button type="button" class="add-size-btn" onclick="addShirtRow('jersey')">+ Add a size</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">&#128221; Additional Notes</div>
+      <div class="field">
+        <label for="notes">Special requests or notes</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="e.g. allergies, custom requests..."></textarea>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">&#128247; Photo &amp; Social Media Consent</div>
+      <label class="addon-item" id="consentItem">
+        <input type="checkbox" name="photoConsent" value="yes">
+        <span class="addon-label">
+          I consent to photos and videos of my child being shared on social media
+          <span class="addon-note">Instagram, Facebook, and other platforms used to promote the event</span>
+        </span>
+      </label>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">&#127991; Discount Code</div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap;">
+        <div class="field" style="flex:1;min-width:160px;margin-bottom:0;">
+          <label for="discountCode">Have a promo code?</label>
+          <input type="text" id="discountCode" name="discountCode" placeholder="Enter code" style="text-transform:uppercase;letter-spacing:1px;">
+        </div>
+        <button type="button" onclick="applyDiscountCode()"
+          style="background:var(--gold);color:#fff;border:none;border-radius:8px;padding:0.65rem 1.4rem;font-weight:700;font-size:0.82rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;flex-shrink:0;margin-bottom:0.05rem;">
+          Apply
+        </button>
+      </div>
+      <div id="discountMsg" style="display:none;font-size:0.82rem;font-weight:600;margin-top:0.6rem;padding:0.5rem 0.75rem;border-radius:6px;"></div>
+    </div>
+
+    <div class="total-bar">
+      <div class="total-bar-row">
+        <span class="total-bar-label">Estimated Total</span>
+        <span class="total-bar-value highlight" id="totalDisplay">$0</span>
+      </div>
+      <div id="discountRow" style="display:none;">
+        <hr class="total-bar-divider">
+        <div class="total-bar-row" style="color:var(--green);">
+          <span class="total-bar-label" id="discountRowLabel">Promo Discount</span>
+          <span class="total-bar-value" id="discountDisplay" style="color:var(--green);">-$0</span>
+        </div>
+        <div class="total-bar-row">
+          <span class="total-bar-label">After Discount</span>
+          <span class="total-bar-value highlight" id="afterDiscountDisplay">$0</span>
+        </div>
+      </div>
+      <hr class="total-bar-divider">
+      <div class="total-bar-row">
+        <span class="total-bar-label">Deposit Due Now (50%)</span>
+        <span class="total-bar-value deposit-amount" id="depositDisplay">$0</span>
+      </div>
+      <div class="total-bar-row">
+        <span class="total-bar-label">Remaining Balance</span>
+        <span class="total-bar-value" id="balanceDisplay">$0</span>
+      </div>
+      <p class="total-balance-note">Final balance is due 3 days prior to costume pickup (pickup date TBD)</p>
+    </div>
+
+    <p style="font-size:0.8rem;line-height:1.7;color:var(--text-light);text-align:center;margin-bottom:1rem;padding:0 0.5rem;">
+      By submitting you will receive an acknowledgement email with a payment link within <strong style="color:#1a1a1a;">24 hours</strong>.<br>
+      Your registration is <strong style="color:#CE1126;">not confirmed</strong> until your deposit has been paid.
+    </p>
+
+    <button type="button" class="submit-btn" onclick="openReviewModal()">Submit Registration</button>
+
+    <div class="success-message" id="successMessage">
+      <svg class="success-flag" viewBox="0 0 52 34" xmlns="http://www.w3.org/2000/svg">
+        <rect width="52" height="34" fill="#CE1126"/>
+        <rect y="11.33" width="52" height="11.34" fill="#FCD116"/>
+        <rect y="22.67" width="52" height="11.33" fill="#006B3F"/>
+        <polygon points="26,12 27.9,17.8 33.9,17.8 29,21.3 30.9,27.1 26,23.6 21.1,27.1 23,21.3 18.1,17.8 24.1,17.8" fill="#000000"/>
+      </svg>
+      <h3>Thank you for your submission!</h3>
+      <p>Please check your email for your confirmation email.<br><br>
+      Your registration for <strong id="successName" style="color:#1a1a1a;"></strong> has been received.<br><br>
+      <span id="successDepositMsg">Please send your <strong style="color:#C8971A;">50% deposit</strong> via e-transfer to <strong style="color:#006B3F;" id="successDepositEmail">simone.cole2@gmail.com</strong> to confirm your spot.</span></p>
+      <div id="simpleContactReminder" style="display:none;margin-top:1.25rem;padding:1rem 1.25rem;border:2px solid var(--gold);border-radius:10px;background:rgba(200,151,26,0.07);text-align:left;">
+        <p style="font-weight:700;color:var(--black);margin-bottom:0.6rem;">⭐ Keep It Simple: Next Steps</p>
+        <p style="font-size:0.88rem;line-height:1.7;">Since you selected <strong>Keep It Simple</strong>, please reach out to us directly for pricing and availability before sending any payment.<br><br>
+        📱 <strong id="simpleIG">@mas.mentality</strong><br>
+        📞 <a id="simplePhone" href="tel:2364647970" style="color:var(--gold);font-weight:700;">236.464.7970</a><br>
+        ✉️ <a id="simpleEmail" href="mailto:masmentality@outlook.com" style="color:var(--gold);font-weight:700;">masmentality@outlook.com</a></p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<footer class="site-footer">
+  <a href="https://www.instagram.com/mas.mentality" target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:15px;height:15px;vertical-align:middle;flex-shrink:0;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    @mas.mentality
+  </a>
+  <span class="sep">•</span>
+  <a href="https://www.instagram.com/lilnationz?igsh=MTYwMzB0MXVnaHB1ag==" target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:15px;height:15px;vertical-align:middle;flex-shrink:0;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    @lilnationz
+  </a>
+  <span class="sep">•</span>
+  <a href="https://www.instagram.com/cnzinc?igsh=Zm04Z2VqYng4Zmln" target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:15px;height:15px;vertical-align:middle;flex-shrink:0;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    @cnzinc
+  </a>
+  <span class="sep">•</span>
+  <a href="mailto:masmentality@outlook.com">
+    <span>✉️</span> masmentality@outlook.com
+  </a>
+</footer>
+
+<!-- Review Modal -->
+<div id="reviewModal" class="review-modal">
+  <div class="review-container">
+    <div class="review-header">
+      <span class="review-title">Review Your Registration</span>
+      <button type="button" class="review-close" onclick="closeReviewModal()">✕</button>
+    </div>
+    <div class="review-body" id="reviewBody"></div>
+    <div class="review-footer">
+      <button type="button" class="review-edit-btn" onclick="closeReviewModal()">Edit</button>
+      <button type="button" class="review-submit-btn" id="reviewSubmitBtn" onclick="confirmSubmit()">Confirm &amp; Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Lookbook Modal -->
+<div id="pdfModal" class="pdf-modal">
+  <div class="pdf-modal-header">
+    <span class="pdf-modal-title">✦ Black Stars 2026 Costume Lookbook</span>
+    <button class="pdf-modal-close" onclick="closePdfModal()">✕</button>
+  </div>
+  <div class="pdf-modal-body">
+    <div id="pdfSpreadContainer" class="pdf-spread-container">
+      <div class="pdf-loading" id="pdfLoading">Loading Lookbook...</div>
+      <div class="pdf-canvas-wrap" id="pdfLeftWrap">
+        <canvas id="pdfCanvasLeft"></canvas>
+      </div>
+      <div class="pdf-canvas-wrap" id="pdfRightWrap">
+        <canvas id="pdfCanvasRight"></canvas>
+      </div>
+    </div>
+    <div class="pdf-nav">
+      <button class="pdf-nav-btn" id="pdfPrevBtn" onclick="pdfPrevSpread()" disabled>&#8592; Prev</button>
+      <span class="pdf-page-info" id="pdfPageInfo">Loading...</span>
+      <button class="pdf-nav-btn" id="pdfNextBtn" onclick="pdfNextSpread()">Next &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Modal -->
+<div id="photoModal" class="photo-modal" onclick="closeModal()">
+  <div class="modal-inner" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img id="modalImg" src="" alt="Costume photo">
+  </div>
+</div>
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// REGISTRATION TEMPLATE — edit values here each year, or use admin.html
+// Open admin.html in any browser to upload photos and update prices/text
+// without touching code. Commit admin's exported config.json alongside this.
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SITE_CONFIG = {
+  // ── Event ─────────────────────────────────────────────────────────────────
+  eventName:        'Kiddies Carnival 2026',
+  eventTheme:       'The Black Stars',
+  eventSubtitle:    'Kiddies Carnival &amp; FIFA World Cup 2026',
+  eventCountryLine: 'Representing Ghana',
+  backgroundImage:  'close up .jpg',
+  showFlag:         true,
+
+  // ── Brand Colors ──────────────────────────────────────────────────────────
+  colorGold:        '#C8971A',
+  colorGoldLight:   '#F0C040',
+  colorRed:         '#CE1126',
+  colorGreen:       '#006B3F',
+
+  // ── Logos ─────────────────────────────────────────────────────────────────
+  logo1Src: 'overview_image_152727140_1284252.png',
+  logo1Alt: 'Mas Mentality',
+  logo2Src: 'lil nationz logo.jpg',
+  logo2Alt: 'Lil Nationz',
+
+  // ── Contact ───────────────────────────────────────────────────────────────
+  contactEmail:    'simone.cole2@gmail.com',
+  contactPhone:    '(236) 464-7970',
+  contactIG:       'mas.mentality',
+  contactEmailBiz: 'masmentality@outlook.com',
+  partnerIG1:      'lilnationz',
+  partnerIG2:      'cnzinc',
+
+  // ── PDF Lookbook URL ──────────────────────────────────────────────────────
+  lookbookURL: 'https://register.masmentality.com/The%20Black%20Stars%20Binder%20(1).pdf',
+
+  // ── Integrations — set these in admin.html > Integrations tab ─────────────
+  emailjsPublicKey:  'unpxBZwGT7DS_NN8G',
+  emailjsServiceId:  'service_4tgahbz',
+  emailjsTemplateId: 'template_6uso1xm',
+  formspreeURL:      'https://formspree.io/f/mqejdpla',
+  googleSheetsURL:   'https://script.google.com/macros/s/AKfycbxEfg8Gl51uXm7CB15KpNTI2swIUGhFrxM9kziM1Zuppq-_Z4liNaKwIuY8kAkWCPpf/exec',
+
+  // ── Costumes ──────────────────────────────────────────────────────────────
+  costumes: {
+    backline: {
+      name: 'Backline', price: 150, badgeClass: 'badge-back',
+      girlPhoto: 'girls backline.jpg',         girlPhotoAlt: 'Girls Backline',
+      boyPhoto:  'boys backline.jpg',          boyPhotoAlt:  'Boys Backline',
+      includesGirl:         'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Skirt',
+      includesGirlLeggings: 'Top, Leggings, Jewelled arm bands (2), Ankle bands, Headpiece, Skirt',
+      includesGirlShorts:   'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Skirt, Yellow knee socks',
+      includesBoy:          'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Headpiece, Chest piece, Belt',
+    },
+    frontline: {
+      name: 'Frontline', price: 280, badgeClass: 'badge-front',
+      girlPhoto: 'frontline girls updated.jpg', girlPhotoAlt: 'Girls Frontline',
+      boyPhoto:  'boys front line.jpg',         boyPhotoAlt:  'Boys Frontline',
+      includesGirl: 'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Feather collar, Tiara, Frontline skirt',
+      includesBoy:  'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Feather collar, Belt, Chest piece, Large headpiece',
+    },
+    ultra: {
+      name: 'Ultra Frontline', price: 420, badgeClass: 'badge-ultra',
+      girlPhoto: 'ava-ultra-front.jpg',  girlPhotoAlt: 'Girls Ultra Frontline',
+      boyPhoto:  'boys ultraffront.jpg', boyPhotoAlt:  'Boys Ultra Frontline',
+      includesGirl: 'Top, Gold Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Caged skirt, Large Headpiece, Large feather collar',
+      includesBoy:  'Top, Shorts, Jewelled arm bands (2), Jewelled Ankle bands (2), Feathered arm bands (2), Belt, Chest piece, Large headpiece, Large feather backpack with flag',
+    },
+  },
+
+  // ── Add-Ons ───────────────────────────────────────────────────────────────
+  addons: [
+    {v:'Cage Skirt & Metallic Shorts',    p:130, l:'Cage Skirt &amp; Metallic Shorts', n:'Girls only',                  g:'girl'},
+    {v:'Ultra Frontline Crown',           p:60,  l:'Ultra Frontline Crown',            n:'Girls / Ultra Frontline',     g:'girl'},
+    {v:'Small Crown',                     p:40,  l:'Small Crown',                      n:'Girls only',                  g:'girl'},
+    {v:'Tiara',                           p:30,  l:'Tiara',                            n:'Girls only',                  g:'girl'},
+    {v:'Small Girls Backpack',            p:75,  l:'Small Girls Backpack',             n:'Girls only',                  g:'girl'},
+    {v:'Medium Backpack w Ostrich',       p:115, l:'Medium Backpack w Ostrich',        n:'Girls / Frontline',           g:'girl'},
+    {v:'Ultra Frontline Backpack',        p:100, l:'Ultra Frontline Backpack',         n:'Girls / Ultra Frontline',     g:'girl'},
+    {v:'Ultra Frontline Backpack (Boys)', p:100, l:'Ultra Frontline Backpack',         n:'Boys / Ultra Frontline',      g:'boy'},
+    {v:'Boys Large Feather Head',         p:30,  l:'Boys Large Feather Head',          n:'Boys only',                   g:'boy'},
+    {v:'Toddler Collar',                  p:35,  l:'Toddler Collar',                   n:'Toddler sizes',               g:''},
+    {v:'Large Diamond Flag',              p:60,  l:'Large Diamond Flag',               n:'Frontline &amp; Ultra Frontline', g:''},
+    {v:'Decorated Shoes (Child)',         p:30,  l:'Decorated Shoes, Child Sizes',     n:'All tiers',                   g:''},
+    {v:'Decorated Shoes (Adult)',         p:40,  l:'Decorated Shoes, Adult Sizes',     n:'All tiers',                   g:''},
+    {v:'Sun Glasses',                     p:5,   l:'Sun Glasses',                      n:'All masqueraders',            g:''},
+  ],
+
+  // ── Add-On Carousel ───────────────────────────────────────────────────────
+  carousel: [
+    {src:'cage skirt.png',                      lsKey:'cfg_addon_0',  caption:'Cage Skirt & Metallic Shorts'},
+    {src:'ava-head-crop.jpg',                   lsKey:'cfg_addon_1',  caption:'Ultra Frontline Crown'},
+    {src:'tiara.jpg',                           lsKey:'cfg_addon_2',  caption:'Tiara'},
+    {src:'small-backpack.jpg',                  lsKey:'cfg_addon_3',  caption:'Small Girls Backpack'},
+    {src:'girls frontline medium backpack.png', lsKey:'cfg_addon_4',  caption:'Medium Backpack w Ostrich'},
+    {src:'boys-ultra-backpack.png',             lsKey:'cfg_addon_5',  caption:'Ultra Frontline Backpack'},
+    {src:'boys frontline backpack.jpg',         lsKey:'cfg_addon_6',  caption:'Frontline Backpack'},
+    {src:'flagcape.jpg',                        lsKey:'cfg_addon_7',  caption:'Large Diamond Flag'},
+    {src:'shoes.png',                           lsKey:'cfg_addon_8',  caption:'Decorated Shoes'},
+    {src:'girls large crown.png',               lsKey:'cfg_addon_9',  caption:'Large Crown'},
+    {src:'sunglasses.png',                      lsKey:'cfg_addon_10', caption:'Sun Glasses'},
+    {src:'toddler collar.jpg',                  lsKey:'cfg_addon_11', caption:'Toddler Collar'},
+    {src:'boys large head.jpg',                 lsKey:'cfg_addon_12', caption:'Boys Large Feather Head'},
+  ],
+
+  // ── Parent Apparel ────────────────────────────────────────────────────────
+  apparel: {
+    cotton: {name:'Cotton T-Shirt', subtitle:'Mas Fam, Unisex',         price:25, photo:'parent-tshirt.jpg',  photoAlt:'Cotton T-Shirt Mas Fam'},
+    jersey: {name:'Ghana Jersey',   subtitle:'Mas Fam on back, Unisex', price:40, photo:'parentjersey.jpg',   photoAlt:'Ghana Jersey Mas Fam'},
+  },
+  apparelSizes: ['XS','S','M','L','XL','XXL','XXXL'],
+
+  // ── Frontline Girls Headpiece Options ─────────────────────────────────────
+  frontlineHeadpieces: [
+    {value:'Small Crown',           label:'Small Crown (Included)',      price:0},
+    {value:'Tiara',                 label:'Tiara (Included)',            price:0},
+    {value:'Large Crown (Upgrade)', label:'Large Crown (+$40 upgrade)', price:40},
+  ],
+
+  // ── Promo Codes ───────────────────────────────────────────────────────────
+  promoCodes: {
+    'roundtwo15': {
+      label: 'Roundtwo15',
+      expiry: new Date('2026-06-06T23:59:59'),
+      description: '$20 off $150+ · $40 off $250+',
+      getDiscount: function(d) { return d >= 250 ? 40 : d >= 150 ? 20 : 0; }
+    }
+  },
+};
+
+// ── Config helpers ──────────────────────────────────────────────────────────
+function getImageSrc(defaultSrc, lsKey) {
+  try { var s = localStorage.getItem(lsKey); if (s) return s; } catch(e) {}
+  return defaultSrc;
+}
+
+function applyConfig() {
+  var cfg = SITE_CONFIG;
+  try {
+    var stored = localStorage.getItem('carnival_config');
+    if (stored) { var ov = JSON.parse(stored); Object.assign(cfg, ov); }
+  } catch(e) {}
+
+  document.title = cfg.eventName + ' — Registration';
+
+  var root = document.documentElement.style;
+  root.setProperty('--gold',       cfg.colorGold);
+  root.setProperty('--gold-light', cfg.colorGoldLight);
+  root.setProperty('--red',        cfg.colorRed);
+  root.setProperty('--green',      cfg.colorGreen);
+
+  var bgSrc = getImageSrc(cfg.backgroundImage, 'cfg_bg');
+  var bgStyle = document.createElement('style');
+  bgStyle.textContent = 'body::before { background-image: url("' + bgSrc.replace(/"/g, '\\"') + '") !important; }';
+  document.head.appendChild(bgStyle);
+
+  var logos = document.querySelectorAll('.banner-logo');
+  if (logos[0]) { logos[0].src = getImageSrc(cfg.logo1Src, 'cfg_logo1'); logos[0].alt = cfg.logo1Alt; }
+  if (logos[1]) { logos[1].src = getImageSrc(cfg.logo2Src, 'cfg_logo2'); logos[1].alt = cfg.logo2Alt; }
+
+  var cLines = document.querySelectorAll('.cursive-line');
+  if (cLines[0]) cLines[0].textContent = cfg.eventCountryLine;
+  var midEl = document.querySelector('.cursive-mid');
+  if (midEl) midEl.textContent = cfg.eventTheme;
+  var smallEl = document.querySelector('.cursive-small');
+  if (smallEl) smallEl.innerHTML = cfg.eventSubtitle;
+
+  var flagEls = document.querySelectorAll('.cursive-flag-row svg');
+  flagEls.forEach(function(f) { f.style.display = cfg.showFlag ? '' : 'none'; });
+
+  var hSocials = document.querySelectorAll('.header-social .social-link');
+  if (hSocials[0]) {
+    hSocials[0].href = 'https://www.instagram.com/' + cfg.contactIG;
+    var igText = hSocials[0].querySelector('svg') ? hSocials[0] : null;
+    if (igText) igText.lastChild.textContent = ' @' + cfg.contactIG;
+  }
+  if (hSocials[1]) {
+    hSocials[1].href = 'mailto:' + cfg.contactEmailBiz;
+    hSocials[1].lastChild.textContent = ' ' + cfg.contactEmailBiz;
+  }
+
+  var depEmail = document.querySelector('.dep-email');
+  if (depEmail) depEmail.textContent = cfg.contactEmail;
+
+  // Success page contact info
+  var sdEmail = document.getElementById('successDepositEmail');
+  if (sdEmail) sdEmail.textContent = cfg.contactEmail;
+  var simIG    = document.getElementById('simpleIG');
+  if (simIG) simIG.textContent = '@' + cfg.contactIG;
+  var simPhone = document.getElementById('simplePhone');
+  if (simPhone) { simPhone.textContent = cfg.contactPhone; simPhone.href = 'tel:' + cfg.contactPhone.replace(/\D/g,''); }
+  var simEmail = document.getElementById('simpleEmail');
+  if (simEmail) { simEmail.textContent = cfg.contactEmailBiz; simEmail.href = 'mailto:' + cfg.contactEmailBiz; }
+
+  // Footer links
+  var footerLinks = document.querySelectorAll('.site-footer a');
+  if (footerLinks[0]) { footerLinks[0].href = 'https://www.instagram.com/' + cfg.contactIG; footerLinks[0].lastChild.textContent = ' @' + cfg.contactIG; }
+  if (footerLinks[1]) { footerLinks[1].href = 'https://www.instagram.com/' + cfg.partnerIG1; footerLinks[1].lastChild.textContent = ' @' + cfg.partnerIG1; }
+  if (footerLinks[2]) { footerLinks[2].href = 'https://www.instagram.com/' + cfg.partnerIG2; footerLinks[2].lastChild.textContent = ' @' + cfg.partnerIG2; }
+  if (footerLinks[3]) { footerLinks[3].href = 'mailto:' + cfg.contactEmailBiz; footerLinks[3].lastChild.textContent = ' ' + cfg.contactEmailBiz; }
+
+  // Apparel cards
+  var cottonImg = document.querySelector('#cottonCard .tshirt-thumb');
+  var cottonViewBtn = document.querySelector('#cottonCard .tshirt-view-btn');
+  if (cottonImg) {
+    var cottonSrc = getImageSrc(cfg.apparel.cotton.photo, 'cfg_apparel_cotton');
+    cottonImg.src = cottonSrc; cottonImg.alt = cfg.apparel.cotton.photoAlt;
+    if (cottonViewBtn) cottonViewBtn.onclick = function(e) { e.stopPropagation(); openModal(cottonSrc); };
+  }
+  var cottonName = document.querySelector('#cottonCard .tshirt-name');
+  var cottonSub  = document.querySelector('#cottonCard .tshirt-name + span');
+  var cottonBadge = document.querySelector('#cottonCard .tshirt-price-badge');
+  if (cottonName)  cottonName.textContent  = cfg.apparel.cotton.name;
+  if (cottonSub)   cottonSub.textContent   = cfg.apparel.cotton.subtitle;
+  if (cottonBadge) cottonBadge.textContent = '$' + cfg.apparel.cotton.price + ' each';
+
+  var jerseyImg = document.querySelector('#jerseyCard .tshirt-thumb');
+  var jerseyViewBtn = document.querySelector('#jerseyCard .tshirt-view-btn');
+  if (jerseyImg) {
+    var jerseySrc = getImageSrc(cfg.apparel.jersey.photo, 'cfg_apparel_jersey');
+    jerseyImg.src = jerseySrc; jerseyImg.alt = cfg.apparel.jersey.photoAlt;
+    if (jerseyViewBtn) jerseyViewBtn.onclick = function(e) { e.stopPropagation(); openModal(jerseySrc); };
+  }
+  var jerseyName  = document.querySelector('#jerseyCard .tshirt-name');
+  var jerseySub   = document.querySelector('#jerseyCard .tshirt-name + span');
+  var jerseyBadge = document.querySelector('#jerseyCard .tshirt-price-badge');
+  if (jerseyName)  jerseyName.textContent  = cfg.apparel.jersey.name;
+  if (jerseySub)   jerseySub.textContent   = cfg.apparel.jersey.subtitle;
+  if (jerseyBadge) jerseyBadge.textContent = '$' + cfg.apparel.jersey.price + ' each';
+}
+
+emailjs.init(SITE_CONFIG.emailjsPublicKey);
+
+  // ── Add-On Carousel ────────────────────────────────────────────────────────
+  const CAROUSEL_ITEMS = SITE_CONFIG.carousel.map(function(item) {
+    return { src: getImageSrc(item.src, item.lsKey), caption: item.caption };
+  });
+
+  const PER_PAGE = 3;
+  let carouselIndex = 0;
+  let carouselTimer = null;
+
+  function buildCarousel() {
+    const stage  = document.getElementById('carouselStage');
+    const thumbs = document.getElementById('carouselThumbs');
+    stage.innerHTML  = '';
+    thumbs.innerHTML = '';
+
+    for (let i = 0; i < PER_PAGE; i++) {
+      const idx  = (carouselIndex + i) % CAROUSEL_ITEMS.length;
+      const item = CAROUSEL_ITEMS[idx];
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      slide.innerHTML = `
+        <img src="${item.src}" alt="${item.caption}" onclick="openModal('${item.src}')">
+        <span class="carousel-caption">${item.caption}</span>
+      `;
+      stage.appendChild(slide);
+    }
+
+    CAROUSEL_ITEMS.forEach((item, idx) => {
+      const thumb = document.createElement('img');
+      thumb.src = item.src;
+      thumb.alt = item.caption;
+      thumb.title = item.caption;
+      thumb.className = 'carousel-thumb' + (idx === carouselIndex ? ' active' : '');
+      thumb.onclick = () => { carouselIndex = idx; buildCarousel(); resetTimer(); };
+      thumbs.appendChild(thumb);
+    });
+  }
+
+  function carouselStep(dir) {
+    carouselIndex = (carouselIndex + dir + CAROUSEL_ITEMS.length) % CAROUSEL_ITEMS.length;
+    buildCarousel();
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(carouselTimer);
+    carouselTimer = setInterval(() => {
+      carouselIndex = (carouselIndex + 1) % CAROUSEL_ITEMS.length;
+      buildCarousel();
+    }, 4000);
+  }
+
+  buildCarousel();
+  resetTimer();
+  // ── End Carousel ────────────────────────────────────────────────────────────
+
+  function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('photoModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('photoModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── PDF Lookbook ──────────────────────────────────────────
+  var _pdfDoc       = null;
+  var _pdfSpread    = 1;   // 1-indexed; each spread = 2 pages
+  var _pdfTotal     = 0;
+  var PDF_SRC = SITE_CONFIG.lookbookURL;
+
+  function openPdfModal() {
+    document.getElementById('pdfModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (!_pdfDoc) _initPdf();
+  }
+
+  function closePdfModal() {
+    document.getElementById('pdfModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function _initPdf() {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    pdfjsLib.getDocument(PDF_SRC).promise.then(function(doc) {
+      _pdfDoc    = doc;
+      _pdfTotal  = doc.numPages;
+      _pdfSpread = 1;
+      document.getElementById('pdfLoading').style.display = 'none';
+      _renderSpread();
+    }).catch(function() {
+      document.getElementById('pdfLoading').textContent =
+        'Could not load the lookbook. Please try again.';
+    });
+  }
+
+  function _isMobile() { return window.innerWidth < 640; }
+
+  function _totalSpreads() {
+    return _isMobile() ? _pdfTotal : Math.ceil(_pdfTotal / 2);
+  }
+
+  function _renderSpread() {
+    var left  = (_pdfSpread - 1) * (_isMobile() ? 1 : 2) + 1;
+    var right = left + 1;
+    var mob   = _isMobile();
+
+    // hide right canvas on mobile or last odd page
+    var rightWrap = document.getElementById('pdfRightWrap');
+    rightWrap.style.display = (!mob && right <= _pdfTotal) ? 'flex' : 'none';
+
+    _renderPage(left, 'pdfCanvasLeft', function() {
+      if (!mob && right <= _pdfTotal) _renderPage(right, 'pdfCanvasRight');
+    });
+
+    var info = mob
+      ? 'Page ' + left + ' of ' + _pdfTotal
+      : 'Pages ' + left + (right <= _pdfTotal ? '-' + right : '') + ' of ' + _pdfTotal;
+    document.getElementById('pdfPageInfo').textContent = info;
+    document.getElementById('pdfPrevBtn').disabled = _pdfSpread <= 1;
+    document.getElementById('pdfNextBtn').disabled = _pdfSpread >= _totalSpreads();
+  }
+
+  function _renderPage(num, canvasId, cb) {
+    _pdfDoc.getPage(num).then(function(page) {
+      var container  = document.getElementById('pdfSpreadContainer');
+      var mob        = _isMobile();
+      var availW     = mob ? container.clientWidth - 28
+                           : (container.clientWidth / 2) - 22;
+      var availH     = container.clientHeight - 28;
+      var vp0        = page.getViewport({ scale: 1 });
+      var scale      = Math.min(availW / vp0.width, availH / vp0.height);
+      var vp         = page.getViewport({ scale: scale });
+      var canvas     = document.getElementById(canvasId);
+      canvas.width   = vp.width;
+      canvas.height  = vp.height;
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: vp })
+          .promise.then(function() { if (cb) cb(); });
+    });
+  }
+
+  function pdfPrevSpread() {
+    if (_pdfSpread > 1) { _pdfSpread--; _renderSpread(); }
+  }
+
+  function pdfNextSpread() {
+    if (_pdfSpread < _totalSpreads()) { _pdfSpread++; _renderSpread(); }
+  }
+  // ─────────────────────────────────────────────────────────
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+      closePdfModal();
+    }
+  });
+
+  // Close PDF modal on backdrop click (outside header/body area)
+  document.getElementById('pdfModal').addEventListener('click', function(e) {
+    if (e.target === this) closePdfModal();
+  });
+
+  // ── Multi-masquerader form ─────────────────────────────────
+  var MASQ_COUNT = 1;
+
+  const costumeIncludes = {
+    Girl: {
+      backline:  SITE_CONFIG.costumes.backline.includesGirl,
+      frontline: SITE_CONFIG.costumes.frontline.includesGirl,
+      ultra:     SITE_CONFIG.costumes.ultra.includesGirl,
+    },
+    Boy: {
+      backline:  SITE_CONFIG.costumes.backline.includesBoy,
+      frontline: SITE_CONFIG.costumes.frontline.includesBoy,
+      ultra:     SITE_CONFIG.costumes.ultra.includesBoy,
+    }
+  };
+
+  // ── Per-masquerader event handlers ───────────────────────
+  function updateMasqLabel(i) {
+    var fn = document.getElementById('m'+i+'_firstName')?.value || '';
+    var ln = document.getElementById('m'+i+'_lastName')?.value || '';
+    var chip = document.getElementById('masqLabel_'+i);
+    if (chip) chip.textContent = fn ? (fn + (ln ? ' ' + ln : '')) : '';
+  }
+
+  function onGenderChange(i) {
+    var r = document.querySelector('input[name="m'+i+'_gender"]:checked');
+    if (!r) return;
+    var gender = r.value, isGirl = gender === 'Girl';
+    document.querySelectorAll('#masqSection_'+i+' .gender-card').forEach(function(c) {
+      if (c.querySelector('input[name="m'+i+'_gender"]')) c.classList.remove('selected');
+    });
+    r.closest('.gender-card').classList.add('selected');
+    document.getElementById('m'+i+'_styleOptionsCard').style.display = 'block';
+    document.getElementById('m'+i+'_girlsStyleOptions').style.display = isGirl ? 'block' : 'none';
+    document.getElementById('m'+i+'_boysStyleOptions').style.display = isGirl ? 'none' : 'block';
+    document.querySelectorAll('input[name="m'+i+'_styleOption"]').forEach(function(x){ x.checked=false; });
+    document.querySelectorAll('#m'+i+'_styleOptionsCard .gender-card').forEach(function(c){ c.classList.remove('selected'); });
+    ['backline','frontline','ultra'].forEach(function(tier) {
+      var el = document.getElementById('m'+i+'_includes-'+tier);
+      if (el) el.textContent = costumeIncludes[gender][tier];
+    });
+    updateAddonAvailabilityForMasq(i, gender);
+    updateFrontlineGirlsForMasq(i);
+  }
+
+  function onCostumeChange(i) {
+    document.querySelectorAll('#masqSection_'+i+' .costume-card').forEach(function(c){ c.classList.remove('selected'); });
+    var r = document.querySelector('input[name="m'+i+'_costume"]:checked');
+    if (r) r.closest('.costume-card').classList.add('selected');
+    updateFrontlineGirlsForMasq(i);
+    updateTotal();
+  }
+
+  function onStyleOptionChange(i) {
+    document.querySelectorAll('#m'+i+'_styleOptionsCard .gender-card').forEach(function(c){ c.classList.remove('selected'); });
+    var r = document.querySelector('input[name="m'+i+'_styleOption"]:checked');
+    if (r) {
+      r.closest('.gender-card').classList.add('selected');
+      var g = document.querySelector('input[name="m'+i+'_gender"]:checked')?.value;
+      if (g === 'Girl') {
+        var inc = document.getElementById('m'+i+'_includes-backline');
+        if (inc) {
+          inc.textContent = r.value === 'White Shorts'
+            ? SITE_CONFIG.costumes.backline.includesGirlShorts
+            : SITE_CONFIG.costumes.backline.includesGirlLeggings;
+        }
+      }
+    }
+  }
+
+  function onAddonChange(cb, i) {
+    cb.closest('.addon-item').classList.toggle('addon-selected', cb.checked);
+    updateTotal();
+  }
+
+  function updateAddonAvailabilityForMasq(i, gender) {
+    document.querySelectorAll('#masqSection_'+i+' .addon-item[data-gender]').forEach(function(item) {
+      var available = item.dataset.gender === gender.toLowerCase();
+      var cb = item.querySelector('input[type="checkbox"]');
+      item.classList.toggle('addon-disabled', !available);
+      cb.disabled = !available;
+      if (!available && cb.checked) {
+        cb.checked = false;
+        item.classList.remove('addon-selected');
+      }
+    });
+    updateTotal();
+  }
+
+  function updateFrontlineGirlsForMasq(i) {
+    var isGirl     = document.querySelector('input[name="m'+i+'_gender"]:checked')?.value === 'Girl';
+    var isFront    = document.querySelector('input[name="m'+i+'_costume"]:checked')?.value === 'Frontline';
+    var show       = isGirl && isFront;
+    var sec        = document.getElementById('m'+i+'_frontlineGirlsSection');
+    if (sec) sec.style.display = show ? 'block' : 'none';
+    if (!show) {
+      var hp = document.getElementById('m'+i+'_frontlineHeadpiece');
+      var sc = document.getElementById('m'+i+'_frontlineSizeCat');
+      if (hp) hp.value = '';
+      if (sc) sc.value = '';
+    }
+    updateTotal();
+  }
+
+  // ── Build masquerader sections ────────────────────────────
+  function buildMasqueraderSections(n) {
+    MASQ_COUNT = parseInt(n) || 1;
+    var container = document.getElementById('masqueraderSections');
+    container.innerHTML = '';
+    for (var i = 1; i <= MASQ_COUNT; i++) {
+      container.insertAdjacentHTML('beforeend', masqSectionHTML(i));
+    }
+    updateTotal();
+  }
+
+  function masqSectionHTML(i) {
+    var addonDefs = SITE_CONFIG.addons;
+    var addonHTML = addonDefs.map(function(a) {
+      return '<label class="addon-item"' + (a.g ? ' data-gender="'+a.g+'"' : '') + '>' +
+        '<input type="checkbox" name="m'+i+'_addons" value="'+a.v+'" data-price="'+a.p+'" onchange="onAddonChange(this,'+i+')">' +
+        '<span class="addon-label">'+a.l+'<span class="addon-note">'+a.n+'</span></span>' +
+        '<span class="addon-price">$'+a.p+'</span>' +
+        '</label>';
+    }).join('');
+
+    var sizeOpts = ['2T','3T','4T','XS (4-5)','S (6-7)','M (8-9)','L (10-12)','XL (14-16)'].map(function(s){
+      return '<option>'+s+'</option>';
+    }).join('');
+
+    return `
+<div class="masq-section" id="masqSection_${i}">
+  <div class="masq-divider">
+    <span class="masq-num-badge">Masquerader ${i}</span>
+    <span class="masq-name-chip" id="masqLabel_${i}"></span>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">&#127968; Masquerader ${i} Information</div>
+    <div class="field-group" style="margin-bottom:1rem;">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" id="m${i}_firstName" placeholder="First name" required oninput="updateMasqLabel(${i})">
+        <div class="error-msg" id="m${i}_firstNameError">Required</div>
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" id="m${i}_lastName" placeholder="Last name" required oninput="updateMasqLabel(${i})">
+        <div class="error-msg" id="m${i}_lastNameError">Required</div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field">
+        <label>Age</label>
+        <input type="number" id="m${i}_age" placeholder="Age" min="1" max="17" required>
+        <div class="error-msg" id="m${i}_ageError">Required</div>
+      </div>
+      <div class="field">
+        <label>Gender</label>
+        <div class="gender-options">
+          <label class="gender-card"><input type="radio" name="m${i}_gender" value="Girl" required onchange="onGenderChange(${i})"> Girl</label>
+          <label class="gender-card"><input type="radio" name="m${i}_gender" value="Boy" onchange="onGenderChange(${i})"> Boy</label>
+        </div>
+        <div class="error-msg" id="m${i}_genderError">Required</div>
+      </div>
+    </div>
+    <div class="field-group full" style="margin-top:1rem;">
+      <div class="field">
+        <label>What country do you represent? <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+        <input type="text" id="m${i}_country" placeholder="Example: Jamaica" required>
+        <div class="error-msg" id="m${i}_countryError">Required</div>
+      </div>
+    </div>
+    <div id="m${i}_styleOptionsCard" style="display:none;margin-top:1rem;">
+      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:1rem;">
+      <div id="m${i}_girlsStyleOptions" style="display:none;">
+        <label style="margin-bottom:0.75rem;display:block;">Choose Your Bottom</label>
+        <div class="gender-options">
+          <label class="gender-card"><input type="radio" name="m${i}_styleOption" value="White Leggings" onchange="onStyleOptionChange(${i})"> White Leggings</label>
+          <label class="gender-card"><input type="radio" name="m${i}_styleOption" value="White Shorts" onchange="onStyleOptionChange(${i})"> White Shorts</label>
+        </div>
+      </div>
+      <div id="m${i}_boysStyleOptions" style="display:none;">
+        <label style="margin-bottom:0.75rem;display:block;">Choose Your Top</label>
+        <div class="gender-options">
+          <label class="gender-card"><input type="radio" name="m${i}_styleOption" value="White Tank" onchange="onStyleOptionChange(${i})"> White Tank</label>
+          <label class="gender-card"><input type="radio" name="m${i}_styleOption" value="White T-Shirt" onchange="onStyleOptionChange(${i})"> White T-Shirt</label>
+        </div>
+      </div>
+      <div class="error-msg" id="m${i}_styleOptionError" style="margin-top:0.5rem;">Please select an option</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">&#127914; Costume Selection</div>
+    <label style="margin-bottom:0.75rem;display:block;">Choose Your Costume</label>
+    <div class="costume-options">
+      <label class="costume-card">
+        <input type="radio" name="m${i}_costume" value="${SITE_CONFIG.costumes.backline.name}" data-price="${SITE_CONFIG.costumes.backline.price}" required onchange="onCostumeChange(${i})">
+        <div class="costume-photos"><img src="${getImageSrc(SITE_CONFIG.costumes.backline.girlPhoto,'cfg_costume_backline_girl')}" alt="${SITE_CONFIG.costumes.backline.girlPhotoAlt}"><img src="${getImageSrc(SITE_CONFIG.costumes.backline.boyPhoto,'cfg_costume_backline_boy')}" alt="${SITE_CONFIG.costumes.backline.boyPhotoAlt}"></div>
+        <span class="costume-badge ${SITE_CONFIG.costumes.backline.badgeClass}">${SITE_CONFIG.costumes.backline.name}</span>
+        <span class="costume-price">$${SITE_CONFIG.costumes.backline.price}</span>
+        <div class="costume-includes"><span class="includes-label">Includes</span><span class="includes-text" id="m${i}_includes-backline"><span class="includes-placeholder">Select gender above to see what's included</span></span></div>
+      </label>
+      <label class="costume-card">
+        <input type="radio" name="m${i}_costume" value="${SITE_CONFIG.costumes.frontline.name}" data-price="${SITE_CONFIG.costumes.frontline.price}" onchange="onCostumeChange(${i})">
+        <div class="costume-photos"><img src="${getImageSrc(SITE_CONFIG.costumes.frontline.girlPhoto,'cfg_costume_frontline_girl')}" alt="${SITE_CONFIG.costumes.frontline.girlPhotoAlt}"><img src="${getImageSrc(SITE_CONFIG.costumes.frontline.boyPhoto,'cfg_costume_frontline_boy')}" alt="${SITE_CONFIG.costumes.frontline.boyPhotoAlt}"></div>
+        <span class="costume-badge ${SITE_CONFIG.costumes.frontline.badgeClass}">${SITE_CONFIG.costumes.frontline.name}</span>
+        <span class="costume-price">$${SITE_CONFIG.costumes.frontline.price}</span>
+        <div class="costume-includes"><span class="includes-label">Includes</span><span class="includes-text" id="m${i}_includes-frontline"><span class="includes-placeholder">Select gender above to see what's included</span></span></div>
+      </label>
+      <label class="costume-card">
+        <input type="radio" name="m${i}_costume" value="${SITE_CONFIG.costumes.ultra.name}" data-price="${SITE_CONFIG.costumes.ultra.price}" onchange="onCostumeChange(${i})">
+        <div class="costume-photos"><img src="${getImageSrc(SITE_CONFIG.costumes.ultra.girlPhoto,'cfg_costume_ultra_girl')}" alt="${SITE_CONFIG.costumes.ultra.girlPhotoAlt}"><img src="${getImageSrc(SITE_CONFIG.costumes.ultra.boyPhoto,'cfg_costume_ultra_boy')}" alt="${SITE_CONFIG.costumes.ultra.boyPhotoAlt}"></div>
+        <span class="costume-badge ${SITE_CONFIG.costumes.ultra.badgeClass}">${SITE_CONFIG.costumes.ultra.name}</span>
+        <span class="costume-price">$${SITE_CONFIG.costumes.ultra.price}</span>
+        <div class="costume-includes"><span class="includes-label">Includes</span><span class="includes-text" id="m${i}_includes-ultra"><span class="includes-placeholder">Select gender above to see what's included</span></span></div>
+      </label>
+      <label class="costume-card">
+        <input type="radio" name="m${i}_costume" value="Keep It Simple" data-price="0" onchange="onCostumeChange(${i})">
+        <span class="costume-badge badge-simple">Keep It Simple</span>
+        <span class="costume-price" style="font-size:1rem;color:var(--text-light);">Please Contact</span>
+        <div class="costume-includes" style="margin-top:0.5rem;"><span class="includes-text" style="color:var(--text-light);font-style:italic;font-size:0.78rem;display:block;text-align:center;">Reach out to us for details &amp; pricing</span></div>
+      </label>
+    </div>
+    <div class="error-msg" id="m${i}_costumeError" style="margin-top:0.5rem;">Please select a costume</div>
+  </div>
+
+  <div id="m${i}_frontlineGirlsSection" class="section-card" style="display:none;border:2px solid var(--gold);background:rgba(200,151,26,0.04);">
+    <div class="section-title" style="color:var(--gold);">&#10022; Frontline Girls: Additional Selections</div>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">These selections are required for all Frontline Girls registrations.</p>
+    <div class="field-group">
+      <div class="field">
+        <label>Headpiece Choice <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+        <select id="m${i}_frontlineHeadpiece" onchange="updateTotal()">
+          <option value="">Select a headpiece</option>
+          ${SITE_CONFIG.frontlineHeadpieces.map(function(hp){ return '<option value="'+hp.value+'" data-price="'+hp.price+'">'+hp.label+'</option>'; }).join('')}
+        </select>
+        <div class="error-msg" id="m${i}_frontlineHeadpieceError">Please select a headpiece</div>
+      </div>
+      <div class="field">
+        <label>Size Category <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+        <select id="m${i}_frontlineSizeCat">
+          <option value="">Select a size category</option>
+          <option value="Likkle Miss (Toddler)">Likkle Miss (Toddler)</option>
+          <option value="Grown Gyal (Size 7 and up)">Grown Gyal (Size 7 and up)</option>
+        </select>
+        <div class="error-msg" id="m${i}_frontlineSizeCatError">Please select a size category</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">&#10024; Add-Ons &amp; Upgrades</div>
+    <div class="addon-group">${addonHTML}</div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">&#128207; Sizing Information</div>
+    <div class="size-grid" style="margin-bottom:1rem;">
+      <div class="field">
+        <label>Top Size</label>
+        <select id="m${i}_topSize" required onchange="updateTotal()">
+          <option value="">Select size</option>${sizeOpts}
+        </select>
+        <div class="error-msg" id="m${i}_topSizeError">Required</div>
+      </div>
+      <div class="field">
+        <label>Bottom Size</label>
+        <select id="m${i}_bottomSize" required>
+          <option value="">Select size</option>${sizeOpts}
+        </select>
+        <div class="error-msg" id="m${i}_bottomSizeError">Required</div>
+      </div>
+    </div>
+    <div class="size-grid">
+      <div class="field">
+        <label>Waist Size (inches) <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:0.7rem;">(optional)</span></label>
+        <input type="number" id="m${i}_waistSize" placeholder="e.g. 22" min="10" max="40">
+      </div>
+      <div class="field">
+        <label>Shoe Size</label>
+        <input type="text" id="m${i}_shoeSize" placeholder="e.g. 10C / 2Y / 8">
+        <div class="error-msg" id="m${i}_shoeSizeError">Required if adding shoes</div>
+      </div>
+    </div>
+  </div>
+
+</div>`;
+  }
+
+  // Initialise with 1 masquerader
+  buildMasqueraderSections(1);
+
+  const SHIRT_SIZES_C26 = SITE_CONFIG.apparelSizes;
+
+  function addShirtRow(type) {
+    const container = document.getElementById(type + 'Rows');
+    const cardId = type === 'cotton' ? 'cottonCard' : 'jerseyCard';
+    const row = document.createElement('div');
+    row.className = 'shirt-row';
+    row.innerHTML = `
+      <select class="${type}-size-sel" onchange="refreshShirtCard('${type}'); updateTotal();" style="flex:1;font-size:0.78rem;padding:5px 8px;">
+        <option value="">Size</option>
+        ${SHIRT_SIZES_C26.map(s => `<option>${s}</option>`).join('')}
+      </select>
+      <input type="number" class="${type}-qty-inp" min="1" max="20" value="1"
+        style="width:50px;padding:5px 6px;border:1px solid var(--border);border-radius:6px;font-size:0.78rem;flex-shrink:0;"
+        onchange="updateTotal()">
+      <button type="button" class="remove-row-btn" onclick="removeShirtRow(this,'${type}')">✕</button>
+    `;
+    container.appendChild(row);
+    document.getElementById(cardId).classList.add('tshirt-selected');
+    updateTotal();
+  }
+
+  function removeShirtRow(btn, type) {
+    btn.closest('.shirt-row').remove();
+    refreshShirtCard(type);
+    updateTotal();
+  }
+
+  function refreshShirtCard(type) {
+    const cardId = type === 'cotton' ? 'cottonCard' : 'jerseyCard';
+    const hasAny = document.querySelectorAll(`#${type}Rows .${type}-size-sel`).length > 0 &&
+                   Array.from(document.querySelectorAll(`#${type}Rows .${type}-size-sel`)).some(s => s.value);
+    document.getElementById(cardId).classList.toggle('tshirt-selected', hasAny);
+  }
+
+  // ── Discount codes ────────────────────────────────────────────────────────
+  const PROMO_CODES = SITE_CONFIG.promoCodes;
+
+  let activePromo = null;
+
+  function applyDiscountCode() {
+    const raw = document.getElementById('discountCode').value.trim();
+    const key = raw.toLowerCase();
+    const msg = document.getElementById('discountMsg');
+    const promo = PROMO_CODES[key];
+
+    if (!promo) {
+      msg.style.display = 'block';
+      msg.style.background = '#fff0f0';
+      msg.style.color = '#CE1126';
+      msg.textContent = 'Invalid code, please check and try again.';
+      activePromo = null;
+      updateTotal();
+      return;
+    }
+    if (new Date() > promo.expiry) {
+      msg.style.display = 'block';
+      msg.style.background = '#fff0f0';
+      msg.style.color = '#CE1126';
+      msg.textContent = 'This promo code has expired.';
+      activePromo = null;
+      updateTotal();
+      return;
+    }
+    activePromo = promo;
+    msg.style.display = 'block';
+    msg.style.background = '#f0fff4';
+    msg.style.color = '#006B3F';
+    msg.textContent = '✓ Code applied: ' + promo.description;
+    updateTotal();
+  }
+
+  function updateTotal() {
+    var grandCostume = 0, grandAddons = 0, tshirtTotal = 0, totalShirts = 0;
+    var anyContact = false;
+
+    for (var i = 1; i <= MASQ_COUNT; i++) {
+      var sc = document.querySelector('input[name="m'+i+'_costume"]:checked');
+      if (sc && sc.value === 'Keep It Simple') { anyContact = true; continue; }
+      if (sc) grandCostume += parseInt(sc.dataset.price) || 0;
+
+      document.querySelectorAll('#masqSection_'+i+' input[name="m'+i+'_addons"]:checked').forEach(function(cb){
+        grandAddons += parseInt(cb.dataset.price) || 0;
+      });
+
+      var fl = document.getElementById('m'+i+'_frontlineGirlsSection');
+      if (fl && fl.style.display !== 'none') {
+        var hp = document.getElementById('m'+i+'_frontlineHeadpiece');
+        var hpOpt = hp && hp.options[hp.selectedIndex];
+        if (hpOpt && hpOpt.dataset.price) grandAddons += parseInt(hpOpt.dataset.price) || 0;
+      }
+    }
+
+    document.querySelectorAll('#cottonRows .shirt-row').forEach(function(row){
+      var sel = row.querySelector('.cotton-size-sel');
+      var qty = parseInt(row.querySelector('.cotton-qty-inp')?.value) || 1;
+      if (sel && sel.value) { tshirtTotal += qty * SITE_CONFIG.apparel.cotton.price; totalShirts += qty; }
+    });
+    document.querySelectorAll('#jerseyRows .shirt-row').forEach(function(row){
+      var sel = row.querySelector('.jersey-size-sel');
+      var qty = parseInt(row.querySelector('.jersey-qty-inp')?.value) || 1;
+      if (sel && sel.value) { tshirtTotal += qty * SITE_CONFIG.apparel.jersey.price; totalShirts += qty; }
+    });
+
+    if (anyContact) {
+      document.getElementById('totalDisplay').textContent = 'Contact for Pricing';
+      document.getElementById('depositDisplay').textContent = '--';
+      document.getElementById('balanceDisplay').textContent = '--';
+      document.getElementById('discountRow').style.display = 'none';
+      return;
+    }
+
+    var subtotal = grandCostume + grandAddons + tshirtTotal;
+    var discountAmount = 0;
+    if (activePromo) {
+      var discountable = (grandCostume > 0) ? subtotal : (totalShirts >= 5 ? tshirtTotal : 0);
+      discountAmount = activePromo.getDiscount(discountable);
+    }
+
+    var total   = subtotal - discountAmount;
+    var deposit = Math.ceil(total / 2);
+    var balance = total - deposit;
+
+    document.getElementById('totalDisplay').textContent = '$' + subtotal;
+
+    var discountRow = document.getElementById('discountRow');
+    if (discountAmount > 0) {
+      discountRow.style.display = 'block';
+      document.getElementById('discountRowLabel').textContent = 'Promo discount (' + activePromo.label + ')';
+      document.getElementById('discountDisplay').textContent  = '-$' + discountAmount;
+      document.getElementById('afterDiscountDisplay').textContent = '$' + total;
+    } else {
+      discountRow.style.display = 'none';
+    }
+
+    document.getElementById('depositDisplay').textContent = '$' + deposit;
+    document.getElementById('balanceDisplay').textContent = '$' + balance;
+  }
+
+  // ── Validation ────────────────────────────────────────────
+  function validateAllSections() {
+    var valid = true;
+
+    for (var i = 1; i <= MASQ_COUNT; i++) {
+      [['m'+i+'_firstName','m'+i+'_firstNameError'],
+       ['m'+i+'_lastName', 'm'+i+'_lastNameError'],
+       ['m'+i+'_age',      'm'+i+'_ageError'],
+       ['m'+i+'_country',  'm'+i+'_countryError'],
+       ['m'+i+'_topSize',  'm'+i+'_topSizeError'],
+       ['m'+i+'_bottomSize','m'+i+'_bottomSizeError']
+      ].forEach(function(pair) {
+        var f = document.getElementById(pair[0]);
+        var e = document.getElementById(pair[1]);
+        if (f && !f.value.trim()) { if(e) e.style.display='block'; valid=false; }
+        else { if(e) e.style.display='none'; }
+      });
+
+      var g = document.querySelector('input[name="m'+i+'_gender"]:checked');
+      var ge = document.getElementById('m'+i+'_genderError');
+      if (!g) { if(ge) ge.style.display='block'; valid=false; } else { if(ge) ge.style.display='none'; }
+
+      var c = document.querySelector('input[name="m'+i+'_costume"]:checked');
+      var ce = document.getElementById('m'+i+'_costumeError');
+      if (!c) { if(ce) ce.style.display='block'; valid=false; } else { if(ce) ce.style.display='none'; }
+
+      var styleCard = document.getElementById('m'+i+'_styleOptionsCard');
+      var so = document.querySelector('input[name="m'+i+'_styleOption"]:checked');
+      var soe = document.getElementById('m'+i+'_styleOptionError');
+      if (styleCard && styleCard.style.display !== 'none' && !so) {
+        if(soe) soe.style.display='block'; valid=false;
+      } else { if(soe) soe.style.display='none'; }
+
+      var fl = document.getElementById('m'+i+'_frontlineGirlsSection');
+      if (fl && fl.style.display !== 'none') {
+        var hp  = document.getElementById('m'+i+'_frontlineHeadpiece');
+        var hpe = document.getElementById('m'+i+'_frontlineHeadpieceError');
+        if (hp && !hp.value) { if(hpe) hpe.style.display='block'; valid=false; } else { if(hpe) hpe.style.display='none'; }
+        var sc  = document.getElementById('m'+i+'_frontlineSizeCat');
+        var sce = document.getElementById('m'+i+'_frontlineSizeCatError');
+        if (sc && !sc.value) { if(sce) sce.style.display='block'; valid=false; } else { if(sce) sce.style.display='none'; }
+      }
+
+      var shoeSel = document.querySelector('#masqSection_'+i+' input[value="Decorated Shoes (Child)"]:checked') ||
+                    document.querySelector('#masqSection_'+i+' input[value="Decorated Shoes (Adult)"]:checked');
+      var shoeF   = document.getElementById('m'+i+'_shoeSize');
+      var shoeE   = document.getElementById('m'+i+'_shoeSizeError');
+      if (shoeSel && shoeF && !shoeF.value.trim()) { if(shoeE) shoeE.style.display='block'; valid=false; }
+      else { if(shoeE) shoeE.style.display='none'; }
+    }
+
+    // Shared contact fields
+    [['parentName','parentNameError'],['phone','phoneError'],['email','emailError']].forEach(function(pair) {
+      var f = document.getElementById(pair[0]);
+      var e = document.getElementById(pair[1]);
+      if (f && !f.value.trim()) { if(e) e.style.display='block'; valid=false; } else { if(e) e.style.display='none'; }
+    });
+    var emailVal = document.getElementById('email')?.value || '';
+    if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      var emailErr = document.getElementById('emailError');
+      if (emailErr) emailErr.style.display='block';
+      valid = false;
+    }
+
+    if (!valid) {
+      var firstErr = document.querySelector('.error-msg[style*="block"]');
+      if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+    return valid;
+  }
+
+  // ── Review modal ─────────────────────────────────────────
+  function openReviewModal() {
+    if (!validateAllSections()) return;
+
+    var html = '<p class="review-intro">Please review the information below carefully before submitting. Pay close attention to sizes — these cannot be changed after submission.</p>';
+
+    for (var i = 1; i <= MASQ_COUNT; i++) {
+      var fn  = document.getElementById('m'+i+'_firstName')?.value || '';
+      var ln  = document.getElementById('m'+i+'_lastName')?.value  || '';
+      var age = document.getElementById('m'+i+'_age')?.value || '';
+      var gender  = document.querySelector('input[name="m'+i+'_gender"]:checked')?.value || '';
+      var country = document.getElementById('m'+i+'_country')?.value || '';
+      var cosR    = document.querySelector('input[name="m'+i+'_costume"]:checked');
+      var costume = cosR ? cosR.value : '';
+      var cosPrice= cosR && cosR.dataset.price !== '0' ? ' ($'+cosR.dataset.price+')' : '';
+      var styleOpt= document.querySelector('input[name="m'+i+'_styleOption"]:checked')?.value || '';
+      var fl      = document.getElementById('m'+i+'_frontlineGirlsSection');
+      var isFL    = fl && fl.style.display !== 'none';
+      var flHead  = isFL ? (document.getElementById('m'+i+'_frontlineHeadpiece')?.value || '') : '';
+      var flSize  = isFL ? (document.getElementById('m'+i+'_frontlineSizeCat')?.value || '') : '';
+      var addons  = Array.from(document.querySelectorAll('#masqSection_'+i+' input[name="m'+i+'_addons"]:checked')).map(function(cb){ return cb.value; }).join(', ') || 'None';
+      var topSz   = document.getElementById('m'+i+'_topSize')?.value || '';
+      var botSz   = document.getElementById('m'+i+'_bottomSize')?.value || '';
+      var waist   = document.getElementById('m'+i+'_waistSize')?.value || '';
+      var shoe    = document.getElementById('m'+i+'_shoeSize')?.value || '';
+
+      html += '<div class="review-masq-block">' +
+        '<div class="review-masq-header">Masquerader '+i+(fn?' - '+fn+' '+ln:'')+'</div>' +
+        '<div class="review-masq-body">' +
+          '<div class="review-row"><span class="review-row-label">Name</span><span class="review-row-value">'+fn+' '+ln+'</span></div>' +
+          '<div class="review-row"><span class="review-row-label">Age</span><span class="review-row-value">'+age+'</span></div>' +
+          '<div class="review-row"><span class="review-row-label">Gender</span><span class="review-row-value">'+gender+'</span></div>' +
+          '<div class="review-row"><span class="review-row-label">Country</span><span class="review-row-value">'+country+'</span></div>' +
+          '<div class="review-row"><span class="review-row-label">Costume</span><span class="review-row-value">'+costume+cosPrice+'</span></div>' +
+          (styleOpt ? '<div class="review-row"><span class="review-row-label">Style</span><span class="review-row-value">'+styleOpt+'</span></div>' : '') +
+          (flHead   ? '<div class="review-row"><span class="review-row-label">Headpiece</span><span class="review-row-value">'+flHead+'</span></div>' : '') +
+          (flSize   ? '<div class="review-row"><span class="review-row-label">Size Category</span><span class="review-row-value">'+flSize+'</span></div>' : '') +
+          '<div class="review-row"><span class="review-row-label">Top Size</span><span class="review-row-value">'+topSz+'</span></div>' +
+          '<div class="review-row"><span class="review-row-label">Bottom Size</span><span class="review-row-value">'+botSz+'</span></div>' +
+          (waist ? '<div class="review-row"><span class="review-row-label">Waist</span><span class="review-row-value">'+waist+'"</span></div>' : '') +
+          (shoe  ? '<div class="review-row"><span class="review-row-label">Shoe Size</span><span class="review-row-value">'+shoe+'</span></div>' : '') +
+          '<div class="review-row"><span class="review-row-label">Add-Ons</span><span class="review-row-value">'+addons+'</span></div>' +
+        '</div></div>';
+    }
+
+    // Parent info
+    var pName = document.getElementById('parentName')?.value || '';
+    var pEmail= document.getElementById('email')?.value || '';
+    var pPhone= document.getElementById('phone')?.value || '';
+    html += '<div class="review-shared-block"><div class="review-shared-title">Parent / Guardian</div>' +
+      '<div class="review-row"><span class="review-row-label">Name</span><span class="review-row-value">'+pName+'</span></div>' +
+      '<div class="review-row"><span class="review-row-label">Email</span><span class="review-row-value">'+pEmail+'</span></div>' +
+      '<div class="review-row"><span class="review-row-label">Phone</span><span class="review-row-value">'+pPhone+'</span></div>' +
+      '</div>';
+
+    // Shirts
+    var shirts = [];
+    document.querySelectorAll('#cottonRows .shirt-row').forEach(function(row){
+      var sz = row.querySelector('.cotton-size-sel')?.value;
+      var q  = parseInt(row.querySelector('.cotton-qty-inp')?.value)||1;
+      if(sz) shirts.push('Cotton T-Shirt, '+sz+' x'+q);
+    });
+    document.querySelectorAll('#jerseyRows .shirt-row').forEach(function(row){
+      var sz = row.querySelector('.jersey-size-sel')?.value;
+      var q  = parseInt(row.querySelector('.jersey-qty-inp')?.value)||1;
+      if(sz) shirts.push('Ghana Jersey, '+sz+' x'+q);
+    });
+    if (shirts.length) {
+      html += '<div class="review-shared-block"><div class="review-shared-title">Parent Apparel</div>' +
+        shirts.map(function(s){ return '<div class="review-row"><span class="review-row-value" style="text-align:left;">'+s+'</span></div>'; }).join('') +
+        '</div>';
+    }
+
+    // Total
+    var totalTxt   = document.getElementById('totalDisplay').textContent;
+    var depositTxt = document.getElementById('depositDisplay').textContent;
+    var discRow    = document.getElementById('discountRow');
+    var discTxt    = (discRow && discRow.style.display !== 'none') ? document.getElementById('discountDisplay').textContent : '';
+    html += '<div class="review-total-block">' +
+      '<div class="review-total-row"><span>Estimated Total</span><span>'+totalTxt+'</span></div>' +
+      (discTxt ? '<div class="review-total-row" style="color:var(--green)"><span>Discount</span><span>'+discTxt+'</span></div>' : '') +
+      '<div class="review-total-row big"><span>Deposit Due Now (50%)</span><span>'+depositTxt+'</span></div>' +
+      '</div>';
+
+    document.getElementById('reviewBody').innerHTML = html;
+    document.getElementById('reviewSubmitBtn').disabled = false;
+    document.getElementById('reviewSubmitBtn').textContent = 'Confirm & Submit';
+    document.getElementById('reviewModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeReviewModal() {
+    document.getElementById('reviewModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function confirmSubmit() {
+    var btn = document.getElementById('reviewSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    // Collect masquerader data
+    var masqLines = [];
+    for (var i = 1; i <= MASQ_COUNT; i++) {
+      var fn  = document.getElementById('m'+i+'_firstName')?.value||'';
+      var ln  = document.getElementById('m'+i+'_lastName')?.value||'';
+      var cosR= document.querySelector('input[name="m'+i+'_costume"]:checked');
+      var fl  = document.getElementById('m'+i+'_frontlineGirlsSection');
+      var isFL= fl && fl.style.display !== 'none';
+      masqLines.push(
+        'Masquerader '+i+': '+fn+' '+ln+
+        ', Age '+( document.getElementById('m'+i+'_age')?.value||'')+
+        ', '+(document.querySelector('input[name="m'+i+'_gender"]:checked')?.value||'')+
+        ', '+(document.getElementById('m'+i+'_country')?.value||'')+
+        ', '+(cosR?cosR.value:'N/A')+
+        (cosR&&cosR.dataset.price!=='0'?' ($'+cosR.dataset.price+')':'')+
+        ', Style: '+(document.querySelector('input[name="m'+i+'_styleOption"]:checked')?.value||'N/A')+
+        (isFL?', Headpiece: '+(document.getElementById('m'+i+'_frontlineHeadpiece')?.value||'N/A'):'')+
+        (isFL?', Size Cat: '+(document.getElementById('m'+i+'_frontlineSizeCat')?.value||'N/A'):'')+
+        ', Top: '+(document.getElementById('m'+i+'_topSize')?.value||'')+
+        ', Bottom: '+(document.getElementById('m'+i+'_bottomSize')?.value||'')+
+        ', Shoe: '+(document.getElementById('m'+i+'_shoeSize')?.value||'N/A')+
+        ', Add-ons: '+( Array.from(document.querySelectorAll('#masqSection_'+i+' input[name="m'+i+'_addons"]:checked')).map(function(cb){return cb.value;}).join(', ')||'None')
+      );
+    }
+
+    var emailVal  = document.getElementById('email').value;
+    var parentName= document.getElementById('parentName').value;
+    var shirts = [];
+    document.querySelectorAll('#cottonRows .shirt-row').forEach(function(row){
+      var sz=row.querySelector('.cotton-size-sel')?.value, q=parseInt(row.querySelector('.cotton-qty-inp')?.value)||1;
+      if(sz) shirts.push('Cotton T-Shirt, '+sz+' x'+q);
+    });
+    document.querySelectorAll('#jerseyRows .shirt-row').forEach(function(row){
+      var sz=row.querySelector('.jersey-size-sel')?.value, q=parseInt(row.querySelector('.jersey-qty-inp')?.value)||1;
+      if(sz) shirts.push('Ghana Jersey, '+sz+' x'+q);
+    });
+
+    var firstMasq = {};
+    firstMasq.firstName = document.getElementById('m1_firstName')?.value||'';
+    firstMasq.lastName  = document.getElementById('m1_lastName')?.value||'';
+    var firstCos = document.querySelector('input[name="m1_costume"]:checked');
+    firstMasq.costume = firstCos ? firstCos.value : '';
+
+    var totalTxt   = document.getElementById('totalDisplay').textContent;
+    var depositTxt = document.getElementById('depositDisplay').textContent;
+
+    var formData = {
+      masqueraderCount: MASQ_COUNT,
+      masqueraders: masqLines.join('\n\n'),
+      parentName: parentName,
+      phone: document.getElementById('phone').value,
+      email: emailVal,
+      instagram: document.getElementById('instagram').value || 'N/A',
+      notes: document.getElementById('notes').value || 'None',
+      photoConsent: document.querySelector('input[name="photoConsent"]:checked') ? 'Yes' : 'No',
+      tshirts: shirts.join(', ') || 'None',
+      promoCode: activePromo ? activePromo.label : 'None',
+      estimatedTotal: totalTxt,
+      depositDue: depositTxt,
+    };
+
+    const SHEETS_URL = SITE_CONFIG.googleSheetsURL;
+
+    try {
+      await fetch(SITE_CONFIG.formspreeURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({}, formData, {
+          _replyto: emailVal,
+          _subject: 'Carnival Registration - ' + firstMasq.firstName + ' ' + firstMasq.lastName +
+                    (MASQ_COUNT > 1 ? ' + ' + (MASQ_COUNT-1) + ' more' : '') + ' - ' + firstMasq.costume
+        }))
+      });
+    } catch(err) { console.error('Formspree error:', err); }
+
+    try {
+      await emailjs.send(SITE_CONFIG.emailjsServiceId, SITE_CONFIG.emailjsTemplateId, {
+        to_email: emailVal, to_name: parentName, parentName: parentName,
+        firstName: firstMasq.firstName, lastName: firstMasq.lastName,
+        costume: MASQ_COUNT > 1 ? MASQ_COUNT + ' masqueraders registered' : firstMasq.costume,
+        country: document.getElementById('m1_country')?.value || '',
+        frontlineHeadpiece: (function(){ var fl=document.getElementById('m1_frontlineGirlsSection'); return fl&&fl.style.display!=='none'?(document.getElementById('m1_frontlineHeadpiece')?.value||'N/A'):'N/A'; })(),
+        frontlineSizeCat:   (function(){ var fl=document.getElementById('m1_frontlineGirlsSection'); return fl&&fl.style.display!=='none'?(document.getElementById('m1_frontlineSizeCat')?.value||'N/A'):'N/A'; })(),
+        addons: formData.masqueraders,
+        topSize: document.getElementById('m1_topSize')?.value||'',
+        bottomSize: document.getElementById('m1_bottomSize')?.value||'',
+        tshirts: formData.tshirts,
+        estimatedTotal: totalTxt, depositDue: depositTxt,
+      });
+    } catch(err) { console.error('EmailJS error:', err); }
+
+    if (SHEETS_URL !== 'YOUR_WEB_APP_URL_HERE') {
+      try {
+        var params = new URLSearchParams();
+        Object.entries(formData).forEach(function(kv){ params.append(kv[0], kv[1]); });
+        fetch(SHEETS_URL + '?' + params.toString(), { mode: 'no-cors' });
+      } catch(err) { console.error('Sheets error:', err); }
+    }
+
+    closeReviewModal();
+    var hasSimple = Array.from({length:MASQ_COUNT},function(_,k){return k+1;})
+                         .some(function(i){ var r=document.querySelector('input[name="m'+i+'_costume"]:checked'); return r&&r.value==='Keep It Simple'; });
+    document.getElementById('successDepositMsg').style.display = hasSimple ? 'none' : 'inline';
+    document.getElementById('simpleContactReminder').style.display = hasSimple ? 'block' : 'none';
+
+    var nameDisplay = MASQ_COUNT > 1
+      ? Array.from({length:MASQ_COUNT},function(_,k){return document.getElementById('m'+(k+1)+'_firstName')?.value||'';}).join(', ')
+      : firstMasq.firstName + ' ' + firstMasq.lastName;
+    document.getElementById('successName').textContent = nameDisplay;
+    document.getElementById('successMessage').style.display = 'block';
+    document.getElementById('registrationForm').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Close review modal on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeReviewModal();
+  });
+
+  // Apply config after DOM is ready
+  document.addEventListener('DOMContentLoaded', applyConfig);
+</script>
+</body>
+</html>
