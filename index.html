@@ -2098,10 +2098,13 @@
       var availH     = container.clientHeight - 28;
       var vp0        = page.getViewport({ scale: 1 });
       var scale      = Math.min(availW / vp0.width, availH / vp0.height);
-      var vp         = page.getViewport({ scale: scale });
+      var dpr        = window.devicePixelRatio || 1;
+      var vp         = page.getViewport({ scale: scale * dpr });
       var canvas     = document.getElementById(canvasId);
       canvas.width   = vp.width;
       canvas.height  = vp.height;
+      canvas.style.width  = Math.round(vp.width  / dpr) + 'px';
+      canvas.style.height = Math.round(vp.height / dpr) + 'px';
       page.render({ canvasContext: canvas.getContext('2d'), viewport: vp })
           .promise.then(function() { if (cb) cb(); });
     });
@@ -2218,17 +2221,31 @@
   }
 
   function updateFrontlineGirlsForMasq(i) {
-    var isGirl     = document.querySelector('input[name="m'+i+'_gender"]:checked')?.value === 'Girl';
-    var isFront    = document.querySelector('input[name="m'+i+'_costume"]:checked')?.value === 'Frontline';
-    var show       = isGirl && isFront;
-    var sec        = document.getElementById('m'+i+'_frontlineGirlsSection');
-    if (sec) sec.style.display = show ? 'block' : 'none';
-    if (!show) {
+    var isGirl    = document.querySelector('input[name="m'+i+'_gender"]:checked')?.value === 'Girl';
+    var costume   = document.querySelector('input[name="m'+i+'_costume"]:checked')?.value;
+    var isFront   = costume === 'Frontline';
+    var isBack    = costume === 'Backline';
+
+    // Frontline girls section
+    var showFront = isGirl && isFront;
+    var frontSec  = document.getElementById('m'+i+'_frontlineGirlsSection');
+    if (frontSec) frontSec.style.display = showFront ? 'block' : 'none';
+    if (!showFront) {
       var hp = document.getElementById('m'+i+'_frontlineHeadpiece');
       var sc = document.getElementById('m'+i+'_frontlineSizeCat');
       if (hp) hp.value = '';
       if (sc) sc.value = '';
     }
+
+    // Backline girls section
+    var showBack  = isGirl && isBack;
+    var backSec   = document.getElementById('m'+i+'_backlineGirlsSection');
+    if (backSec) backSec.style.display = showBack ? 'block' : 'none';
+    if (!showBack) {
+      var bh = document.getElementById('m'+i+'_backlineHeadpiece');
+      if (bh) bh.value = '';
+    }
+
     updateTotal();
   }
 
@@ -2348,7 +2365,7 @@
     <div class="costume-options">
       <label class="costume-card">
         <input type="radio" name="m${i}_costume" value="Backline" data-price="150" required onchange="onCostumeChange(${i})">
-        <div class="costume-photos"><img src="girls backline.jpg" alt="Girls Backline"><img src="boys backline.jpg" alt="Boys Backline"></div>
+        <div class="costume-photos"><img src="The Black Stars Binder-9-backline girls.png" alt="Girls Backline"><img src="boys backline.jpg" alt="Boys Backline"></div>
         <span class="costume-badge badge-back">Backline</span>
         <span class="costume-price">$150</span>
         <div class="costume-includes"><span class="includes-label">Includes</span><span class="includes-text" id="m${i}_includes-backline"><span class="includes-placeholder">Select gender above to see what's included</span></span></div>
@@ -2378,6 +2395,20 @@
     <div class="error-msg" id="m${i}_costumeError" style="margin-top:0.5rem;">Please select a costume</div>
   </div>
 
+  <div id="m${i}_backlineGirlsSection" class="section-card" style="display:none;border:2px solid var(--gold);background:rgba(200,151,26,0.04);">
+    <div class="section-title" style="color:var(--gold);">&#10022; Backline Girls: Headpiece Choice</div>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">Choose your included headpiece for Backline Girls.</p>
+    <div class="field">
+      <label>Headpiece <span style="color:#CE1126;font-size:0.9em;">*</span></label>
+      <select id="m${i}_backlineHeadpiece">
+        <option value="">Select a headpiece</option>
+        <option value="Headband">Headband (Included)</option>
+        <option value="Tiara">Tiara (Included)</option>
+      </select>
+      <div class="error-msg" id="m${i}_backlineHeadpieceError">Please select a headpiece</div>
+    </div>
+  </div>
+
   <div id="m${i}_frontlineGirlsSection" class="section-card" style="display:none;border:2px solid var(--gold);background:rgba(200,151,26,0.04);">
     <div class="section-title" style="color:var(--gold);">&#10022; Frontline Girls: Additional Selections</div>
     <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:1rem;line-height:1.6;">These selections are required for all Frontline Girls registrations.</p>
@@ -2386,8 +2417,8 @@
         <label>Headpiece Choice <span style="color:#CE1126;font-size:0.9em;">*</span></label>
         <select id="m${i}_frontlineHeadpiece" onchange="updateTotal()">
           <option value="">Select a headpiece</option>
-          <option value="Small Crown" data-price="0">Small Crown (Included)</option>
           <option value="Tiara" data-price="0">Tiara (Included)</option>
+          <option value="Small Crown" data-price="0">Small Crown (Included)</option>
           <option value="Large Crown (Upgrade)" data-price="40">Large Crown (+$40 upgrade)</option>
         </select>
         <div class="error-msg" id="m${i}_frontlineHeadpieceError">Please select a headpiece</div>
@@ -2641,6 +2672,12 @@
         var sce = document.getElementById('m'+i+'_frontlineSizeCatError');
         if (sc && !sc.value) { if(sce) sce.style.display='block'; valid=false; } else { if(sce) sce.style.display='none'; }
       }
+      var bfl = document.getElementById('m'+i+'_backlineGirlsSection');
+      if (bfl && bfl.style.display !== 'none') {
+        var bh  = document.getElementById('m'+i+'_backlineHeadpiece');
+        var bhe = document.getElementById('m'+i+'_backlineHeadpieceError');
+        if (bh && !bh.value) { if(bhe) bhe.style.display='block'; valid=false; } else { if(bhe) bhe.style.display='none'; }
+      }
 
       var shoeSel = document.querySelector('#masqSection_'+i+' input[value="Decorated Shoes (Child)"]:checked') ||
                     document.querySelector('#masqSection_'+i+' input[value="Decorated Shoes (Adult)"]:checked');
@@ -2690,6 +2727,9 @@
       var isFL    = fl && fl.style.display !== 'none';
       var flHead  = isFL ? (document.getElementById('m'+i+'_frontlineHeadpiece')?.value || '') : '';
       var flSize  = isFL ? (document.getElementById('m'+i+'_frontlineSizeCat')?.value || '') : '';
+      var bfl     = document.getElementById('m'+i+'_backlineGirlsSection');
+      var isBFL   = bfl && bfl.style.display !== 'none';
+      var bflHead = isBFL ? (document.getElementById('m'+i+'_backlineHeadpiece')?.value || '') : '';
       var addons  = Array.from(document.querySelectorAll('#masqSection_'+i+' input[name="m'+i+'_addons"]:checked')).map(function(cb){ return cb.value; }).join(', ') || 'None';
       var topSz   = document.getElementById('m'+i+'_topSize')?.value || '';
       var botSz   = document.getElementById('m'+i+'_bottomSize')?.value || '';
@@ -2705,6 +2745,7 @@
           '<div class="review-row"><span class="review-row-label">Country</span><span class="review-row-value">'+country+'</span></div>' +
           '<div class="review-row"><span class="review-row-label">Costume</span><span class="review-row-value">'+costume+cosPrice+'</span></div>' +
           (styleOpt ? '<div class="review-row"><span class="review-row-label">Style</span><span class="review-row-value">'+styleOpt+'</span></div>' : '') +
+          (bflHead  ? '<div class="review-row"><span class="review-row-label">Headpiece</span><span class="review-row-value">'+bflHead+'</span></div>' : '') +
           (flHead   ? '<div class="review-row"><span class="review-row-label">Headpiece</span><span class="review-row-value">'+flHead+'</span></div>' : '') +
           (flSize   ? '<div class="review-row"><span class="review-row-label">Size Category</span><span class="review-row-value">'+flSize+'</span></div>' : '') +
           '<div class="review-row"><span class="review-row-label">Top Size</span><span class="review-row-value">'+topSz+'</span></div>' +
@@ -2788,6 +2829,8 @@
       var cosR= document.querySelector('input[name="m'+i+'_costume"]:checked');
       var fl  = document.getElementById('m'+i+'_frontlineGirlsSection');
       var isFL= fl && fl.style.display !== 'none';
+      var bfl = document.getElementById('m'+i+'_backlineGirlsSection');
+      var isBFL= bfl && bfl.style.display !== 'none';
       masqLines.push(
         'Masquerader '+i+': '+fn+' '+ln+
         ', Age '+( document.getElementById('m'+i+'_age')?.value||'')+
@@ -2796,6 +2839,7 @@
         ', '+(cosR?cosR.value:'N/A')+
         (cosR&&cosR.dataset.price!=='0'?' ($'+cosR.dataset.price+')':'')+
         ', Style: '+(document.querySelector('input[name="m'+i+'_styleOption"]:checked')?.value||'N/A')+
+        (isBFL?', Headpiece: '+(document.getElementById('m'+i+'_backlineHeadpiece')?.value||'N/A'):'')+
         (isFL?', Headpiece: '+(document.getElementById('m'+i+'_frontlineHeadpiece')?.value||'N/A'):'')+
         (isFL?', Size Cat: '+(document.getElementById('m'+i+'_frontlineSizeCat')?.value||'N/A'):'')+
         ', Top: '+(document.getElementById('m'+i+'_topSize')?.value||'')+
