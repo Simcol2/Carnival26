@@ -2369,6 +2369,7 @@
       </label>
       <label class="costume-card">
         <input type="radio" name="m${i}_costume" value="Keep It Simple" data-price="0" onchange="onCostumeChange(${i})">
+        <div class="costume-photos"><img src="girl simple.jpg" alt="Girls Keep It Simple"><img src="boy simple.jpg" alt="Boys Keep It Simple"></div>
         <span class="costume-badge badge-simple">Keep It Simple</span>
         <span class="costume-price" style="font-size:1rem;color:var(--text-light);">Please Contact</span>
         <div class="costume-includes" style="margin-top:0.5rem;"><span class="includes-text" style="color:var(--text-light);font-style:italic;font-size:0.78rem;display:block;text-align:center;">Reach out to us for details &amp; pricing</span></div>
@@ -2442,9 +2443,6 @@
 </div>`;
   }
 
-  // Initialise with 1 masquerader
-  buildMasqueraderSections(1);
-
   const SHIRT_SIZES_C26 = ['XS','S','M','L','XL','XXL','XXXL'];
 
   function addShirtRow(type) {
@@ -2498,6 +2496,9 @@
   };
 
   let activePromo = null;
+
+  // Initialise with 1 masquerader — must run AFTER all const/let declarations above
+  buildMasqueraderSections(1);
 
   function applyDiscountCode() {
     const raw = document.getElementById('discountCode').value.trim();
